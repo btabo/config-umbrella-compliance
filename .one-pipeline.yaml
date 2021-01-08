@@ -1,0 +1,27 @@
+# Documentation on available configuration
+# https://pages.github.ibm.com/one-pipeline/docs/custom-scripts.html
+
+version: '1'
+
+setup:
+  image: ibmcom/pipeline-base-image:2.9
+  script: |
+    #!/usr/bin/env bash
+
+    # TODO
+
+deploy:
+  image: ibmcom/pipeline-base-image:2.6
+  #image: us.icr.io/otc-ops/otc-deploy:dev
+  #imagePullPolicy: Always
+  script: |
+    #!/usr/bin/env bash
+
+    # TODO
+
+acceptance-test:
+  image: ibmcom/pipeline-base-image:2.9
+  script: |
+    #!/usr/bin/env bash
+
+    # TODO
