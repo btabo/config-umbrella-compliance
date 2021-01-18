@@ -63,7 +63,7 @@ deploy:
       echo "Deploying to $firstCluster"
       echo
     . /umbrella/deployHelmChart.sh $firstCluster
-      echo "Done deploying to $cluster_name"
+      echo "Done deploying to $firstCluster"
       echo
     . /glb/clusterDance.sh "($otherClusters)" "($firstCluster)"
 
