@@ -11,13 +11,73 @@ setup:
     # TODO
 
 deploy:
-  image: ibmcom/pipeline-base-image:2.6
-  #image: us.icr.io/otc-ops/otc-deploy:dev
-  #imagePullPolicy: Always
+  #image: ibmcom/pipeline-base-image:2.6
+  image: us.icr.io/otc-ops/otc-deploy:test
+  imagePullPolicy: Always
   script: |
     #!/usr/bin/env bash
 
-    # TODO
+    # config
+    export ENVIRONMENT=$(cat /config/environment-properties/ENVIRONMENT)
+    export PIPELINE_TOOLCHAIN_ID=$(jq -r '.toolchain_guid' /toolchain/toolchain.json)
+    export IDS_JOB_ID=$PIPELINE_RUN_ID
+    export IDS_USER=idsorg
+    export REGISTRY_TOKEN_ID="10d3bc02-1aa0-5f94-a42a-92208f626af9"
+    export OTC_REGISTRY=registry.ng.bluemix.net
+    export CHART_REPO="devops-prod"
+    export CHART_BRANCH="umbrella-$ENVIRONMENT"
+    export PRUNE_CHART_REPO="true"
+    export DOMAIN="$ENVIRONMENT.devops.cloud.ibm.com"
+    export NAMESPACE=opentoolchain
+    export WAIT_FOR_DEPLOY="true"
+    export WAIT_FOR_DEPLOY_MAX="80"
+    if [ -f /config/environment-properties/EXCLUDED_FROM_STATUS_CHECK ]; then
+      export EXCLUDED_FROM_STATUS_CHECK=$(cat /config/environment-properties/EXCLUDED_FROM_STATUS_CHECK)
+    fi
+    if [ -f /config/environment-properties/DRY_RUN ]; then
+      export DRY_RUN=$(cat /config/environment-properties/DRY_RUN)
+    fi
+
+    # secrets
+    export IDS_TOKEN=$(cat /config/secure-properties/git-token)
+    export IC_1308775_API_KEY=$(cat /config/secure-properties/IC_1308775_API_KEY)
+    export IC_1651315_API_KEY=$(cat /config/secure-properties/IC_1651315_API_KEY)
+    export OTC_REGISTRY_API_KEY=$(cat /config/secure-properties/IC_1416501_API_KEY)
+
+    # uncomment below if not using otc-deploy image
+    # git clone https://$IDS_USER:$IDS_TOKEN@github.ibm.com/org-ids/otc-deploy
+    # cp -r otc-deploy/k8s/scripts/* /
+    # git clone "https://$IDS_USER:$IDS_TOKEN@github.ibm.com/ids-env/devops-config"
+    # cp -r devops-config/otc-deploy/* /config
+
+    # build umbrella chart
+    . /umbrella/buildUmbrellaChartFromInventory.sh 
+
+    # split first cluster and other clusters
+    clusters=$(cat /config/environment-properties/clusters)
+    firstCluster=$(echo $clusters | awk '{print $1}')
+    otherClusters=$(echo $clusters | awk '{for (i=2; i<NF; i++) printf $i " "; print $NF}')
+
+    # deploy to first cluster
+    . /glb/clusterDance.sh "($firstCluster)" "()"
+      echo "Deploying to $firstCluster"
+      echo
+    . /umbrella/deployHelmChart.sh $firstCluster
+      echo "Done deploying to $cluster_name"
+      echo
+    . /glb/clusterDance.sh "($otherClusters)" "($firstCluster)"
+
+    # TODO: wait for testing
+
+    # deploy to other clusters
+    for cluster_name in "$otherClusters"; do 
+      echo "Deploying to $cluster_name"
+      echo
+      . /umbrella/deployHelmChart.sh $cluster_name
+      echo "Done deploying to $cluster_name"
+      echo
+    done
+    . /glb/clusterDance.sh "()" "($otherClusters)"
 
 acceptance-test:
   image: ibmcom/pipeline-base-image:2.9
