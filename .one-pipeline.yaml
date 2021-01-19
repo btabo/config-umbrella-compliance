@@ -63,12 +63,15 @@ deploy:
 
     # deploy to first cluster
     . /glb/clusterDance.sh "($firstCluster)" "()"
-      echo "Deploying to $firstCluster"
-      echo
+    echo "Deploying to $firstCluster"
+    echo
     . /umbrella/deployHelmChart.sh $firstCluster
+    echo "Done deploying to $firstCluster"
+    echo
+    echo "Running health check for $firstCluster"
     . /cluster-checks/sanityCheckAll.sh $firstCluster
-      echo "Done deploying to $firstCluster"
-      echo
+    echo "Done running heath check for $firstCluster"
+    echo
     . /glb/clusterDance.sh "($otherClusters)" "($firstCluster)"
 
     if [ "$DEPLOYMENT_SLACK_CHANNEL_ID" != "ignore" ]; then
@@ -89,10 +92,13 @@ deploy:
       echo "Deploying to $cluster_name"
       echo
       . /umbrella/deployHelmChart.sh $cluster_name
-      . /cluster-checks/sanityCheckAll.sh $cluster_name
       echo "Done deploying to $cluster_name"
       echo
-    done
+      echo "Running health check for $cluster_name"
+      . /cluster-checks/sanityCheckAll.sh $cluster_name
+      echo "Done running heath check for $cluster_name"
+      echo
+     done
     . /glb/clusterDance.sh "()" "($otherClusters)"
 
 acceptance-test:
