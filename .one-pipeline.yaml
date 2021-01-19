@@ -70,16 +70,18 @@ deploy:
       echo
     . /glb/clusterDance.sh "($otherClusters)" "($firstCluster)"
 
-    echo "Waiting for $firstCluster testing to complete" 
-    postSlackMessage timestamp "Please test/check the ui/logs for $firstCluster :fidg-spinn: = testing and :+1: = complete" $DEPLOYMENT_SLACK_CHANNEL_ID $DEPLOYMENT_SLACK_TOKEN
-    waitForSlackGoNoGo go $timestamp $DEPLOYMENT_SLACK_CHANNEL_ID $DEPLOYMENT_SLACK_TOKEN
-    if [ "$go" == "-1" ]; then
-      echo "Got a no go to proceed after testing $firstCluster"
-      echo "Aborting"
-      exit -1
+    if [ "$DEPLOYMENT_SLACK_CHANNEL_ID" != "ignore" ]; then
+      echo "Waiting for $firstCluster testing to complete" 
+      postSlackMessage timestamp "Please test/check the ui/logs for $firstCluster :fidg-spinn: = testing and :+1: = complete" $DEPLOYMENT_SLACK_CHANNEL_ID $DEPLOYMENT_SLACK_TOKEN
+      waitForSlackGoNoGo go $timestamp $DEPLOYMENT_SLACK_CHANNEL_ID $DEPLOYMENT_SLACK_TOKEN
+      if [ "$go" == "-1" ]; then
+        echo "Got a no go to proceed after testing $firstCluster"
+        echo "Aborting"
+        exit -1
+      fi
+      echo "$firstCluster testing complete"
+      echo
     fi
-    echo "$firstCluster testing complete"
-    echo
 
     # deploy to other clusters
     for cluster_name in "$otherClusters"; do 
