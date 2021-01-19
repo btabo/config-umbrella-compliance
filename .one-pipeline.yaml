@@ -38,12 +38,14 @@ deploy:
     if [ -f /config/environment-properties/DRY_RUN ]; then
       export DRY_RUN=$(cat /config/environment-properties/DRY_RUN)
     fi
+    export DEPLOYMENT_SLACK_CHANNEL_ID=$(cat /config/environment-properties/DEPLOYMENT_SLACK_CHANNEL_ID)
 
     # secrets
     export IDS_TOKEN=$(cat /config/secure-properties/git-token)
     export IC_1308775_API_KEY=$(cat /config/secure-properties/IC_1308775_API_KEY)
     export IC_1651315_API_KEY=$(cat /config/secure-properties/IC_1651315_API_KEY)
     export OTC_REGISTRY_API_KEY=$(cat /config/secure-properties/IC_1416501_API_KEY)
+    export DEPLOYMENT_SLACK_TOKEN=$(cat /config/environment-properties/DEPLOYMENT_SLACK_TOKEN)
 
     # uncomment below if not using otc-deploy image
     # git clone https://$IDS_USER:$IDS_TOKEN@github.ibm.com/org-ids/otc-deploy
@@ -68,7 +70,13 @@ deploy:
       echo
     . /glb/clusterDance.sh "($otherClusters)" "($firstCluster)"
 
-    # TODO: wait for testing
+    postSlackMessage timestamp "Please test/check the ui/logs for $firstCluster :fidg-spinn: = testing and :+1: = complete" $DEPLOYMENT_SLACK_CHANNEL_ID $DEPLOYMENT_SLACK_TOKEN
+    waitForSlackGoNoGo go $timestamp $DEPLOYMENT_SLACK_CHANNEL_ID $DEPLOYMENT_SLACK_TOKEN
+    if [ "$go" == "-1" ]; then
+      echo "Got a no go to proceed after testing $firstCluster"
+      echo "Aborting"
+      exit -1
+    fi
 
     # deploy to other clusters
     for cluster_name in "$otherClusters"; do 
