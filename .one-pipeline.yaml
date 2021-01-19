@@ -45,7 +45,7 @@ deploy:
     export IC_1308775_API_KEY=$(cat /config/secure-properties/IC_1308775_API_KEY)
     export IC_1651315_API_KEY=$(cat /config/secure-properties/IC_1651315_API_KEY)
     export OTC_REGISTRY_API_KEY=$(cat /config/secure-properties/IC_1416501_API_KEY)
-    export DEPLOYMENT_SLACK_TOKEN=$(cat /config/environment-properties/DEPLOYMENT_SLACK_TOKEN)
+    export DEPLOYMENT_SLACK_TOKEN=$(cat /config/secure-properties/DEPLOYMENT_SLACK_TOKEN)
 
     # uncomment below if not using otc-deploy image
     # git clone https://$IDS_USER:$IDS_TOKEN@github.ibm.com/org-ids/otc-deploy
