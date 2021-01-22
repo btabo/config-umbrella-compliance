@@ -111,8 +111,11 @@ deploy:
     fi
 
 acceptance-test:
-  image: ibmcom/pipeline-base-image:2.9
+  image: us.icr.io/otc-ops/otc-deploy:test
+  imagePullPolicy: Always
   script: |
     #!/usr/bin/env bash
-
-    # TODO
+    export ENVIRONMENT=$(cat /config/environment-properties/ENVIRONMENT)
+    export IC_1651315_API_KEY=$(cat /config/secure-properties/IC_1651315_API_KEY)
+    . /umbrella/helpers.sh
+    runRegionTests status "$ENVIRONMENT" "$PIPELINE_RUN_ID" "d5c0676c-55ed-4c25-b763-60b7afd64c87" "0a86e449-cd54-4ccf-9704-28eb39c02a13"
