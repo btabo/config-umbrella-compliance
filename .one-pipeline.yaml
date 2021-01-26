@@ -59,8 +59,14 @@ deploy:
     # build umbrella chart
     . /umbrella/buildUmbrellaChartFromInventory.sh $INVENTORY_BRANCH
 
+    # get clusters
+    readEnvironmentInfo envInfo $ENVIRONMENT "otc"
+    if [ -z "$envInfo" ]; then 
+        return 1; 
+    fi
+    getUmbrellaClusters clusters "$envInfo"
+
     # split first cluster and other clusters
-    clusters=$(cat /config/environment-properties/clusters)
     firstCluster=$(echo $clusters | awk '{print $1}')
     otherClusters=$(echo $clusters | awk '{for (i=2; i<NF; i++) printf $i " "; print $NF}')
 
