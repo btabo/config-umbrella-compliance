@@ -56,65 +56,8 @@ deploy:
     # git clone "https://$IDS_USER:$IDS_TOKEN@github.ibm.com/ids-env/devops-config"
     # cp -r devops-config/otc-deploy/* /config
 
-    # build umbrella chart
-    . /umbrella/buildUmbrellaChartFromInventory.sh $INVENTORY_BRANCH
-
-    # get clusters
-    readEnvironmentInfo envInfo $ENVIRONMENT "otc"
-    if [ -z "$envInfo" ]; then 
-        return 1; 
-    fi
-    getUmbrellaClusters clusters "$envInfo"
-
-    # split first cluster and other clusters
-    firstCluster=$(echo $clusters | awk '{print $1}')
-    otherClusters=$(echo $clusters | awk '{for (i=2; i<NF; i++) printf $i " "; print $NF}')
-
-    # deploy to first cluster
-    if [ "$SKIP_CLUSTER_DANCE" != "true" ]; then
-      . /glb/clusterDance.sh "($firstCluster)" "()"
-    fi
-    echo "Deploying to $firstCluster"
-    echo
-    . /umbrella/deployHelmChart.sh $firstCluster
-    echo "Done deploying to $firstCluster"
-    echo
-    echo "Running health check for $firstCluster"
-    . /cluster-checks/sanityCheckAll.sh $firstCluster
-    echo "Done running heath check for $firstCluster"
-    echo
-    if [ "$SKIP_CLUSTER_DANCE" != "true" ]; then
-      . /glb/clusterDance.sh "($otherClusters)" "($firstCluster)"
-    fi
-
-    if [ "$DEPLOYMENT_SLACK_CHANNEL_ID" != "ignore" ]; then
-      echo "Waiting for $firstCluster testing to complete" 
-      postSlackMessage timestamp "Please test/check the ui/logs for $firstCluster :fidg-spinn: = testing and :+1: = complete" $DEPLOYMENT_SLACK_CHANNEL_ID $DEPLOYMENT_SLACK_TOKEN
-      waitForSlackGoNoGo go $timestamp $DEPLOYMENT_SLACK_CHANNEL_ID $DEPLOYMENT_SLACK_TOKEN
-      if [ "$go" == "-1" ]; then
-        echo "Got a no go to proceed after testing $firstCluster"
-        echo "Aborting"
-        exit -1
-      fi
-      echo "$firstCluster testing complete"
-      echo
-    fi
-
-    # deploy to other clusters
-    for cluster_name in "$otherClusters"; do 
-      echo "Deploying to $cluster_name"
-      echo
-      . /umbrella/deployHelmChart.sh $cluster_name
-      echo "Done deploying to $cluster_name"
-      echo
-      echo "Running health check for $cluster_name"
-      . /cluster-checks/sanityCheckAll.sh $cluster_name
-      echo "Done running heath check for $cluster_name"
-      echo
-     done
-    if [ "$SKIP_CLUSTER_DANCE" != "true" ]; then
-      . /glb/clusterDance.sh "()" "($otherClusters)"
-    fi
+    . /umbrella/helpers.sh
+    buildAndDeployFromInventory $ENVIRONMENT $INVENTORY_BRANCH $DEPLOYMENT_SLACK_CHANNEL_ID $DEPLOYMENT_SLACK_TOKEN $SKIP_CLUSTER_DANCE
 
 acceptance-test:
   image: us.icr.io/otc-ops/otc-deploy:test
