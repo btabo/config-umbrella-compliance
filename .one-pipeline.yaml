@@ -69,3 +69,7 @@ acceptance-test:
     export IC_1651315_API_KEY=$(cat /config/secure-properties/IC_1651315_API_KEY)
     . /umbrella/helpers.sh
     runRegionTests status "$ENVIRONMENT" "$PIPELINE_RUN_ID" "d5c0676c-55ed-4c25-b763-60b7afd64c87" "$TEST_PIPELINE_ID"
+    echo "Status of $ENVIRONMENT tests is $status"
+    if [ "$status" != "succeeded" ]; then
+      exit 1
+    fi
