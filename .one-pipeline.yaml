@@ -65,6 +65,7 @@ acceptance-test:
   script: |
     #!/usr/bin/env bash
     export ENVIRONMENT=$(cat /config/environment-properties/ENVIRONMENT)
+    export TEST_PIPELINE_ID=$(cat /config/environment-properties/TEST_PIPELINE_ID)
     export IC_1651315_API_KEY=$(cat /config/secure-properties/IC_1651315_API_KEY)
     . /umbrella/helpers.sh
-    runRegionTests status "$ENVIRONMENT" "$PIPELINE_RUN_ID" "d5c0676c-55ed-4c25-b763-60b7afd64c87" "0a86e449-cd54-4ccf-9704-28eb39c02a13"
+    runRegionTests status "$ENVIRONMENT" "$PIPELINE_RUN_ID" "d5c0676c-55ed-4c25-b763-60b7afd64c87" "$TEST_PIPELINE_ID"
