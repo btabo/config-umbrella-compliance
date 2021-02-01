@@ -12,7 +12,7 @@ setup:
 
 deploy:
   #image: ibmcom/pipeline-base-image:2.6
-  image: us.icr.io/otc-ops/otc-deploy:test
+  image: us.icr.io/otc-ops/otc-deploy:dev
   imagePullPolicy: Always
   script: |
     #!/usr/bin/env bash
@@ -63,7 +63,7 @@ deploy:
     buildAndDeployFromInventory $ENVIRONMENT $INVENTORY_BRANCH $DEPLOYMENT_SLACK_CHANNEL_ID $DEPLOYMENT_SLACK_TOKEN $SKIP_CLUSTER_DANCE $PAUSE_AFTER_FIRST_CLUSTER
 
 acceptance-test:
-  image: us.icr.io/otc-ops/otc-deploy:test
+  image: us.icr.io/otc-ops/otc-deploy:dev
   imagePullPolicy: Always
   script: |
     #!/usr/bin/env bash
