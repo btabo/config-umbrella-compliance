@@ -37,7 +37,7 @@ containerize:
 
     cd $REPO
 
-    #source ../ci/scripts/build_setup.sh
+    source ../ci/scripts/build_setup.sh
     #source ../ci/scripts/build.sh
 
 deploy:
