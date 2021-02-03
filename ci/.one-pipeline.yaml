@@ -13,7 +13,7 @@ setup:
 
     git clone https://$GH_TOKEN@github.ibm.com/$OWNER/$REPO
     cd $REPO
-    npm ci
+    #npm ci
 
 test:
   abort_on_failure: false
@@ -21,7 +21,7 @@ test:
   script: |
     #!/usr/bin/env bash
     cd $REPO
-    npm test
+    #npm test
 
 containerize:
   dind: true
@@ -37,8 +37,8 @@ containerize:
 
     cd $REPO
 
-    source ../ci/scripts/build_setup.sh
-    source ../ci/scripts/build.sh
+    #source ../ci/scripts/build_setup.sh
+    #source ../ci/scripts/build.sh
 
 deploy:
   image: icr.io/continuous-delivery/pipeline/pipeline-base-image:2.6@sha256:7f588468622a981f89cf5e1212aaf75fface9da6169b5345ca52ab63d8215907
@@ -52,8 +52,8 @@ deploy:
     fi
 
     cd $REPO
-    source ../ci/scripts/deploy_setup.sh
-    source ../ci/scripts/deploy.sh
+    #source ../ci/scripts/deploy_setup.sh
+    #source ../ci/scripts/deploy.sh
 
 acceptance-test:
   abort_on_failure: false
@@ -63,9 +63,9 @@ acceptance-test:
 
     cd $REPO
     source /root/.nvm/nvm.sh
-    npm ci
+    #npm ci
     export APP_URL=$(cat ../app-url)
-    npm run acceptance-test
+    #npm run acceptance-test
 
 release:
   image: wcp-compliance-automation-team-docker-local.artifactory.swg-devops.com/ibm-compliance-automation:1.2.4@sha256:dc98cc52c0caede42149c08727147520e30e81fee543b8dd5939b45d06baa142
@@ -73,5 +73,5 @@ release:
     #!/usr/bin/env bash
 
     cd $REPO
-    source ../ci/scripts/release.sh
+    #source ../ci/scripts/release.sh
 
