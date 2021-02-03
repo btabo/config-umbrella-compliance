@@ -11,6 +11,7 @@ setup:
 
     curl -u ":$GH_TOKEN" https://github.ibm.com/api/v3/repos/$OWNER/$REPO/branches/master/protection -XPUT -d '{"required_pull_request_reviews":{"dismiss_stale_reviews":true},"required_status_checks":{"strict":true,"contexts":["tekton/code-branch-protection","tekton/code-unit-tests","tekton/code-cis-check","tekton/code-vulnerability-scan","tekton/code-detect-secrets"]},"enforce_admins":null,"restrictions":null}'
 
+    ls -l .
     #npm ci
 
 test:
@@ -32,6 +33,8 @@ containerize:
       env
       set -x
     fi
+
+    ls -l .
 
     source scripts/build_setup.sh
     source scripts/build.sh
