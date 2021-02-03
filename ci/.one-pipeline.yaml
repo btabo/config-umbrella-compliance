@@ -11,7 +11,7 @@ setup:
 
     curl -u ":$GH_TOKEN" https://github.ibm.com/api/v3/repos/$OWNER/$REPO/branches/master/protection -XPUT -d '{"required_pull_request_reviews":{"dismiss_stale_reviews":true},"required_status_checks":{"strict":true,"contexts":["tekton/code-branch-protection","tekton/code-unit-tests","tekton/code-cis-check","tekton/code-vulnerability-scan","tekton/code-detect-secrets"]},"enforce_admins":null,"restrictions":null}'
 
-    git clone https://github.ibm.com/$OWNER/$REPO
+    git clone https://$GH_TOKEN@github.ibm.com/$OWNER/$REPO
     cd $REPO
     npm ci
 
