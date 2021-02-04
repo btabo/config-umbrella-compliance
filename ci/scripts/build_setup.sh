@@ -50,7 +50,7 @@ else
   ICR_REGISTRY_NAMESPACE="$(cat /config/registry-namespace)"
   ICR_REGISTRY_REGION="$(get-icr-region "$(cat /config/registry-region)")"
   IMAGE="$ICR_REGISTRY_REGION.icr.io/$ICR_REGISTRY_NAMESPACE/$IMAGE_NAME:$IMAGE_TAG"
-  docker login -u iamapikey --password-stdin "$ICR_REGISTRY_REGION.icr.io" < /config/api-key
+  docker login -u iamapikey --password-stdin "$ICR_REGISTRY_REGION.icr.io" < /config/IC_1308775_API_KEY
 
   # Create the namespace if needed to ensure the push will be can be successfull
   echo "Checking registry namespace: ${ICR_REGISTRY_NAMESPACE}"
