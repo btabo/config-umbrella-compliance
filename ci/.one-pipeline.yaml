@@ -37,30 +37,10 @@ containerize:
     fi
     REPO=$(jq -r '.services[] | select(.toolchain_binding.name=="app-repo") | .parameters.repo_name' /toolchain/toolchain.json)
 
-    echo ls -l .
-    ls -l .
+    echo ls -l /config
+    ls -l /config
     echo
-
-    echo cd $REPO
-    cd $REPO
-    echo
-
-    echo ls -l .
-    ls -l .
-    echo
-
-    echo ls -l ..
-    ls -l ..
-    echo
-
-    echo ls -l ../ci
-    ls -l ../ci
-    echo
-
-    echo ls -l ../ci/scripts
-    ls -l ../ci/scripts
-    echo
-
+    
     source ../ci/scripts/build_setup.sh
     #source ../ci/scripts/build.sh
 
