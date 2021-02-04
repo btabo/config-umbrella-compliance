@@ -50,12 +50,12 @@ else
   ICR_REGISTRY_NAMESPACE="$(cat /config/registry-namespace)"
   ICR_REGISTRY_REGION="$(get-icr-region "$(cat /config/registry-region)")"
   IMAGE="$ICR_REGISTRY_REGION.icr.io/$ICR_REGISTRY_NAMESPACE/$IMAGE_NAME:$IMAGE_TAG"
-  docker login -u iamapikey --password-stdin "$ICR_REGISTRY_REGION.icr.io" < /config/IC_1308775_API_KEY
+  docker login -u iamapikey --password-stdin "$ICR_REGISTRY_REGION.icr.io" < /config/IC_1416501_API_KEY
 
   # Create the namespace if needed to ensure the push will be can be successfull
   echo "Checking registry namespace: ${ICR_REGISTRY_NAMESPACE}"
   IBM_LOGIN_REGISTRY_REGION=$(cat /config/registry-region | awk -F: '{print $3}')
-  ibmcloud login --apikey @/config/IC_1308775_API_KEY -r "$IBM_LOGIN_REGISTRY_REGION"
+  ibmcloud login --apikey @/config/IC_1416501_API_KEY -r "$IBM_LOGIN_REGISTRY_REGION"
   NS=$( ibmcloud cr namespaces | sed 's/ *$//' | grep -x "${ICR_REGISTRY_NAMESPACE}" ||: )
 
   if [ -z "${NS}" ]; then
