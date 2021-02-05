@@ -4,7 +4,7 @@
 # prepare data
 #
 
-export GHE_TOKEN="$(cat ../git-token)"
+export GHE_TOKEN="$(cat ../ci/git-token)"
 export COMMIT_SHA="$(cat /config/git-commit)"
 export APP_NAME="$(cat /config/app-name)"
 
@@ -20,7 +20,8 @@ export APP_REPO_ORG=${APP_REPO_ORG##*/}
 APP_REPO_NAME=${APP_REPO##*/}
 export APP_REPO_NAME=${APP_REPO_NAME%.git}
 
-ARTIFACT="https://raw.github.ibm.com/${APP_REPO_ORG}/${APP_REPO_NAME}/${COMMIT_SHA}/deployment.yml"
+# TODO: read from build step
+ARTIFACT="https://github.ibm.com/ids-env/devops-int/blob/master/charts/otc-pagerduty-broker-1.0.77.tgz"
 
 IMAGE_ARTIFACT="$(cat /config/artifact)"
 SIGNATURE="$(cat /config/signature)"
@@ -36,7 +37,7 @@ cocoa inventory add \
     --build-number="${BUILD_NUMBER}" \
     --pipeline-run-id="${PIPELINE_RUN_ID}" \
     --version="$(cat /config/version)" \
-    --name="${APP_NAME}_deployment"
+    --name="${APP_NAME}"
 
 cocoa inventory add \
     --artifact="${IMAGE_ARTIFACT}" \
@@ -45,5 +46,5 @@ cocoa inventory add \
     --build-number="${BUILD_NUMBER}" \
     --pipeline-run-id="${PIPELINE_RUN_ID}" \
     --version="$(cat /config/version)" \
-    --name="${APP_NAME}" \
+    --name="${APP_NAME}_image" \
     --app-artifacts="${APP_ARTIFACTS}"
