@@ -11,7 +11,11 @@ setup:
     git clone https://$GH_TOKEN@github.ibm.com/$OWNER/$REPO
     cd $REPO
 
-    #npm ci
+    export IDS_USER=idsorg
+    export IDS_TOKEN=$GH_TOKEN
+    export GIT_COMMIT=(git rev-parse HEAD)
+    chmod +x .jobs/build
+    .jobs/build
 
 test:
   abort_on_failure: false
@@ -75,5 +79,5 @@ release:
     REPO=$(jq -r '.services[] | select(.toolchain_binding.name=="app-repo") | .parameters.repo_name' /toolchain/toolchain.json)
     cd $REPO
 
-    #source ../ci/scripts/release.sh
+    source ../ci/scripts/release.sh
 
