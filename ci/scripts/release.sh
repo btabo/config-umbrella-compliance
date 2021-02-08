@@ -4,7 +4,7 @@
 # prepare data
 #
 
-export GHE_TOKEN="$(cat ../ci/git-token)"
+export GHE_TOKEN=$(cat "$WORKSPACE/git-token")
 export COMMIT_SHA="$(cat /config/git-commit)"
 export APP_NAME="$(cat /config/app-name)"
 
