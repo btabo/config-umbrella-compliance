@@ -4,8 +4,6 @@ CONFIG_FOLDER=${1:-"/config"}
 #
 # prepare data
 #
-echo "WORKSPACE=$WORKSPACE"
-
 export GHE_TOKEN=$(cat "$WORKSPACE/git-token")
 export COMMIT_SHA="$(cat $CONFIG_FOLDER/git-commit)"
 export APP_NAME="$(cat $CONFIG_FOLDER/app-name)"
