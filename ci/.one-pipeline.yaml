@@ -50,8 +50,8 @@ deploy:
     fi
     cd $(cat /config/app-name)
 
-    #source ../ci/common/deploy_setup.sh
-    #source ../ci/common/deploy.sh
+    source ../ci/common/deploy_setup.sh
+    source ../ci/common/deploy.sh
 
 acceptance-test:
   abort_on_failure: false
