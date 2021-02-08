@@ -20,7 +20,7 @@ export APP_REPO_ORG=${APP_REPO_ORG##*/}
 APP_REPO_NAME=${APP_REPO##*/}
 export APP_REPO_NAME=${APP_REPO_NAME%.git}
 
-# TODO: read from build step
+# TODO: build compponent chart here
 ARTIFACT="https://github.ibm.com/ids-env/devops-int/blob/master/charts/otc-pagerduty-broker-1.0.77.tgz"
 
 IMAGE_ARTIFACT="$(cat /config/artifact)"

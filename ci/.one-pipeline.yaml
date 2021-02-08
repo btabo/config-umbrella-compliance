@@ -11,13 +11,7 @@ setup:
     git clone https://$GH_TOKEN@github.ibm.com/$OWNER/$REPO
     cd $REPO
 
-    export IDS_USER=idsorg
-    export IDS_TOKEN=$GH_TOKEN
-    export GIT_COMMIT=$(git rev-parse HEAD)
-    export ARTIFACTORY_ID=idsorg@us.ibm.com
-    export ARTIFACTORY_TOKEN_BASE64="$(cat /config/ARTIFACTORY_TOKEN_BASE64)"
-    chmod +x .jobs/build
-    .jobs/build
+    source ../ci/scripts/code_setup.sh
 
 test:
   abort_on_failure: false
@@ -27,7 +21,7 @@ test:
     REPO=$(jq -r '.services[] | select(.toolchain_binding.name=="app-repo") | .parameters.repo_name' /toolchain/toolchain.json)
     cd $REPO
 
-    #npm test
+    source ../ci/scripts/test.sh
 
 containerize:
   dind: true
