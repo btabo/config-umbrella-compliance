@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 
-set -euo pipefail
 CONFIG_FOLDER=${1:-"/config"}
 
 DOCKER_BUILDKIT=1 docker build $DOCKER_BUILD_ARGS .

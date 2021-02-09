@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 
-set -euo pipefail
 CONFIG_FOLDER=${1:-"/config"}
 
 export IDS_USER=idsorg

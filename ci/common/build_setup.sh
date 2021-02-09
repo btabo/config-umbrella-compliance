@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 
-set -euo pipefail
 CONFIG_FOLDER=${1:-"/config"}
 
 if [[ "${PIPELINE_DEBUG:-0}" == 1 ]]; then

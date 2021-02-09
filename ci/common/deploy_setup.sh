@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 COMMON_FOLDER="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-set -euo pipefail
 CONFIG_FOLDER=${1:-"/config"}
 
 GIT_TOKEN=$(cat "$WORKSPACE/git-token")

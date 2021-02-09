@@ -13,7 +13,7 @@ setup:
     git clone https://$GH_TOKEN@github.ibm.com/$OWNER/$REPO $APP_NAME
     cd $APP_NAME
 
-    source ../ci/common/code_setup.sh
+    #source ../ci/common/code_setup.sh
 
 test:
   abort_on_failure: false
@@ -22,7 +22,7 @@ test:
     #!/usr/bin/env bash
     cd $(cat /config/app-name)
 
-    source ../ci/common/test.sh
+    #source ../ci/common/test.sh
 
 containerize:
   dind: true
@@ -37,8 +37,8 @@ containerize:
     fi
     cd $(cat /config/app-name)
 
-    source ../ci/common/build_setup.sh
-    source ../ci/common/build.sh
+    #source ../ci/common/build_setup.sh
+    #source ../ci/common/build.sh
 
 deploy:
   image: icr.io/continuous-delivery/pipeline/pipeline-base-image:2.6@sha256:7f588468622a981f89cf5e1212aaf75fface9da6169b5345ca52ab63d8215907
@@ -72,5 +72,5 @@ release:
     #!/usr/bin/env bash
     cd $(cat /config/app-name)
 
-    source ../ci/common/release.sh
+    #source ../ci/common/release.sh
 

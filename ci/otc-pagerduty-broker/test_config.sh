@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-CONFIG_FOLDER=${1:-"/config"}
+CONFIG_FOLDER=$1
 
 # secrets
 export OTC_API_BROKER_SECRET=$(cat $CONFIG_FOLDER/pagerduty_OTC_API_SECRET)       

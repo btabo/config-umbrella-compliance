@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-CONFIG_FOLDER=${1:-"/config"}
+CONFIG_FOLDER=$1
 
 export NAMESPACE="opentoolchain"
 export NUM_INSTANCES='1'
