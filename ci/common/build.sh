@@ -20,16 +20,14 @@ cat ../../image
 echo
 
 # pass image information along via build.properties
+GIT_COMMIT=$(git rev-parse HEAD)
 echo "IMAGE_REGISTRY=$ICR_REGISTRY_REGION.icr.io" >> build.properties
 echo "REGISTRY_NAMESPACE=${ICR_REGISTRY_NAMESPACE}" >> build.properties
 echo "IMAGE_NAME=${IMAGE_NAME}" >> build.properties
 echo "REGISTRY_URL=$ICR_REGISTRY_REGION.icr.io/${ICR_REGISTRY_NAMESPACE}" >> build.properties
-echo "APPLICATION_VERSION=$(<.pipeline_build_id)" >> build.properties
+echo "APPLICATION_VERSION=$GIT_COMMIT-$(date +%Y%m%d%H%M%Z)" >> build.properties
 echo "BUILD_NUMBER=${BUILD_NUMBER}" >> build.properties
 
-echo pwd
-pwd
-echo
 echo cat build.properties
 cat build.properties
 echo

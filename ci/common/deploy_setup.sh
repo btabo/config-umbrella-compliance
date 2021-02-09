@@ -17,9 +17,6 @@ fi
 export IC_1308775_API_KEY=$(cat $CONFIG_FOLDER/IC_1308775_API_KEY)
 . otc-deploy/k8s/scripts/login/clusterLogin.sh "otc-dal12-test"
 
-echo pwd
-pwd
-echo
 echo cat build.properties
 cat build.properties
 echo
