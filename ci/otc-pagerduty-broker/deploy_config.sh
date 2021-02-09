@@ -11,4 +11,4 @@ export ROUTE=$(cat $CONFIG_FOLDER/app-name)
 export DOMAIN="otc-dal12-test.us-south.containers.mybluemix.net"
 export GLOBAL_ENV_SECGRP="GRP3DEVS"
 export ENV_url="https://$COMPONENT_NAME.$DOMAIN"
-export PIPELINE_KUBERNETES_CLUSTER_NAME="otc-dal12-test"
+#export PIPELINE_KUBERNETES_CLUSTER_NAME="otc-dal12-test"
