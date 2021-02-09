@@ -27,6 +27,9 @@ echo "REGISTRY_URL=$ICR_REGISTRY_REGION.icr.io/${ICR_REGISTRY_NAMESPACE}" >> bui
 echo "APPLICATION_VERSION=$(<.pipeline_build_id)" >> build.properties
 echo "BUILD_NUMBER=${BUILD_NUMBER}" >> build.properties
 
+echo pwd
+pwd
+echo
 echo cat build.properties
 cat build.properties
 echo
