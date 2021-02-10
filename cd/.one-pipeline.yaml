@@ -50,6 +50,7 @@ deploy:
     export IDS_TOKEN=$(cat /config/secure-properties/git-token)
     export IC_1308775_API_KEY=$(cat /config/secure-properties/IC_1308775_API_KEY)
     export IC_1651315_API_KEY=$(cat /config/secure-properties/IC_1651315_API_KEY)
+    export IC_1416501_API_KEY=$(cat /config/secure-properties/IC_1416501_API_KEY)
     export OTC_REGISTRY_API_KEY=$(cat /config/secure-properties/IC_1416501_API_KEY)
     export DEPLOYMENT_SLACK_TOKEN=$(cat /config/secure-properties/DEPLOYMENT_SLACK_TOKEN)
 
