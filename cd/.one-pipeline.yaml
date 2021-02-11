@@ -12,7 +12,7 @@ setup:
 
 deploy:
   #image: ibmcom/pipeline-base-image:2.6
-  image: us.icr.io/otc-ops/otc-deploy # don't use dev tag because of `imagePullPolicy not honoured` - https://github.ibm.com/cocoa/board/issues/1560
+  image: us.icr.io/otc-ops/otc-deploy:latest # don't use dev tag because of `imagePullPolicy not honoured` - https://github.ibm.com/cocoa/board/issues/1560
   imagePullPolicy: Always
   script: |
     #!/usr/bin/env bash
