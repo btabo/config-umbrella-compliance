@@ -37,8 +37,20 @@ containerize:
     fi
     cd $(cat /config/app-name)
 
-    #source ../ci/common/build_setup.sh
-    #source ../ci/common/build.sh
+    if false; then
+      source ../ci/common/build_setup.sh
+      source ../ci/common/build.sh
+    else
+      echo sha256:fcb67782542310dc8cce0dd59c9df08b1f8b0dbd2e235b4e572ede4f9b8bebdf > ../../image-digest
+      echo 20210210145430-master-4ce89e59127a7760b2ebf94c7d50929ec82de05a > ../../image-tags
+      echo us.icr.io/opentoolchain/otc-pagerduty-broker:20210210145430-master-4ce89e59127a7760b2ebf94c7d50929ec82de05a > ../../image
+      echo IMAGE_REGISTRY=us.icr.io > build.properties
+      echo REGISTRY_NAMESPACE=opentoolchain >> build.properties
+      echo IMAGE_NAME=otc-pagerduty-broker >> build.properties
+      echo REGISTRY_URL=us.icr.io/opentoolchain >> build.properties
+      echo APPLICATION_VERSION=20210210145430-master-4ce89e59127a7760b2ebf94c7d50929ec82de05a >> build.properties
+      echo BUILD_NUMBER=63 >> build.properties
+    fi
 
 deploy:
   image: icr.io/continuous-delivery/pipeline/pipeline-base-image:2.6@sha256:7f588468622a981f89cf5e1212aaf75fface9da6169b5345ca52ab63d8215907
