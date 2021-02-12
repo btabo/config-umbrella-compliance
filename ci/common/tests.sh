@@ -5,8 +5,8 @@ COMMON_FOLDER="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 CONFIG_FOLDER=${1:-"/config"}
 
 APP_NAME=$(cat $CONFIG_FOLDER/app-name)
-if [ -f "$COMMON_FOLDER/../$APP_NAME/test_config.sh" ]; then
-    . $COMMON_FOLDER/../$APP_NAME/test_config.sh $CONFIG_FOLDER
+if [ -f "$COMMON_FOLDER/../$APP_NAME/tests_config.sh" ]; then
+    . $COMMON_FOLDER/../$APP_NAME/tests_config.sh $CONFIG_FOLDER
 fi
 
 export ARTIFACTORY_ID=idsorg@us.ibm.com
