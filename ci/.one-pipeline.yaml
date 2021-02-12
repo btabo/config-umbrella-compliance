@@ -13,7 +13,7 @@ setup:
     git clone https://$GH_TOKEN@github.ibm.com/$OWNER/$REPO $APP_NAME
     cd $APP_NAME
 
-    #source ../ci/common/code_setup.sh
+    source ../ci/common/code_setup.sh
 
 test:
   abort_on_failure: false
