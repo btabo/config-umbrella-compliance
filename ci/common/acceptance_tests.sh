@@ -9,4 +9,4 @@ if [ -f "$COMMON_FOLDER/../$APP_NAME/acceptance_tests_config.sh" ]; then
     . $COMMON_FOLDER/../$APP_NAME/acceptance_tests_config.sh $CONFIG_FOLDER
 fi
 
-# TODO
+.jobs/test
