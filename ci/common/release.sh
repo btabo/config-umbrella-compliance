@@ -16,6 +16,7 @@ echo "Compute BUILD_NUMBER to $BUILD_NUMBER"
 
 chmod u+x otc-deploy/k8s/scripts/ci/publishHelmChart.sh
 ./otc-deploy/k8s/scripts/ci/publishHelmChart.sh
+cd .. # publishHelmChart.sh changed folder
 
 echo pwd
 pwd
@@ -42,7 +43,7 @@ export APP_REPO_ORG=${APP_REPO_ORG##*/}
 APP_REPO_NAME=${APP_REPO##*/}
 export APP_REPO_NAME=${APP_REPO_NAME%.git}
 
-CHART_VERSION=$(yq r -j "$(cat $CONFIG_FOLDER/app-name)/Chart.yaml" | jq -r '.version')
+CHART_VERSION=$(yq r -j "$APP_NAME/Chart.yaml" | jq -r '.version')
 ARTIFACT="https://github.ibm.com/$CHART_ORG/$CHART_REPO/blob/master/charts/$APP_NAME-$CHART_VERSION.tgz"
 
 IMAGE_ARTIFACT="$(cat $CONFIG_FOLDER/artifact)"
