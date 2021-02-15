@@ -12,7 +12,9 @@ if [ -f "$COMMON_FOLDER/../$APP_NAME/release_config.sh" ]; then
     . $COMMON_FOLDER/../$APP_NAME/release_config.sh $CONFIG_FOLDER
 fi
 
-BRANCH=$(cat $CONFIG_FOLDER/revision)
+export IDS_USER="idsorg@us.ibm.com"
+export IDS_TOKEN=$GIT_TOKEN
+export BRANCH=$(cat $CONFIG_FOLDER/revision)
 if [ "$BRANCH" == "master" ]; then
     export DOMAIN="devops.dev.us-south.bluemix.net"
     export NUM_INSTANCES="1"
