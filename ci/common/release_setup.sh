@@ -37,6 +37,7 @@ export CHART_ORG="ids-env"
 #export TRIGGER_BRANCH="trigger-deploy"
 export LOGICAL_APP_NAME="$APP_NAME"
 export BUILD_PREFIX="$BRANCH"
+export ENV_BUILD_TIMESTAMP=$(date +%s%3N)
 export ARTIFACTORY_ID=idsorg@us.ibm.com
 export ARTIFACTORY_TOKEN_BASE64="$(cat $CONFIG_FOLDER/ARTIFACTORY_TOKEN_BASE64)"
 
