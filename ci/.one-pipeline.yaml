@@ -76,7 +76,7 @@ acceptance-test:
     #source ../ci/common/acceptance_tests.sh
 
 release:
-  image: wcp-compliance-automation-team-docker-local.artifactory.swg-devops.com/ibm-compliance-automation:1.2.4@sha256:dc98cc52c0caede42149c08727147520e30e81fee543b8dd5939b45d06baa142
+  image: icr.io/continuous-delivery/pipeline/pipeline-base-image:2.7@sha256:282677e79ccb9d20c699d384a54093894de03675752cd848a3133266c898c14c
   script: |
     #!/usr/bin/env bash
     cd $(cat /config/app-name)
