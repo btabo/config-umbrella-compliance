@@ -59,7 +59,7 @@ deploy:
     git clone https://$IDS_USER:$IDS_TOKEN@github.ibm.com/org-ids/otc-deploy
     cp -r otc-deploy/k8s/scripts/* /
     git clone "https://$IDS_USER:$IDS_TOKEN@github.ibm.com/ids-env/devops-config"
-    cp -r devops-config/otc-deploy/* /config
+    cp -r devops-config/otc-deploy/* /otc-config
 
     . /umbrella/helpers.sh
     buildAndDeployFromInventory $ENVIRONMENT $INVENTORY_BRANCH $DEPLOYMENT_SLACK_CHANNEL_ID $DEPLOYMENT_SLACK_TOKEN $SKIP_CLUSTER_DANCE $PAUSE_AFTER_FIRST_CLUSTER
