@@ -34,3 +34,5 @@ export CHART_ORG="ids-env"
 #export TRIGGER_BRANCH="trigger-deploy"
 export LOGICAL_APP_NAME="$APP_NAME"
 export BUILD_PREFIX="$BRANCH"
+
+. otc-deploy/k8s/scripts/login/clusterLogin.sh otc-dal12-build
