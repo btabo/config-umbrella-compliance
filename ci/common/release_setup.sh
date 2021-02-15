@@ -7,6 +7,9 @@ GIT_TOKEN=$(cat "$WORKSPACE/git-token")
 if [ ! -d "otc-deploy" ]; then
   git clone "https://$GIT_TOKEN@github.ibm.com/org-ids/otc-deploy"
 fi 
+if [ ! -d "devops-config" ]; then
+  git clone "https://$GIT_TOKEN@github.ibm.com/ids-env/devops-config"
+fi 
 APP_NAME=$(cat $CONFIG_FOLDER/app-name)
 if [ -f "$COMMON_FOLDER/../$APP_NAME/release_config.sh" ]; then
     . $COMMON_FOLDER/../$APP_NAME/release_config.sh $CONFIG_FOLDER
@@ -35,4 +38,6 @@ export CHART_ORG="ids-env"
 export LOGICAL_APP_NAME="$APP_NAME"
 export BUILD_PREFIX="$BRANCH"
 
-. otc-deploy/k8s/scripts/login/clusterLogin.sh otc-dal12-build
+export IC_1308775_API_KEY=$(cat $CONFIG_FOLDER/IC_1308775_API_KEY)
+. otc-deploy/k8s/scripts/login/clusterLogin.sh "otc-dal12-test"
+. otc-deploy/k8s/scripts/helpers/checkHelmVersion.sh

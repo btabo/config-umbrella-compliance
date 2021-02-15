@@ -22,47 +22,6 @@ echo "Next helm chart version will be $NEXT_VERSION"
 
 echo "Compute BUILD_NUMBER to $BUILD_NUMBER"
 
-####################################################
-
-# Installing a specific helm version as the pipeline vbi seems not appropriate
-
-echo "=========================================================="
-
-echo "CHECKING HELM VERSION: matching Helm Tiller (server) if detected. "
-
-set +e
-
-LOCAL_VERSION=$( helm version --client ${HELM_TLS_OPTION} | grep SemVer: | sed "s/^.*SemVer:\"v\([0-9.]*\).*/\1/" )
-
-TILLER_VERSION=$( helm version --server ${HELM_TLS_OPTION} | grep SemVer: | sed "s/^.*SemVer:\"v\([0-9.]*\).*/\1/" )
-
-set -e
-
-if [ -z "${TILLER_VERSION}" ]; then
-    if [ -z "${HELM_VERSION}" ]; then
-        CLIENT_VERSION=${LOCAL_VERSION}
-    else
-        CLIENT_VERSION=${HELM_VERSION}
-    fi
-else
-    echo -e "Helm Tiller ${TILLER_VERSION} already installed in cluster. Keeping it, and aligning client."
-    CLIENT_VERSION=${TILLER_VERSION}
-fi
-
-if [ "${CLIENT_VERSION}" != "${LOCAL_VERSION}" ]; then
-    echo -e "Installing Helm client ${CLIENT_VERSION}"
-    WORKING_DIR=$(pwd)
-    mkdir ~/tmpbin && cd ~/tmpbin
-    curl -L https://storage.googleapis.com/kubernetes-helm/helm-v${CLIENT_VERSION}-linux-amd64.tar.gz -o helm.tar.gz && tar -xzvf helm.tar.gz
-    cd linux-amd64
-    export PATH=$(pwd):$PATH
-    cd $WORKING_DIR
-fi
-
-####################################################
-
-echo "====================================";
-
 #export IMAGE_TAG=$LATEST_IMAGE_TAG
 
 export ENV_BUILD_TIMESTAMP=$(date +%s%3N)
