@@ -23,9 +23,6 @@ echo
 echo ls -l $CONFIG_FOLDER
 ls -l $CONFIG_FOLDER
 echo
-echo ls -l .
-ls -l .
-echo
 
 #
 # prepare data

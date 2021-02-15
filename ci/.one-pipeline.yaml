@@ -13,7 +13,7 @@ setup:
     git clone https://$GH_TOKEN@github.ibm.com/$OWNER/$REPO $APP_NAME
     cd $APP_NAME
 
-    source ../ci/common/code_setup.sh
+    #source ../ci/common/code_setup.sh
 
 test:
   abort_on_failure: false
@@ -36,16 +36,6 @@ containerize:
       set -x
     fi
     cd $(cat /config/app-name)
-
-echo pwd
-pwd
-echo
-echo ls -l $CONFIG_FOLDER
-ls -l $CONFIG_FOLDER
-echo
-echo ls -l .
-ls -l .
-echo
 
     if false; then
       source ../ci/common/build_setup.sh
