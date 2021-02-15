@@ -18,12 +18,6 @@ deploy:
   script: |
     #!/usr/bin/env bash
 
-    # comment below if using otc-deploy image
-    git clone https://$IDS_USER:$IDS_TOKEN@github.ibm.com/org-ids/otc-deploy
-    cp -r otc-deploy/k8s/scripts/* /
-    git clone "https://$IDS_USER:$IDS_TOKEN@github.ibm.com/ids-env/devops-config"
-    cp -r devops-config/otc-deploy/* /config
-
     # config
     export ENVIRONMENT=$(cat /config/environment-properties/ENVIRONMENT)
     export INVENTORY_BRANCH=$(cat /config/environment-properties/target-environment)
@@ -60,6 +54,12 @@ deploy:
     export IC_1416501_API_KEY=$(cat /config/secure-properties/IC_1416501_API_KEY)
     export OTC_REGISTRY_API_KEY=$(cat /config/secure-properties/IC_1416501_API_KEY)
     export DEPLOYMENT_SLACK_TOKEN=$(cat /config/secure-properties/DEPLOYMENT_SLACK_TOKEN)
+
+    # comment below if using otc-deploy image
+    git clone https://$IDS_USER:$IDS_TOKEN@github.ibm.com/org-ids/otc-deploy
+    cp -r otc-deploy/k8s/scripts/* /
+    git clone "https://$IDS_USER:$IDS_TOKEN@github.ibm.com/ids-env/devops-config"
+    cp -r devops-config/otc-deploy/* /config
 
     . /umbrella/helpers.sh
     buildAndDeployFromInventory $ENVIRONMENT $INVENTORY_BRANCH $DEPLOYMENT_SLACK_CHANNEL_ID $DEPLOYMENT_SLACK_TOKEN $SKIP_CLUSTER_DANCE $PAUSE_AFTER_FIRST_CLUSTER
