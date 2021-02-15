@@ -3,8 +3,7 @@ CONFIG_FOLDER=${1:-"/config"}
 
 # build and publish component chart
 
-echo "Workaround to find a suitable BUILD_NUMBER for helm chart revision
-number"
+echo "Workaround to find a suitable BUILD_NUMBER for helm chart revision number"
 
 git clone --depth 1 https://$IDS_USER:$IDS_TOKEN@github.ibm.com/ids-env/$CHART_REPO || true
 
