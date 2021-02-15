@@ -26,8 +26,8 @@ echo
 echo ls -l .
 ls -l .
 echo
-echo ls -l $APP_NAME
-ls -l $APP_NAME
+echo ls -l $APP_NAME/$APP_NAME
+ls -l $APP_NAME/$APP_NAME
 echo
 
 #
@@ -48,7 +48,7 @@ export APP_REPO_ORG=${APP_REPO_ORG##*/}
 APP_REPO_NAME=${APP_REPO##*/}
 export APP_REPO_NAME=${APP_REPO_NAME%.git}
 
-CHART_VERSION=$(yq r -j "$APP_NAME/Chart.yaml" | jq -r '.version')
+CHART_VERSION=$(yq r -j "$APP_NAME/$APP_NAME/Chart.yaml" | jq -r '.version')
 ARTIFACT="https://github.ibm.com/$CHART_ORG/$CHART_REPO/blob/master/charts/$APP_NAME-$CHART_VERSION.tgz"
 
 IMAGE_ARTIFACT="$(cat $CONFIG_FOLDER/artifact)"
