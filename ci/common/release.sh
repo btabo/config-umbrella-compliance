@@ -17,10 +17,17 @@ echo "Compute BUILD_NUMBER to $BUILD_NUMBER"
 chmod u+x otc-deploy/k8s/scripts/ci/publishHelmChart.sh
 ./otc-deploy/k8s/scripts/ci/publishHelmChart.sh
 
+echo pwd
+pwd
+echo
+echo ls -l $CONFIG_FOLDER
+ls -l $CONFIG_FOLDER
+echo
+
 #
 # prepare data
 #
-export GHE_TOKEN=$(cat "$WORKSPACE/git-token")
+export GHE_TOKEN="$(cat $WORKSPACE/git-token)"
 export COMMIT_SHA="$(cat $CONFIG_FOLDER/git-commit)"
 
 INVENTORY_REPO=$(jq -r '.services[] | select(.toolchain_binding.name=="inventory-repo") | .parameters.repo_url' /toolchain/toolchain.json)
@@ -35,7 +42,7 @@ export APP_REPO_ORG=${APP_REPO_ORG##*/}
 APP_REPO_NAME=${APP_REPO##*/}
 export APP_REPO_NAME=${APP_REPO_NAME%.git}
 
-CHART_VERSION=$(yq r -j $(cat $CONFIG_FOLDER/app-name)/Chart.yaml | jq -r '.version')
+CHART_VERSION=$(yq r -j "$(cat $CONFIG_FOLDER/app-name)/Chart.yaml" | jq -r '.version')
 ARTIFACT="https://github.ibm.com/$CHART_ORG/$CHART_REPO/blob/master/charts/$APP_NAME-$CHART_VERSION.tgz"
 
 IMAGE_ARTIFACT="$(cat $CONFIG_FOLDER/artifact)"
