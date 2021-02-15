@@ -73,7 +73,7 @@ acceptance-test:
     #!/usr/bin/env bash
     cd $(cat /config/app-name)
 
-    source ../ci/common/acceptance_tests.sh
+    #source ../ci/common/acceptance_tests.sh
 
 release:
   image: wcp-compliance-automation-team-docker-local.artifactory.swg-devops.com/ibm-compliance-automation:1.2.4@sha256:dc98cc52c0caede42149c08727147520e30e81fee543b8dd5939b45d06baa142
@@ -81,5 +81,6 @@ release:
     #!/usr/bin/env bash
     cd $(cat /config/app-name)
 
-    #source ../ci/common/release.sh
+    source ../ci/common/release_setup.sh
+    source ../ci/common/release.sh
 

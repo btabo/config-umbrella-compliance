@@ -1,6 +1,77 @@
 #!/usr/bin/env bash
 CONFIG_FOLDER=${1:-"/config"}
 
+# build and publish component chart
+
+echo "Workaround to find a suitable BUILD_NUMBER for helm chart revision
+number"
+
+git clone --depth 1 https://$IDS_USER:$IDS_TOKEN@github.ibm.com/ids-env/$CHART_REPO || true
+
+NEXT_VERSION=$(ls -v ${CHART_REPO}/charts/${LOGICAL_APP_NAME}* 2> /dev/null | tail -n -1 | grep -Eo '[0-9]+\.[0-9]+\.[0-9]+' | awk -F'.' -v OFS='.' '{$3=sprintf("%d",++$3)}7')
+
+if [ -z "$NEXT_VERSION" ]; then
+    NEXT_VERSION="$MAJOR_VERSION.$MINOR_VERSION.0"
+fi
+
+export BUILD_NUMBER=$(echo "$NEXT_VERSION" | awk -F. '{print $3}')
+
+rm -r -f $CHART_REPO
+
+echo "Next helm chart version will be $NEXT_VERSION"
+
+echo "Compute BUILD_NUMBER to $BUILD_NUMBER"
+
+####################################################
+
+# Installing a specific helm version as the pipeline vbi seems not appropriate
+
+echo "=========================================================="
+
+echo "CHECKING HELM VERSION: matching Helm Tiller (server) if detected. "
+
+set +e
+
+LOCAL_VERSION=$( helm version --client ${HELM_TLS_OPTION} | grep SemVer: | sed "s/^.*SemVer:\"v\([0-9.]*\).*/\1/" )
+
+TILLER_VERSION=$( helm version --server ${HELM_TLS_OPTION} | grep SemVer: | sed "s/^.*SemVer:\"v\([0-9.]*\).*/\1/" )
+
+set -e
+
+if [ -z "${TILLER_VERSION}" ]; then
+    if [ -z "${HELM_VERSION}" ]; then
+        CLIENT_VERSION=${LOCAL_VERSION}
+    else
+        CLIENT_VERSION=${HELM_VERSION}
+    fi
+else
+    echo -e "Helm Tiller ${TILLER_VERSION} already installed in cluster. Keeping it, and aligning client."
+    CLIENT_VERSION=${TILLER_VERSION}
+fi
+
+if [ "${CLIENT_VERSION}" != "${LOCAL_VERSION}" ]; then
+    echo -e "Installing Helm client ${CLIENT_VERSION}"
+    WORKING_DIR=$(pwd)
+    mkdir ~/tmpbin && cd ~/tmpbin
+    curl -L https://storage.googleapis.com/kubernetes-helm/helm-v${CLIENT_VERSION}-linux-amd64.tar.gz -o helm.tar.gz && tar -xzvf helm.tar.gz
+    cd linux-amd64
+    export PATH=$(pwd):$PATH
+    cd $WORKING_DIR
+fi
+
+####################################################
+
+echo "====================================";
+
+#export IMAGE_TAG=$LATEST_IMAGE_TAG
+
+export ENV_BUILD_TIMESTAMP=$(date +%s%3N)
+
+# Build and Package the Helm Chart for dev environment
+
+chmod u+x otc-deploy/k8s/scripts/ci/publishHelmChart.sh
+./otc-deploy/k8s/scripts/ci/publishHelmChart.sh
+
 #
 # prepare data
 #
