@@ -13,7 +13,7 @@ setup:
     git clone https://$GH_TOKEN@github.ibm.com/$OWNER/$REPO $APP_NAME
     cd $APP_NAME
 
-    source ../ci/common/code_setup.sh
+    #source ../ci/common/code_setup.sh
 
 test:
   abort_on_failure: false
@@ -76,7 +76,7 @@ acceptance-test:
     #source ../ci/common/acceptance_tests.sh
 
 release:
-  image: icr.io/continuous-delivery/pipeline/pipeline-base-image:2.7@sha256:282677e79ccb9d20c699d384a54093894de03675752cd848a3133266c898c14c
+  image: icr.io/continuous-delivery/pipeline/pipeline-base-image:2.6@sha256:7f588468622a981f89cf5e1212aaf75fface9da6169b5345ca52ab63d8215907
   script: |
     #!/usr/bin/env bash
     cd $(cat /config/app-name)

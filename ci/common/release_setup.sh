@@ -46,7 +46,7 @@ export IC_1308775_API_KEY=$(cat $CONFIG_FOLDER/IC_1308775_API_KEY)
 
 # install cocoa cli
 COCOA_CLI_VERSION=1.4.0
-ARTIFACTORY_API_KEY=$(base64 -D <<< $ARTIFACTORY_TOKEN_BASE64)
+ARTIFACTORY_API_KEY=$(base64 -d <<< $ARTIFACTORY_TOKEN_BASE64)
 curl -u ${ARTIFACTORY_ID}:${ARTIFACTORY_API_KEY} -O "https://eu.artifactory.swg-devops.com/artifactory/wcp-compliance-automation-team-generic-local/cocoa-linux-${COCOA_CLI_VERSION}"
 cp cocoa-linux-* /usr/local/bin/cocoa
 chmod +x /usr/local/bin/cocoa
