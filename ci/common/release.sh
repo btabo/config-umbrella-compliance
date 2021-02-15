@@ -16,13 +16,18 @@ echo "Compute BUILD_NUMBER to $BUILD_NUMBER"
 
 chmod u+x otc-deploy/k8s/scripts/ci/publishHelmChart.sh
 ./otc-deploy/k8s/scripts/ci/publishHelmChart.sh
-cd .. # publishHelmChart.sh changed folder
 
 echo pwd
 pwd
 echo
 echo ls -l $CONFIG_FOLDER
 ls -l $CONFIG_FOLDER
+echo
+echo ls -l .
+ls -l .
+echo
+echo ls -l $APP_NAME
+ls -l $APP_NAME
 echo
 
 #
