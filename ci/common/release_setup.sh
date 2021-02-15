@@ -12,7 +12,7 @@ if [ -f "$COMMON_FOLDER/../$APP_NAME/release_config.sh" ]; then
     . $COMMON_FOLDER/../$APP_NAME/release_config.sh $CONFIG_FOLDER
 fi
 
-export IDS_USER="idsorg@us.ibm.com"
+export IDS_USER="idsorg"
 export IDS_TOKEN=$GIT_TOKEN
 export BRANCH=$(cat $CONFIG_FOLDER/revision)
 if [ "$BRANCH" == "master" ]; then
