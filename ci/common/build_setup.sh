@@ -36,7 +36,7 @@ add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(
 apt-get update && apt-get install docker-ce-cli
 
 IMAGE_NAME="$(cat $CONFIG_FOLDER/app-name)"
-IMAGE_TAG="$(date +%Y%m%d%H%M%S)-$(cat $CONFIG_FOLDER/git-branch)-$(cat $CONFIG_FOLDER/git-commit)"
+IMAGE_TAG="$(date +%Y%m%d%H%M%S)-$(cat $CONFIG_FOLDER/app-branch)-$(cat $CONFIG_FOLDER/git-commit)"
 
 BREAK_GLASS=$(cat $CONFIG_FOLDER/break_glass || true)
 
