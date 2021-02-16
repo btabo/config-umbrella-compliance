@@ -29,6 +29,9 @@ echo
 echo ls -l k8s
 ls -l k8s
 echo
+echo ls -l k8s/$APP_NAME
+ls -l k8s/$APP_NAME
+echo
 echo ls -l $WORKSPACE
 ls -l $WORKSPACE
 echo
@@ -51,7 +54,7 @@ export APP_REPO_ORG=${APP_REPO_ORG##*/}
 APP_REPO_NAME=${APP_REPO##*/}
 export APP_REPO_NAME=${APP_REPO_NAME%.git}
 
-CHART_VERSION=$(yq r -j "k8s/Chart.yaml" | jq -r '.version')
+CHART_VERSION=$(yq r -j "k8s/$APP_NAME/Chart.yaml" | jq -r '.version')
 ARTIFACT="https://github.ibm.com/$CHART_ORG/$CHART_REPO/blob/master/charts/$APP_NAME-$CHART_VERSION.tgz"
 
 IMAGE_ARTIFACT="$(cat $CONFIG_FOLDER/artifact)"
