@@ -59,13 +59,14 @@ CHART_VERSION=$(yq r -j "k8s/$APP_NAME/Chart.yaml" | jq -r '.version')
 ARTIFACT="https://github.ibm.com/$CHART_ORG/$CHART_REPO/blob/master/charts/$APP_NAME-$CHART_VERSION.tgz"
 echo "ARTIFACT=$ARTIFACT"
 
+set -x
+
 IMAGE_ARTIFACT="$(cat $CONFIG_FOLDER/artifact)"
 SIGNATURE="$(cat $CONFIG_FOLDER/signature)"
 APP_ARTIFACTS='{ "signature": "'${SIGNATURE}'", "provenance": "'${IMAGE_ARTIFACT}'" }'
 #
 # add to inventory
 #
-set -x
 cocoa inventory add \
     --artifact="${ARTIFACT}" \
     --repository-url="${APP_REPO}" \
