@@ -51,3 +51,21 @@ ARTIFACTORY_API_KEY=$(base64 -d <<< $ARTIFACTORY_TOKEN_BASE64)
 curl -u ${ARTIFACTORY_ID}:${ARTIFACTORY_API_KEY} -O "https://eu.artifactory.swg-devops.com/artifactory/wcp-compliance-automation-team-generic-local/cocoa-linux-${COCOA_CLI_VERSION}"
 cp cocoa-linux-* /usr/local/bin/cocoa
 chmod +x /usr/local/bin/cocoa
+export PATH="$PATH:/usr/local/bin/"
+
+echo "Workaround to find a suitable BUILD_NUMBER for helm chart revision number"
+git clone --depth 1 https://$IDS_USER:$IDS_TOKEN@github.ibm.com/ids-env/$CHART_REPO || true
+NEXT_VERSION=$(ls -v ${CHART_REPO}/charts/${LOGICAL_APP_NAME}* 2> /dev/null | tail -n -1 | grep -Eo '[0-9]+\.[0-9]+\.[0-9]+' | awk -F'.' -v OFS='.' '{$3=sprintf("%d",++$3)}7')
+if [ -z "$NEXT_VERSION" ]; then
+    NEXT_VERSION="$MAJOR_VERSION.$MINOR_VERSION.0"
+fi
+export BUILD_NUMBER=$(echo "$NEXT_VERSION" | awk -F. '{print $3}')
+rm -r -f $CHART_REPO
+echo "Next helm chart version will be $NEXT_VERSION"
+echo "Compute BUILD_NUMBER to $BUILD_NUMBER"
+
+export COMMIT_SHA="$(cat $CONFIG_FOLDER/git-commit)"
+
+APP_REPO=$(cat $CONFIG_FOLDER/repository-url)
+APP_REPO_NAME=${APP_REPO##*/}
+export APP_REPO_NAME=${APP_REPO_NAME%.git}
