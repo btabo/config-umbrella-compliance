@@ -39,23 +39,25 @@ echo
 #
 # prepare data
 #
-export GHE_TOKEN="$(cat $WORKSPACE/git-token)"
+#export GHE_TOKEN="$(cat $WORKSPACE/git-token)"
 export COMMIT_SHA="$(cat $CONFIG_FOLDER/git-commit)"
 
-INVENTORY_REPO=$(jq -r '.services[] | select(.toolchain_binding.name=="inventory-repo") | .parameters.repo_url' /toolchain/toolchain.json)
-GHE_ORG=${INVENTORY_REPO%/*}
-export GHE_ORG=${GHE_ORG##*/}
-GHE_REPO=${INVENTORY_REPO##*/}
-export GHE_REPO=${GHE_REPO%.git}
+# INVENTORY_REPO=$(jq -r '.services[] | select(.toolchain_binding.name=="inventory-repo") | .parameters.repo_url' /toolchain/toolchain.json)
+# GHE_ORG=${INVENTORY_REPO%/*}
+# export GHE_ORG=${GHE_ORG##*/}
+# GHE_REPO=${INVENTORY_REPO##*/}
+# export GHE_REPO=${GHE_REPO%.git}
 
 export APP_REPO=$(jq -r '.services[] | select(.toolchain_binding.name=="app-repo") | .parameters.repo_url' /toolchain/toolchain.json)
 APP_REPO_ORG=${APP_REPO%/*}
 export APP_REPO_ORG=${APP_REPO_ORG##*/}
 APP_REPO_NAME=${APP_REPO##*/}
 export APP_REPO_NAME=${APP_REPO_NAME%.git}
+echo "APP_REPO_NAME=$APP_REPO_NAME"
 
 CHART_VERSION=$(yq r -j "k8s/$APP_NAME/Chart.yaml" | jq -r '.version')
 ARTIFACT="https://github.ibm.com/$CHART_ORG/$CHART_REPO/blob/master/charts/$APP_NAME-$CHART_VERSION.tgz"
+echo "ARTIFACT=$ARTIFACT"
 
 IMAGE_ARTIFACT="$(cat $CONFIG_FOLDER/artifact)"
 SIGNATURE="$(cat $CONFIG_FOLDER/signature)"
@@ -63,7 +65,7 @@ APP_ARTIFACTS='{ "signature": "'${SIGNATURE}'", "provenance": "'${IMAGE_ARTIFACT
 #
 # add to inventory
 #
-
+set -x
 cocoa inventory add \
     --artifact="${ARTIFACT}" \
     --repository-url="${APP_REPO}" \
