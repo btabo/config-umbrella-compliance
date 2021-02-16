@@ -45,14 +45,7 @@ export IC_1308775_API_KEY=$(cat $CONFIG_FOLDER/IC_1308775_API_KEY)
 . otc-deploy/k8s/scripts/login/clusterLogin.sh "otc-dal12-test"
 . otc-deploy/k8s/scripts/helpers/checkHelmVersion.sh
 
-# install cocoa cli
-COCOA_CLI_VERSION=1.4.0
-ARTIFACTORY_API_KEY=$(base64 -d <<< $ARTIFACTORY_TOKEN_BASE64)
-curl -u ${ARTIFACTORY_ID}:${ARTIFACTORY_API_KEY} -O "https://eu.artifactory.swg-devops.com/artifactory/wcp-compliance-automation-team-generic-local/cocoa-linux-${COCOA_CLI_VERSION}"
-cp cocoa-linux-* /usr/local/bin/cocoa
-chmod +x /usr/local/bin/cocoa
-export PATH="$PATH:/usr/local/bin/"
-
+# compute BUILD_NUMBER
 echo "Workaround to find a suitable BUILD_NUMBER for helm chart revision number"
 git clone --depth 1 https://$IDS_USER:$IDS_TOKEN@github.ibm.com/ids-env/$CHART_REPO || true
 NEXT_VERSION=$(ls -v ${CHART_REPO}/charts/${LOGICAL_APP_NAME}* 2> /dev/null | tail -n -1 | grep -Eo '[0-9]+\.[0-9]+\.[0-9]+' | awk -F'.' -v OFS='.' '{$3=sprintf("%d",++$3)}7')
@@ -64,9 +57,24 @@ rm -r -f $CHART_REPO
 echo "Next helm chart version will be $NEXT_VERSION"
 echo "Compute BUILD_NUMBER to $BUILD_NUMBER"
 
+# install cocoa cli
+COCOA_CLI_VERSION=1.4.0
+ARTIFACTORY_API_KEY=$(base64 -d <<< $ARTIFACTORY_TOKEN_BASE64)
+curl -u ${ARTIFACTORY_ID}:${ARTIFACTORY_API_KEY} -O "https://eu.artifactory.swg-devops.com/artifactory/wcp-compliance-automation-team-generic-local/cocoa-linux-${COCOA_CLI_VERSION}"
+cp cocoa-linux-* /usr/local/bin/cocoa
+chmod +x /usr/local/bin/cocoa
+export PATH="$PATH:/usr/local/bin/"
+
 # for cocoa cli
 export GHE_TOKEN="$(cat $WORKSPACE/git-token)"
 export COMMIT_SHA="$(cat $CONFIG_FOLDER/git-commit)"
+INVENTORY_REPO=$(cat $CONFIG_FOLDER/inventory-url)
+GHE_ORG=${INVENTORY_REPO%/*}
+export GHE_ORG=${GHE_ORG##*/}
+GHE_REPO=${INVENTORY_REPO##*/}
+export GHE_REPO=${GHE_REPO%.git}
 APP_REPO=$(cat $CONFIG_FOLDER/repository-url)
+APP_REPO_ORG=${APP_REPO%/*}
+export APP_REPO_ORG=${APP_REPO_ORG##*/}
 APP_REPO_NAME=${APP_REPO##*/}
 export APP_REPO_NAME=${APP_REPO_NAME%.git}
