@@ -10,7 +10,7 @@ fi
 if [ ! -d "devops-config" ]; then
   git clone "https://$GIT_TOKEN@github.ibm.com/ids-env/devops-config"
 fi 
-APP_NAME=$(cat $CONFIG_FOLDER/app-name)
+export APP_NAME=$(cat $CONFIG_FOLDER/app-name)
 if [ -f "$COMMON_FOLDER/../$APP_NAME/deploy_config.sh" ]; then
     . $COMMON_FOLDER/../$APP_NAME/deploy_config.sh $CONFIG_FOLDER
 fi
