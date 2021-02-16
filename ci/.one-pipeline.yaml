@@ -6,11 +6,15 @@ setup:
     #!/usr/bin/env bash
     echo "WORKSPACE=$WORKSPACE"
     GH_TOKEN=$(cat "$WORKSPACE/git-token")
-    OWNER=$(jq -r '.services[] | select(.toolchain_binding.name=="app-repo") | .parameters.owner_id' /toolchain/toolchain.json)
-    REPO=$(jq -r '.services[] | select(.toolchain_binding.name=="app-repo") | .parameters.repo_name' /toolchain/toolchain.json)
-    curl -u ":$GH_TOKEN" https://github.ibm.com/api/v3/repos/$OWNER/$REPO/branches/master/protection -XPUT -d '{"required_pull_request_reviews":{"dismiss_stale_reviews":true},"required_status_checks":{"strict":true,"contexts":["tekton/code-branch-protection","tekton/code-unit-tests","tekton/code-cis-check","tekton/code-vulnerability-scan","tekton/code-detect-secrets"]},"enforce_admins":null,"restrictions":null}'
+    APP_REPO_URL=$(cat /config/app-repo-url)
+    APP_REPO_URL=${APP_REPO_URL%.git}
+    OWNER=${APP_REPO_URL%/*}
+    OWNER=${OWNER##*/}
+    REPO_NAME=${APP_REPO_URL##*/}
+    REPO_BRANCH=$(cat /config/app-repo-branch)
+    curl -u ":$GH_TOKEN" https://github.ibm.com/api/v3/repos/$OWNER/$REPO_NAME/branches/$REPO_BRANCH/protection -XPUT -d '{"required_pull_request_reviews":{"dismiss_stale_reviews":true},"required_status_checks":{"strict":true,"contexts":["tekton/code-branch-protection","tekton/code-unit-tests","tekton/code-cis-check","tekton/code-vulnerability-scan","tekton/code-detect-secrets"]},"enforce_admins":null,"restrictions":null}'
     APP_NAME=$(cat /config/app-name)
-    git clone https://$GH_TOKEN@github.ibm.com/$OWNER/$REPO $APP_NAME
+    git clone -b $REPO_BRANCH https://$GH_TOKEN@github.ibm.com/$OWNER/$REPO_NAME $APP_NAME
     cd $APP_NAME
 
     source ../ci/common/code_setup.sh
