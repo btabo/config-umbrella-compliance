@@ -6,13 +6,16 @@ chmod u+x otc-deploy/k8s/scripts/ci/publishHelmChart.sh
 
 CHART_VERSION=$(yq r -j "k8s/$APP_NAME/Chart.yaml" | jq -r '.version')
 ARTIFACT="https://github.ibm.com/$CHART_ORG/$CHART_REPO/blob/master/charts/$APP_NAME-$CHART_VERSION.tgz"
-echo "ARTIFACT=$ARTIFACT"
-
-set -x
 
 IMAGE_ARTIFACT="$(cat $CONFIG_FOLDER/artifact)"
-SIGNATURE="$(cat $CONFIG_FOLDER/signature)"
-APP_ARTIFACTS='{ "signature": "'${SIGNATURE}'", "provenance": "'${IMAGE_ARTIFACT}'" }'
+if [ -f $CONFIG_FOLDER/signature ]; then
+    # using TaaS worker
+    SIGNATURE="$(cat $CONFIG_FOLDER/signature)"
+    APP_ARTIFACTS='{ "signature": "'${SIGNATURE}'", "provenance": "'${IMAGE_ARTIFACT}'" }'
+else
+    # using regular worker, no signature
+    APP_ARTIFACTS='{ "provenance": "'${IMAGE_ARTIFACT}'" }'
+fi
 
 echo which cocoa
 which cocoa
