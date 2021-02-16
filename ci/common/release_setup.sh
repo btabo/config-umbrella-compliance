@@ -64,8 +64,9 @@ rm -r -f $CHART_REPO
 echo "Next helm chart version will be $NEXT_VERSION"
 echo "Compute BUILD_NUMBER to $BUILD_NUMBER"
 
+# for cocoa cli
+export GHE_TOKEN="$(cat $WORKSPACE/git-token)"
 export COMMIT_SHA="$(cat $CONFIG_FOLDER/git-commit)"
-
 APP_REPO=$(cat $CONFIG_FOLDER/repository-url)
 APP_REPO_NAME=${APP_REPO##*/}
 export APP_REPO_NAME=${APP_REPO_NAME%.git}
