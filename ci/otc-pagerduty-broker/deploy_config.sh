@@ -11,6 +11,11 @@ export SEC_ENCRYPTION_KEY=$(cat $CONFIG_FOLDER/pagerduty_ENCRYPTION_KEY)
 export SEC_CLOUDANT_IAM_API_KEY=$(cat $CONFIG_FOLDER/pagerduty_CLOUDANT_IAM_API_KEY)
  
 # config 
+if [ "$(cat $CONFIG_FOLER/app-branch)" == "integration" ]; then
+    export NAMESPACE="otc-int"
+else
+    export NAMESPACE="opentoolchain"
+fi
 export ENV_CLOUDANT_URL=$(cat $CONFIG_FOLDER/pagerduty_CLOUDANT_URL)
 export ENV_LOG4J_LEVEL="DEBUG"
 export ENV_services__otc_api="https://otc-api.us-south.devops.dev.cloud.ibm.com/api/v1"
@@ -21,11 +26,10 @@ export pagerduty_site_name="ibmdevops"
 export pagerduty_site_name_2="ibmdevops"
 export test_tiam_id="test"
 export ENV_PORT="8080"
-export NAMESPACE="otc-int"
 export NUM_INSTANCES='1'
 export RELEASE_NAME=$APP_NAME-$NAMESPACE
 export COMPONENT_NAME=$APP_NAME
-export IMAGE_TAG= "latest"
+export IMAGE_TAG= "latest" #unused ?
 export ROUTE=$APP_NAME-$NAMESPACE
 export DOMAIN="otc-dal12-test.us-south.containers.mybluemix.net"
 export GLOBAL_ENV_SECGRP="GRP3DEVS"
