@@ -3,7 +3,7 @@
 CONFIG_FOLDER=$1
 
 # secrets
-export SEC_OTC_API_BROKER_SECRET=$(cat $CONFIG_FOLDER/pagerduty_OTC_API_SECRET)       
+export SEC_OTC_API_BROKER_SECRET=$(cat $CONFIG_FOLDER/pagerduty_OTC_API_SECRET)
 export pagerduty_api_key=$(cat $CONFIG_FOLDER/pagerduty_api_key)
 export pagerduty_api_key_2=$(cat $CONFIG_FOLDER/pagerduty_api_key_2)
 export test_tiam_secret=$(cat $CONFIG_FOLDER/pagerduty_test_tiam_secret)
@@ -23,11 +23,11 @@ export test_tiam_id="test"
 export ENV_PORT="8080"
 export NAMESPACE="otc-int"
 export NUM_INSTANCES='1'
-export RELEASE_NAME=$APP_NAME-int
+export RELEASE_NAME=$APP_NAME-$NAMESPACE
 export COMPONENT_NAME=$APP_NAME
 export IMAGE_TAG= "latest"
-export ROUTE=$APP_NAME-int
+export ROUTE=$APP_NAME-$NAMESPACE
 export DOMAIN="otc-dal12-test.us-south.containers.mybluemix.net"
 export GLOBAL_ENV_SECGRP="GRP3DEVS"
-export ENV_url="https://$APP_NAME-int.$DOMAIN"
+export ENV_url="https://$APP_NAME-$NAMESPACE.$DOMAIN"
 export PIPELINE_KUBERNETES_CLUSTER_NAME="otc-dal12-test"
