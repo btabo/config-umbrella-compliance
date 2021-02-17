@@ -17,7 +17,7 @@ fi
 
 export IDS_USER="idsorg"
 export IDS_TOKEN=$GIT_TOKEN
-export BRANCH=$(cat $CONFIG_FOLDER/revision)
+export BRANCH=$(cat $CONFIG_FOLDER/app-branch)
 if [ "$BRANCH" == "master" ]; then
     export DOMAIN="devops.dev.us-south.bluemix.net"
     export NUM_INSTANCES="1"
