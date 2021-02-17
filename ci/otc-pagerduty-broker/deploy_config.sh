@@ -11,7 +11,7 @@ export SEC_ENCRYPTION_KEY=$(cat $CONFIG_FOLDER/pagerduty_ENCRYPTION_KEY)
 export SEC_CLOUDANT_IAM_API_KEY=$(cat $CONFIG_FOLDER/pagerduty_CLOUDANT_IAM_API_KEY)
  
 # config 
-if [ "$(cat $CONFIG_FOLER/app-branch)" == "integration" ]; then
+if [ "$(cat $CONFIG_FOLDER/app-branch)" == "integration" ]; then
     export NAMESPACE="otc-int"
 else
     export NAMESPACE="opentoolchain"
