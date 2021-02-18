@@ -36,6 +36,3 @@ export DOMAIN="otc-dal12-test.us-south.containers.mybluemix.net"
 export GLOBAL_ENV_SECGRP="GRP3DEVS"
 export ENV_url="https://$APP_NAME-$NAMESPACE.$DOMAIN"
 export PIPELINE_KUBERNETES_CLUSTER_NAME="otc-dal12-test"
-
-IMAGE_TAG=$(cat ../../image-tags)
-export BUILD_NUMBER=$(git rev-parse HEAD)-${IMAGE_TAG%-*}
