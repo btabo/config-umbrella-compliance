@@ -13,8 +13,10 @@ export SEC_CLOUDANT_IAM_API_KEY=$(cat $CONFIG_FOLDER/pagerduty_CLOUDANT_IAM_API_
 # config 
 if [ "$(cat $CONFIG_FOLDER/app-branch)" == "integration" ]; then
     export NAMESPACE="otc-int"
+    export RELEASE_NAME=$APP_NAME-$NAMESPACE
 else
     export NAMESPACE="opentoolchain"
+    export RELEASE_NAME=$APP_NAME
 fi
 export ENV_CLOUDANT_URL=$(cat $CONFIG_FOLDER/pagerduty_CLOUDANT_URL)
 export ENV_LOG4J_LEVEL="DEBUG"
@@ -27,7 +29,6 @@ export pagerduty_site_name_2="ibmdevops"
 export test_tiam_id="test"
 export ENV_PORT="8080"
 export NUM_INSTANCES='1'
-export RELEASE_NAME=$APP_NAME-$NAMESPACE
 export COMPONENT_NAME=$APP_NAME
 export IMAGE_TAG= "latest" #unused ?
 export ROUTE=$APP_NAME-$NAMESPACE
