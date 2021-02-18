@@ -18,16 +18,16 @@ fi
 export IDS_USER="idsorg"
 export IDS_TOKEN=$GIT_TOKEN
 export BRANCH=$(cat $CONFIG_FOLDER/app-branch)
-if [ "$BRANCH" == "master" ]; then
-    export DOMAIN="devops.dev.us-south.bluemix.net"
-    export NUM_INSTANCES="1"
-    export CHART_REPO="devops-dev"
-    export PRUNE_CHART_REPO="true"
-else
+if [ "$BRANCH" == "integration" ]; then
     export DOMAIN="stage.us-south.devops.cloud.ibm.com"
     export NUM_INSTANCES="3"
     export CHART_REPO="devops-int"
     export PRUNE_CHART_REPO="false"
+else
+    export DOMAIN="devops.dev.us-south.bluemix.net"
+    export NUM_INSTANCES="1"
+    export CHART_REPO="devops-dev"
+    export PRUNE_CHART_REPO="true"
 fi
 export NAMESPACE="opentoolchain"
 export RELEASE_NAME="$APP_NAME"
@@ -68,7 +68,11 @@ export PATH="$PATH:/usr/local/bin/"
 # for cocoa cli
 export GHE_TOKEN="$(cat $WORKSPACE/git-token)"
 export COMMIT_SHA="$(cat $CONFIG_FOLDER/git-commit)"
-INVENTORY_REPO=$(cat $CONFIG_FOLDER/inventory-url)
+if [ "$BRANCH" == "integration" ]; then
+  INVENTORY_REPO=$(cat $CONFIG_FOLDER/inventory-url)
+else
+  INVENTORY_REPO=$(cat $CONFIG_FOLDER/inventory-dev-url)
+fi
 GHE_ORG=${INVENTORY_REPO%/*}
 export GHE_ORG=${GHE_ORG##*/}
 GHE_REPO=${INVENTORY_REPO##*/}
