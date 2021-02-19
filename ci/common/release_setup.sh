@@ -58,7 +58,7 @@ echo "Next helm chart version will be $NEXT_VERSION"
 echo "Compute BUILD_NUMBER to $BUILD_NUMBER"
 
 # install cocoa cli
-COCOA_CLI_VERSION=1.4.0
+COCOA_CLI_VERSION=1.5.0
 ARTIFACTORY_API_KEY=$(base64 -d <<< $ARTIFACTORY_TOKEN_BASE64)
 curl -u ${ARTIFACTORY_ID}:${ARTIFACTORY_API_KEY} -O "https://eu.artifactory.swg-devops.com/artifactory/wcp-compliance-automation-team-generic-local/cocoa-linux-${COCOA_CLI_VERSION}"
 cp cocoa-linux-* /usr/local/bin/cocoa
@@ -69,10 +69,11 @@ export PATH="$PATH:/usr/local/bin/"
 export GHE_TOKEN="$(cat $WORKSPACE/git-token)"
 export COMMIT_SHA="$(cat $CONFIG_FOLDER/git-commit)"
 if [ "$BRANCH" == "integration" ]; then
-  INVENTORY_REPO=$(cat $CONFIG_FOLDER/inventory-url)
+  export INVENTORY_BRANCH="staging"
 else
-  INVENTORY_REPO=$(cat $CONFIG_FOLDER/inventory-dev-url)
+  export INVENTORY_BRANCH="dev"
 fi
+INVENTORY_REPO=$(cat $CONFIG_FOLDER/inventory-url)
 GHE_ORG=${INVENTORY_REPO%/*}
 export GHE_ORG=${GHE_ORG##*/}
 GHE_REPO=${INVENTORY_REPO##*/}

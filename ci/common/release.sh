@@ -18,6 +18,7 @@ else
     APP_ARTIFACTS='{ "provenance": "'${IMAGE_ARTIFACT}'" }'
 fi
 cocoa inventory add \
+    --environment="${INVENTORY_BRANCH}" \
     --artifact="${ARTIFACT}" \
     --repository-url="${APP_REPO}" \
     --commit-sha="${COMMIT_SHA}" \
@@ -26,6 +27,7 @@ cocoa inventory add \
     --version="$(cat $CONFIG_FOLDER/version)" \
     --name="${APP_NAME}"
 cocoa inventory add \
+    --environment="${INVENTORY_BRANCH}" \
     --artifact="${IMAGE_ARTIFACT}" \
     --repository-url="${APP_REPO}" \
     --commit-sha="${COMMIT_SHA}" \
