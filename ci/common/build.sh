@@ -31,5 +31,5 @@ echo cat build.properties
 cat build.properties
 echo
 
-# also .pipeline_build_id is needed by nock tests
+# also .pipeline_build_id is needed by acceptance tests
 echo $IMAGE_TAG > .pipeline_build_id
