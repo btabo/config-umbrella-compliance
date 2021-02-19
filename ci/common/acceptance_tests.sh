@@ -9,6 +9,5 @@ if [ -f "$COMMON_FOLDER/../$APP_NAME/acceptance_tests_config.sh" ]; then
     . $COMMON_FOLDER/../$APP_NAME/acceptance_tests_config.sh $CONFIG_FOLDER
 fi
 
-echo "BUILD_NUMBER=$BUILD_NUMBER"
 echo ".pipeline_build_id=$(<.pipeline_build_id)"
 .jobs/test

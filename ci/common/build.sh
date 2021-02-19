@@ -30,3 +30,6 @@ echo "BUILD_NUMBER=${BUILD_NUMBER}" >> build.properties
 echo cat build.properties
 cat build.properties
 echo
+
+# also .pipeline_build_id is needed by nock tests
+echo $IMAGE_TAG > .pipeline_build_id
