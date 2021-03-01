@@ -60,7 +60,7 @@ deploy:
     cp -r otc-deploy/k8s/scripts/* /
     git clone "https://$IDS_USER:$IDS_TOKEN@github.ibm.com/ids-env/devops-config"
     cp -r devops-config/otc-deploy/* /otc-config
-    . /login/clusterLogin.sh "$(cat /config/cluster)"
+    . /login/clusterLogin.sh "$(cat /config/cluster)" "otc"
     . /helpers/checkHelmVersion.sh
 
     . /umbrella/helpers.sh
