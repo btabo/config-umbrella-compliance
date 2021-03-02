@@ -25,7 +25,7 @@ test:
     #!/usr/bin/env bash
     cd $(cat /config/app-name)
 
-    source ../ci/common/tests.sh
+    #source ../ci/common/tests.sh
 
 containerize:
   dind: true
