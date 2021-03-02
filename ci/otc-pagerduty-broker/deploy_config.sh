@@ -3,12 +3,12 @@
 CONFIG_FOLDER=$1
 
 # secrets
-export SEC_OTC_API_BROKER_SECRET=$(cat $CONFIG_FOLDER/pagerduty_OTC_API_SECRET)
-export pagerduty_api_key=$(cat $CONFIG_FOLDER/pagerduty_api_key)
-export pagerduty_api_key_2=$(cat $CONFIG_FOLDER/pagerduty_api_key_2)
-export test_tiam_secret=$(cat $CONFIG_FOLDER/pagerduty_test_tiam_secret)
-export SEC_ENCRYPTION_KEY=$(cat $CONFIG_FOLDER/pagerduty_ENCRYPTION_KEY)
-export SEC_CLOUDANT_IAM_API_KEY=$(cat $CONFIG_FOLDER/pagerduty_CLOUDANT_IAM_API_KEY)
+export SEC_OTC_API_BROKER_SECRET=$(cat $CONFIG_FOLDER/otc_OTC_API_SECRET)
+export pagerduty_api_key=$(cat $CONFIG_FOLDER/otc-pagerduty-broker_api_key)
+export pagerduty_api_key_2=$(cat $CONFIG_FOLDER/otc-pagerduty-broker_api_key_2)
+export test_tiam_secret=$(cat $CONFIG_FOLDER/otc-pagerduty-broker_test_tiam_secret)
+export SEC_ENCRYPTION_KEY=$(cat $CONFIG_FOLDER/otc-pagerduty-broker_ENCRYPTION_KEY)
+export SEC_CLOUDANT_IAM_API_KEY=$(cat $CONFIG_FOLDER/otc-pagerduty-broker_CLOUDANT_IAM_API_KEY)
  
 # config 
 if [ "$(cat $CONFIG_FOLDER/app-branch)" == "integration" ]; then
@@ -18,7 +18,7 @@ else
     export NAMESPACE="opentoolchain"
     export RELEASE_NAME=$APP_NAME
 fi
-export ENV_CLOUDANT_URL=$(cat $CONFIG_FOLDER/pagerduty_CLOUDANT_URL)
+export ENV_CLOUDANT_URL=$(cat $CONFIG_FOLDER/otc-pagerduty-broker_CLOUDANT_URL)
 export ENV_LOG4J_LEVEL="DEBUG"
 export ENV_services__otc_api="https://otc-api.us-south.devops.dev.cloud.ibm.com/api/v1"
 export ENV_services__otc_ui="https://otc-ui.us-south.devops.dev.cloud.ibm.com/devops"
