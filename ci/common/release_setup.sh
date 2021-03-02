@@ -3,6 +3,7 @@ COMMON_FOLDER="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 CONFIG_FOLDER=${1:-"/config"}
 
+# clone otc-deploy and devops-config if needed
 GIT_TOKEN=$(cat "$WORKSPACE/git-token")
 if [ ! -d "otc-deploy" ]; then
   git clone "https://$GIT_TOKEN@github.ibm.com/org-ids/otc-deploy"
@@ -10,11 +11,26 @@ fi
 if [ ! -d "devops-config" ]; then
   git clone "https://$GIT_TOKEN@github.ibm.com/ids-env/devops-config"
 fi 
+
+# secrets and config
 export APP_NAME=$(cat $CONFIG_FOLDER/app-name)
 if [ -f "$COMMON_FOLDER/../$APP_NAME/release_config.sh" ]; then
     . $COMMON_FOLDER/../$APP_NAME/release_config.sh $CONFIG_FOLDER
 fi
 
+# to pass helm lint --strict
+export SEC_CLOUDANT_IAM_API_KEY="topasshelmlintstrict"
+export SEC_OTC_API_BROKER_SECRET="topasshelmlintstrict"
+export ENV_CLOUDANT_URL="topasshelmlintstrict"
+export ENV_services__otc_ui="topasshelmlintstrict"
+export ENV_services__otc_ui_env_id="topasshelmlintstrict"
+export ENV_url="topasshelmlintanddryrun"
+export ENV_TIAM_URL="topasshelmlintanddryrun"
+export ENV_PORT="8080"
+export GLOBAL_ENV_SECGRP="topasshelmlintanddryrun"
+export PIPELINE_KUBERNETES_CLUSTER_NAME="otc-dal12-test"
+
+# for building helm chart
 export IDS_USER="idsorg"
 export IDS_TOKEN=$GIT_TOKEN
 export BRANCH=$(cat $CONFIG_FOLDER/app-branch)
