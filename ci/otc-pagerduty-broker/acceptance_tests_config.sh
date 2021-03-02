@@ -1,9 +1,14 @@
 #!/usr/bin/env bash
-OTC_PAGERDUTY_BROKER_FOLDER="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-# same config as for test cluster deployment
-. $OTC_PAGERDUTY_BROKER_FOLDER/deploy_config.sh $CONFIG_FOLDER
+CONFIG_FOLDER=$1
 
-export TIAM_URL=$ENV_TIAM_URL
-export _DEPLOY_url=$ENV_url
-export _DEPLOY_OTC_API_BROKER_SECRET=$SEC_OTC_API_BROKER_SECRET
+# secrets
+export pagerduty_api_key=$(cat $CONFIG_FOLDER/otc-pagerduty-broker_api_key)
+export pagerduty_api_key_2=$(cat $CONFIG_FOLDER/otc-pagerduty-broker_api_key_2)
+export test_tiam_secret=$(cat $CONFIG_FOLDER/otc_test_tiam_secret)
+export _DEPLOY_OTC_API_BROKER_SECRET=$(cat $CONFIG_FOLDER/otc-pagerduty-broker_OTC_API_SECRET)
+
+# config
+export pagerduty_site_name="ibmdevops"
+export pagerduty_site_name_2="ibmdevops"
+export test_tiam_id="test"
