@@ -18,7 +18,7 @@ else
     export NAMESPACE="opentoolchain"
     export RELEASE_NAME=$APP_NAME
 fi
-export ENV_CLOUDANT_URL=$(cat $CONFIG_FOLDER/otc-pagerduty-broker_CLOUDANT_URL)
+export ENV_CLOUDANT_URL=$(cat $CONFIG_FOLDER/otc_CLOUDANT_URL)
 export ENV_LOG4J_LEVEL="DEBUG"
 export ENV_services__otc_api="https://otc-api.us-south.devops.dev.cloud.ibm.com/api/v1"
 export ENV_services__otc_ui="https://otc-ui.us-south.devops.dev.cloud.ibm.com/devops"

@@ -11,7 +11,7 @@ export test_tiam_secret=$(cat $CONFIG_FOLDER/otc_test_tiam_secret)
 export ENCRYPTION_KEY=$(cat $CONFIG_FOLDER/otc-pagerduty-broker_ENCRYPTION_KEY)
 
 # config
-export CLOUDANT_URL=$(cat $CONFIG_FOLDER/otc-pagerduty-broker_CLOUDANT_URL)
+export CLOUDANT_URL=$(cat $CONFIG_FOLDER/otc_CLOUDANT_URL)
 export DOMAIN=stage1.ng.bluemix.net
 export PORT='4000'
 export url=http://localhost:4000
