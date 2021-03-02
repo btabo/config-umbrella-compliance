@@ -3,7 +3,7 @@
 CONFIG_FOLDER=$1
 
 # secrets
-export SEC_OTC_API_BROKER_SECRET=$(cat $CONFIG_FOLDER/otc_OTC_API_SECRET)
+export SEC_OTC_API_BROKER_SECRET=$(cat $CONFIG_FOLDER/otc-pagerduty-broker_OTC_API_SECRET)
 export pagerduty_api_key=$(cat $CONFIG_FOLDER/otc-pagerduty-broker_api_key)
 export pagerduty_api_key_2=$(cat $CONFIG_FOLDER/otc-pagerduty-broker_api_key_2)
 export test_tiam_secret=$(cat $CONFIG_FOLDER/otc-pagerduty-broker_test_tiam_secret)
@@ -30,7 +30,7 @@ export test_tiam_id="test"
 export ENV_PORT="8080"
 export NUM_INSTANCES='1'
 export COMPONENT_NAME=$APP_NAME
-export IMAGE_TAG= "latest" #unused ?
+export IMAGE_TAG="latest" #unused ?
 export ROUTE=$APP_NAME-$NAMESPACE
 export DOMAIN="otc-dal12-test.us-south.containers.mybluemix.net"
 export GLOBAL_ENV_SECGRP="GRP3DEVS"
