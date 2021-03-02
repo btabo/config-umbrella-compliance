@@ -6,7 +6,7 @@ CONFIG_FOLDER=$1
 export SEC_OTC_API_BROKER_SECRET=$(cat $CONFIG_FOLDER/otc-pagerduty-broker_OTC_API_SECRET)
 export pagerduty_api_key=$(cat $CONFIG_FOLDER/otc-pagerduty-broker_api_key)
 export pagerduty_api_key_2=$(cat $CONFIG_FOLDER/otc-pagerduty-broker_api_key_2)
-export test_tiam_secret=$(cat $CONFIG_FOLDER/otc-pagerduty-broker_test_tiam_secret)
+export test_tiam_secret=$(cat $CONFIG_FOLDER/otc_test_tiam_secret)
 export SEC_ENCRYPTION_KEY=$(cat $CONFIG_FOLDER/otc-pagerduty-broker_ENCRYPTION_KEY)
 export SEC_CLOUDANT_IAM_API_KEY=$(cat $CONFIG_FOLDER/otc-pagerduty-broker_CLOUDANT_IAM_API_KEY)
  
