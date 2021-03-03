@@ -12,7 +12,8 @@ export APP_NAME=$(cat $CONFIG_FOLDER/app-name)
 cd $APP_NAME
 
 # secrets
-export SEC_CLOUDANT_IAM_API_KEY=$(cat $CONFIG_FOLDER/otc_CLOUDANT_IAM_API_KEY)
+#export SEC_CLOUDANT_IAM_API_KEY=$(cat $CONFIG_FOLDER/otc_CLOUDANT_IAM_API_KEY)
+export test_tiam_secret=$(cat $CONFIG_FOLDER/otc_test_tiam_secret)
 
 # config
 if [ "$(cat $CONFIG_FOLDER/app-branch)" == "integration" ]; then
