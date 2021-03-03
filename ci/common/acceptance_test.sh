@@ -35,5 +35,4 @@ fi
 echo ".pipeline_build_id=$(<.pipeline_build_id)"
 
 # run tests
-cd $APP_NAME
 .jobs/test
