@@ -1,6 +1,13 @@
 #!/usr/bin/env bash
+if [[ "${PIPELINE_DEBUG:-0}" == 1 ]]; then
+    trap env EXIT
+    env
+    set -x
+fi
 
 CONFIG_FOLDER=${1:-"/config"}
+export APP_NAME=$(cat $CONFIG_FOLDER/app-name)
+cd $APP_NAME
 
 # clone otc-deploy and devops-config if needed
 GIT_TOKEN=$(cat "$WORKSPACE/git-token")
@@ -12,7 +19,6 @@ if [ ! -d "devops-config" ]; then
 fi 
 
 # secrets and config
-export APP_NAME=$(cat $CONFIG_FOLDER/app-name)
 COMMON_FOLDER="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 if [ -f "$COMMON_FOLDER/../$APP_NAME/release_config.sh" ]; then
     . $COMMON_FOLDER/../$APP_NAME/release_config.sh $CONFIG_FOLDER

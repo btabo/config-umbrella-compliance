@@ -1,12 +1,18 @@
 #!/usr/bin/env bash
+if [[ "${PIPELINE_DEBUG:-0}" == 1 ]]; then
+    trap env EXIT
+    env
+    set -x
+fi
 
 CONFIG_FOLDER=${1:-"/config"}
+export APP_NAME=$(cat $CONFIG_FOLDER/app-name)
+cd $APP_NAME
 
 # secrets
 export SEC_CLOUDANT_IAM_API_KEY=$(cat $CONFIG_FOLDER/otc_CLOUDANT_IAM_API_KEY)
 
 # config
-export APP_NAME=$(cat $CONFIG_FOLDER/app-name)
 if [ "$(cat $CONFIG_FOLDER/app-branch)" == "integration" ]; then
     export NAMESPACE="otc-int"
     export RELEASE_NAME=$APP_NAME-$NAMESPACE
@@ -28,4 +34,5 @@ fi
 echo ".pipeline_build_id=$(<.pipeline_build_id)"
 
 # run tests
+cd $APP_NAME
 .jobs/test

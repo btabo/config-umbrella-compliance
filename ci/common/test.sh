@@ -1,13 +1,19 @@
 #!/usr/bin/env bash
+if [[ "${PIPELINE_DEBUG:-0}" == 1 ]]; then
+    trap env EXIT
+    env
+    set -x
+fi
 
 CONFIG_FOLDER=${1:-"/config"}
+export APP_NAME=$(cat $CONFIG_FOLDER/app-name)
+cd $APP_NAME
 
 # secrets
 export CLOUDANT_IAM_API_KEY=$(cat $CONFIG_FOLDER/otc_CLOUDANT_IAM_API_KEY)
 export test_tiam_secret=$(cat $CONFIG_FOLDER/otc_test_tiam_secret)
 
 # config
-export APP_NAME=$(cat $CONFIG_FOLDER/app-name)
 export CLOUDANT_URL=$(cat $CONFIG_FOLDER/otc_CLOUDANT_URL)
 export DOMAIN=stage1.ng.bluemix.net
 export PORT='4000'
@@ -24,6 +30,7 @@ if [ -f "$COMMON_FOLDER/../$APP_NAME/test_config.sh" ]; then
     . $COMMON_FOLDER/../$APP_NAME/test_config.sh $CONFIG_FOLDER
 fi
 
+# unused?
 export ARTIFACTORY_ID=idsorg@us.ibm.com
 export ARTIFACTORY_TOKEN_BASE64="$(cat $CONFIG_FOLDER/ARTIFACTORY_TOKEN_BASE64)"
 

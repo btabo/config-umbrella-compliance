@@ -1,11 +1,13 @@
 #!/usr/bin/env bash
+if [[ "${PIPELINE_DEBUG:-0}" == 1 ]]; then
+    trap env EXIT
+    env
+    set -x
+fi
 
 CONFIG_FOLDER=${1:-"/config"}
-
-if [[ "${PIPELINE_DEBUG:-0}" == 1 ]]; then
-  set -x
-  trap env EXIT
-fi
+export APP_NAME=$(cat $CONFIG_FOLDER/app-name)
+cd $APP_NAME
 
 get-icr-region() {
   case "$1" in
