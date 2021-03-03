@@ -4,6 +4,8 @@ setup:
   image: icr.io/continuous-delivery/pipeline/pipeline-base-image:2.7@sha256:282677e79ccb9d20c699d384a54093894de03675752cd848a3133266c898c14c
   script: |
     #!/usr/bin/env bash
+    pwd
+    ls -l
     source ./common/setup.sh
 
 test:
