@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-COMMON_FOLDER="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 CONFIG_FOLDER=${1:-"/config"}
 
@@ -32,6 +31,7 @@ export GLOBAL_ENV_SECGRP="GRP3DEVS"
 export PIPELINE_KUBERNETES_CLUSTER_NAME="otc-dal12-test"
 
 # secrets and config specific to the component
+COMMON_FOLDER="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 if [ -f "$COMMON_FOLDER/../$APP_NAME/deploy_config.sh" ]; then
     . $COMMON_FOLDER/../$APP_NAME/deploy_config.sh $CONFIG_FOLDER
 fi
@@ -49,12 +49,6 @@ fi
 export IC_1308775_API_KEY=$(cat $CONFIG_FOLDER/IC_1308775_API_KEY)
 . otc-deploy/k8s/scripts/login/clusterLogin.sh "otc-dal12-test" "otc"
 . otc-deploy/k8s/scripts/helpers/checkHelmVersion.sh
-
-# temp
-echo ==============================================
-env | sort
-echo ==============================================
-echo
 
 # deploy to test cluster
 . otc-deploy/k8s/scripts/deployComponentToCluster.sh

@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-COMMON_FOLDER="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-
 CONFIG_FOLDER=${1:-"/config"}
 
 # secrets
@@ -20,19 +18,14 @@ export TIAM_URL="https://tiam.us-south.devops.dev.cloud.ibm.com/identity/v1"
 export DOMAIN="otc-dal12-test.us-south.containers.mybluemix.net"
 export _DEPLOY_url="https://$APP_NAME-$NAMESPACE.$DOMAIN"
 
-# secrets and config specific to components
-if [ -f "$COMMON_FOLDER/../$APP_NAME/acceptance_tests_config.sh" ]; then
-    . $COMMON_FOLDER/../$APP_NAME/acceptance_tests_config.sh $CONFIG_FOLDER
+# secrets and config specific to the component
+COMMON_FOLDER="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+if [ -f "$COMMON_FOLDER/../$APP_NAME/acceptance_test_config.sh" ]; then
+    . $COMMON_FOLDER/../$APP_NAME/acceptance_test_config.sh $CONFIG_FOLDER
 fi
 
 # .pipeline_build_id
 echo ".pipeline_build_id=$(<.pipeline_build_id)"
-
-# temp
-echo ==============================================
-env | sort
-echo ==============================================
-echo
 
 # run tests
 .jobs/test

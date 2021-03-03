@@ -15,7 +15,6 @@ setup:
     export APP_NAME=$(cat /config/app-name)
     git clone -b $REPO_BRANCH https://$GH_TOKEN@github.ibm.com/$OWNER/$REPO_NAME $APP_NAME
     cd $APP_NAME
-
     source ../ci/common/setup.sh
 
 test:

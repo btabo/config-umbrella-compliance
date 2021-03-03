@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-COMMON_FOLDER="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 CONFIG_FOLDER=${1:-"/config"}
 
@@ -14,6 +13,7 @@ fi
 
 # secrets and config
 export APP_NAME=$(cat $CONFIG_FOLDER/app-name)
+COMMON_FOLDER="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 if [ -f "$COMMON_FOLDER/../$APP_NAME/release_config.sh" ]; then
     . $COMMON_FOLDER/../$APP_NAME/release_config.sh $CONFIG_FOLDER
 fi
@@ -99,12 +99,6 @@ APP_REPO_ORG=${APP_REPO%/*}
 export APP_REPO_ORG=${APP_REPO_ORG##*/}
 APP_REPO_NAME=${APP_REPO##*/}
 export APP_REPO_NAME=${APP_REPO_NAME%.git}
-
-# temp
-echo ==============================================
-env | sort
-echo ==============================================
-echo
 
 # build and publish component chart to solution repo
 chmod u+x otc-deploy/k8s/scripts/ci/publishHelmChart.sh

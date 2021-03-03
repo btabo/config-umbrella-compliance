@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-COMMON_FOLDER="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-
 CONFIG_FOLDER=${1:-"/config"}
 
 # secrets
@@ -20,19 +18,14 @@ export services__otc_api=http://nock-localhost:3400/api/v1
 export services__otc_ui=http://nock-localhost:3100/devops
 export test_tiam_id=test
 
-# secrets and config specific to components
-if [ -f "$COMMON_FOLDER/../$APP_NAME/tests_config.sh" ]; then
-    . $COMMON_FOLDER/../$APP_NAME/tests_config.sh $CONFIG_FOLDER
+# secrets and config specific to the component
+COMMON_FOLDER="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+if [ -f "$COMMON_FOLDER/../$APP_NAME/test_config.sh" ]; then
+    . $COMMON_FOLDER/../$APP_NAME/test_config.sh $CONFIG_FOLDER
 fi
 
 export ARTIFACTORY_ID=idsorg@us.ibm.com
 export ARTIFACTORY_TOKEN_BASE64="$(cat $CONFIG_FOLDER/ARTIFACTORY_TOKEN_BASE64)"
-
-# temp
-echo ==============================================
-env | sort
-echo ==============================================
-echo
 
 chmod +x .jobs/nock
 .jobs/nock
