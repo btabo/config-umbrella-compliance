@@ -28,5 +28,11 @@ fi
 export ARTIFACTORY_ID=idsorg@us.ibm.com
 export ARTIFACTORY_TOKEN_BASE64="$(cat $CONFIG_FOLDER/ARTIFACTORY_TOKEN_BASE64)"
 
+# temp
+echo ==============================================
+env | sort
+echo ==============================================
+echo
+
 chmod +x .jobs/nock
 .jobs/nock

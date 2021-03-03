@@ -28,5 +28,11 @@ fi
 # .pipeline_build_id
 echo ".pipeline_build_id=$(<.pipeline_build_id)"
 
+# temp
+echo ==============================================
+env | sort
+echo ==============================================
+echo
+
 # run tests
 .jobs/test
