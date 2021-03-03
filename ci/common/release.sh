@@ -5,6 +5,8 @@ if [[ "${PIPELINE_DEBUG:-0}" == 1 ]]; then
     set -x
 fi
 
+COMMON_FOLDER="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
 CONFIG_FOLDER=${1:-"/config"}
 export APP_NAME=$(cat $CONFIG_FOLDER/app-name)
 cd $APP_NAME
@@ -19,7 +21,6 @@ if [ ! -d "devops-config" ]; then
 fi 
 
 # secrets and config
-COMMON_FOLDER="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 if [ -f "$COMMON_FOLDER/../$APP_NAME/release_config.sh" ]; then
     . $COMMON_FOLDER/../$APP_NAME/release_config.sh $CONFIG_FOLDER
 fi

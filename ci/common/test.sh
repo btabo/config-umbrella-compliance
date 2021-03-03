@@ -5,6 +5,8 @@ if [[ "${PIPELINE_DEBUG:-0}" == 1 ]]; then
     set -x
 fi
 
+COMMON_FOLDER="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
 CONFIG_FOLDER=${1:-"/config"}
 export APP_NAME=$(cat $CONFIG_FOLDER/app-name)
 cd $APP_NAME
@@ -25,7 +27,6 @@ export services__otc_ui=http://nock-localhost:3100/devops
 export test_tiam_id=test
 
 # secrets and config specific to the component
-COMMON_FOLDER="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 if [ -f "$COMMON_FOLDER/../$APP_NAME/test_config.sh" ]; then
     . $COMMON_FOLDER/../$APP_NAME/test_config.sh $CONFIG_FOLDER
 fi
