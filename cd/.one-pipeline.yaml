@@ -20,6 +20,10 @@ deploy:
 
     # config
     export ENVIRONMENT=$(get_env ENVIRONMENT)
+    echo "ENVIRONMENT=$ENVIRONMENT"
+    if [ -z "$ENVIRONMENT"]; then 
+      exit 1
+    fi
     export INVENTORY_BRANCH=$(cat /config/environment-properties/target-environment)
     export PIPELINE_TOOLCHAIN_ID=$(jq -r '.toolchain_guid' /toolchain/toolchain.json)
     export IDS_JOB_ID=$PIPELINE_RUN_ID
