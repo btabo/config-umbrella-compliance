@@ -7,22 +7,21 @@ fi
 
 COMMON_FOLDER="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-CONFIG_FOLDER=${1:-"/config"}
-export APP_NAME=$(cat $CONFIG_FOLDER/app-name)
+export APP_NAME=$(get_env app-name)
 cd $APP_NAME
 
 # secrets
-export SEC_CLOUDANT_IAM_API_KEY=$(cat $CONFIG_FOLDER/otc_CLOUDANT_IAM_API_KEY)
+export SEC_CLOUDANT_IAM_API_KEY=$(get_env otc_CLOUDANT_IAM_API_KEY)
 
 # config
-if [ "$(cat $CONFIG_FOLDER/app-branch)" == "integration" ]; then
+if [ "$(get_env app-branch)" == "integration" ]; then
     export NAMESPACE="otc-int"
     export RELEASE_NAME=$APP_NAME-$NAMESPACE
 else
     export NAMESPACE="opentoolchain"
     export RELEASE_NAME=$APP_NAME
 fi
-export ENV_CLOUDANT_URL=$(cat $CONFIG_FOLDER/otc_CLOUDANT_URL)
+export ENV_CLOUDANT_URL=$(get_env otc_CLOUDANT_URL)
 export ENV_LOG4J_LEVEL="DEBUG"
 export ENV_services__otc_api="https://otc-api.us-south.devops.dev.cloud.ibm.com/api/v1"
 export ENV_services__otc_ui="https://otc-ui.us-south.devops.dev.cloud.ibm.com/devops"
@@ -40,7 +39,7 @@ export PIPELINE_KUBERNETES_CLUSTER_NAME="otc-dal12-test"
 
 # secrets and config specific to the component
 if [ -f "$COMMON_FOLDER/../$APP_NAME/deploy_config.sh" ]; then
-    . $COMMON_FOLDER/../$APP_NAME/deploy_config.sh $CONFIG_FOLDER
+    . $COMMON_FOLDER/../$APP_NAME/deploy_config.sh
 fi
 
 # clone otc-deploy and devops-config if needed
@@ -53,7 +52,7 @@ if [ ! -d "devops-config" ]; then
 fi 
 
 # login and check helm version
-export IC_1308775_API_KEY=$(cat $CONFIG_FOLDER/IC_1308775_API_KEY)
+export IC_1308775_API_KEY=$(get_env IC_1308775_API_KEY)
 . otc-deploy/k8s/scripts/login/clusterLogin.sh "otc-dal12-test" "otc"
 . otc-deploy/k8s/scripts/helpers/checkHelmVersion.sh
 

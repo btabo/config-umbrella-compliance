@@ -5,8 +5,7 @@ if [[ "${PIPELINE_DEBUG:-0}" == 1 ]]; then
     set -x
 fi
 
-CONFIG_FOLDER=${1:-"/config"}
-export APP_NAME=$(cat $CONFIG_FOLDER/app-name)
+export APP_NAME=$(get_env app-name)
 cd $APP_NAME
 
 get-icr-region() {
@@ -37,27 +36,27 @@ curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
 add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
 apt-get update && apt-get install docker-ce-cli
 
-IMAGE_NAME="$(cat $CONFIG_FOLDER/app-name)"
-IMAGE_TAG="$(cat $CONFIG_FOLDER/git-commit)-$(date +%Y%m%d%H%M%Z)" # need this exact format as it is used a BUILD_NUMBER passed to deployed app
+IMAGE_NAME="$(get_env app-name)"
+IMAGE_TAG="$(get_env git-commit)-$(date +%Y%m%d%H%M%Z)" # need this exact format as it is used a BUILD_NUMBER passed to deployed app
 
-BREAK_GLASS=$(cat $CONFIG_FOLDER/break_glass || true)
+BREAK_GLASS=$(get_env break_glass || true)
 
 if [[ "$BREAK_GLASS" == "true" ]]; then
-  ARTIFACTORY_URL="$(jq -r .parameters.repository_url $CONFIG_FOLDER/artifactory)"
+  ARTIFACTORY_URL="$(get_env artifactory | jq -r .parameters.repository_url)"
   ARTIFACTORY_REGISTRY="$(sed -E 's~https://(.*)/?~\1~' <<<"$ARTIFACTORY_URL")"
-  ARTIFACTORY_INTEGRATION_ID="$(jq -r .instance_id $CONFIG_FOLDER/artifactory)"
+  ARTIFACTORY_INTEGRATION_ID="$(get_env artifactory | jq -r .instance_id)"
   IMAGE="$ARTIFACTORY_REGISTRY/$IMAGE_NAME:$IMAGE_TAG"
-  jq -j --arg instance_id "$ARTIFACTORY_INTEGRATION_ID" '.services[] | select(.instance_id == $instance_id) | .parameters.token' /toolchain/toolchain.json | docker login -u "$(jq -r '.parameters.user_id' $CONFIG_FOLDER/artifactory)" --password-stdin "$(jq -r '.parameters.repository_url' $CONFIG_FOLDER/artifactory)"
+  jq -j --arg instance_id "$ARTIFACTORY_INTEGRATION_ID" '.services[] | select(.instance_id == $instance_id) | .parameters.token' /toolchain/toolchain.json | docker login -u "$(get_env artifactory | jq -r '.parameters.user_id')" --password-stdin "$(get_env artifactory | jq -r '.parameters.repository_url')"
 else
-  ICR_REGISTRY_NAMESPACE="$(cat $CONFIG_FOLDER/registry-namespace)"
-  ICR_REGISTRY_REGION="$(get-icr-region "$(cat $CONFIG_FOLDER/registry-region)")"
+  ICR_REGISTRY_NAMESPACE="$(get_env registry-namespace)"
+  ICR_REGISTRY_REGION="$(get-icr-region "$(get_env registry-region)")"
   IMAGE="$ICR_REGISTRY_REGION.icr.io/$ICR_REGISTRY_NAMESPACE/$IMAGE_NAME:$IMAGE_TAG"
-  docker login -u iamapikey --password-stdin "$ICR_REGISTRY_REGION.icr.io" < $CONFIG_FOLDER/IC_1416501_API_KEY
+  docker login -u iamapikey --password-stdin "$ICR_REGISTRY_REGION.icr.io" <<< $(get_env IC_1416501_API_KEY)
 
   # Create the namespace if needed to ensure the push will be can be successfull
   echo "Checking registry namespace: ${ICR_REGISTRY_NAMESPACE}"
-  IBM_LOGIN_REGISTRY_REGION=$(cat $CONFIG_FOLDER/registry-region | awk -F: '{print $3}')
-  ibmcloud login --apikey @$CONFIG_FOLDER/IC_1416501_API_KEY -r "$IBM_LOGIN_REGISTRY_REGION"
+  IBM_LOGIN_REGISTRY_REGION=$(get_env registry-region | awk -F: '{print $3}')
+  ibmcloud login --apikey $(get_env IC_1416501_API_KEY) -r "$IBM_LOGIN_REGISTRY_REGION"
   NS=$( ibmcloud cr namespaces | sed 's/ *$//' | grep -x "${ICR_REGISTRY_NAMESPACE}" ||: )
 
   if [ -z "${NS}" ]; then

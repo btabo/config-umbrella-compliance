@@ -7,8 +7,7 @@ fi
 
 COMMON_FOLDER="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-CONFIG_FOLDER=${1:-"/config"}
-export APP_NAME=$(cat $CONFIG_FOLDER/app-name)
+export APP_NAME=$(get_env app-name)
 cd $APP_NAME
 
 # clone otc-deploy and devops-config if needed
@@ -22,7 +21,7 @@ fi
 
 # secrets and config
 if [ -f "$COMMON_FOLDER/../$APP_NAME/release_config.sh" ]; then
-    . $COMMON_FOLDER/../$APP_NAME/release_config.sh $CONFIG_FOLDER
+    . $COMMON_FOLDER/../$APP_NAME/release_config.sh
 fi
 
 # to pass helm lint --strict
@@ -40,7 +39,7 @@ export PIPELINE_KUBERNETES_CLUSTER_NAME="otc-dal12-test"
 # for building helm chart
 export IDS_USER="idsorg"
 export IDS_TOKEN=$GIT_TOKEN
-export BRANCH=$(cat $CONFIG_FOLDER/app-branch)
+export BRANCH=$(get_env app-branch)
 if [ "$BRANCH" == "integration" ]; then
     export DOMAIN="stage.us-south.devops.cloud.ibm.com"
     export NUM_INSTANCES="3"
@@ -62,9 +61,9 @@ export LOGICAL_APP_NAME="$APP_NAME"
 export BUILD_PREFIX="$BRANCH"
 export ENV_BUILD_TIMESTAMP=$(date +%s%3N)
 export ARTIFACTORY_ID=idsorg@us.ibm.com
-export ARTIFACTORY_TOKEN_BASE64="$(cat $CONFIG_FOLDER/ARTIFACTORY_TOKEN_BASE64)"
+export ARTIFACTORY_TOKEN_BASE64="$(get_env ARTIFACTORY_TOKEN_BASE64)"
 
-export IC_1308775_API_KEY=$(cat $CONFIG_FOLDER/IC_1308775_API_KEY)
+export IC_1308775_API_KEY=$(get_env IC_1308775_API_KEY)
 . otc-deploy/k8s/scripts/login/clusterLogin.sh "otc-dal12-test" "otc"
 . otc-deploy/k8s/scripts/helpers/checkHelmVersion.sh
 
@@ -90,18 +89,18 @@ export PATH="$PATH:/usr/local/bin/"
 
 # for cocoa cli
 export GHE_TOKEN="$(cat $WORKSPACE/git-token)"
-export COMMIT_SHA="$(cat $CONFIG_FOLDER/git-commit)"
+export COMMIT_SHA="$(get_env git-commit)"
 if [ "$BRANCH" == "integration" ]; then
   export INVENTORY_BRANCH="staging"
 else
   export INVENTORY_BRANCH="dev"
 fi
-INVENTORY_REPO=$(cat $CONFIG_FOLDER/inventory-url)
+INVENTORY_REPO=$(get_env inventory-url)
 GHE_ORG=${INVENTORY_REPO%/*}
 export GHE_ORG=${GHE_ORG##*/}
 GHE_REPO=${INVENTORY_REPO##*/}
 export GHE_REPO=${GHE_REPO%.git}
-APP_REPO=$(cat $CONFIG_FOLDER/repository-url)
+APP_REPO=$(get_env repository-url)
 APP_REPO_ORG=${APP_REPO%/*}
 export APP_REPO_ORG=${APP_REPO_ORG##*/}
 APP_REPO_NAME=${APP_REPO##*/}
@@ -114,10 +113,10 @@ chmod u+x otc-deploy/k8s/scripts/ci/publishHelmChart.sh
 # add to inventory
 CHART_VERSION=$(yq r -j "k8s/$APP_NAME/Chart.yaml" | jq -r '.version')
 ARTIFACT="https://github.ibm.com/$CHART_ORG/$CHART_REPO/blob/master/charts/$APP_NAME-$CHART_VERSION.tgz"
-IMAGE_ARTIFACT="$(cat $CONFIG_FOLDER/artifact)"
-if [ -f $CONFIG_FOLDER/signature ]; then
+IMAGE_ARTIFACT="$(get_env artifact)"
+SIGNATURE="$(get_env signature)"
+if [ "$SIGNATURE" ]; then
     # using TaaS worker
-    SIGNATURE="$(cat $CONFIG_FOLDER/signature)"
     APP_ARTIFACTS='{ "signature": "'${SIGNATURE}'", "provenance": "'${IMAGE_ARTIFACT}'" }'
 else
     # using regular worker, no signature
@@ -130,7 +129,7 @@ cocoa inventory add \
     --commit-sha="${COMMIT_SHA}" \
     --build-number="${BUILD_NUMBER}" \
     --pipeline-run-id="${PIPELINE_RUN_ID}" \
-    --version="$(cat $CONFIG_FOLDER/version)" \
+    --version="$(get_env version)" \
     --name="${APP_NAME}"
 cocoa inventory add \
     --environment="${INVENTORY_BRANCH}" \
@@ -139,6 +138,6 @@ cocoa inventory add \
     --commit-sha="${COMMIT_SHA}" \
     --build-number="${BUILD_NUMBER}" \
     --pipeline-run-id="${PIPELINE_RUN_ID}" \
-    --version="$(cat $CONFIG_FOLDER/version)" \
+    --version="$(get_env version)" \
     --name="${APP_NAME}_image" \
     --app-artifacts="${APP_ARTIFACTS}"

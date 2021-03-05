@@ -1,10 +1,8 @@
 #!/usr/bin/env bash
 
-CONFIG_FOLDER=$1
-
 # secrets
-export OTC_API_BROKER_SECRET=$(cat $CONFIG_FOLDER/otc-slack-broker_OTC_API_SECRET)
-export slack_token=$(cat $CONFIG_FOLDER/otc-slack-broker_slack_token)
+export OTC_API_BROKER_SECRET=$(get_env otc-slack-broker_OTC_API_SECRET)
+export slack_token=$(get_env otc-slack-broker_slack_token)
 
 # config
 export TIAM_CLIENT_ID=slack
