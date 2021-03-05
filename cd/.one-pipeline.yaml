@@ -20,11 +20,7 @@ deploy:
 
     # config
     export ENVIRONMENT=$(get_env ENVIRONMENT)
-    echo "ENVIRONMENT=$ENVIRONMENT"
-    if [ -z "$ENVIRONMENT"]; then 
-      exit 1
-    fi
-    export INVENTORY_BRANCH=$(cat /config/environment-properties/target-environment)
+    export INVENTORY_BRANCH=$(get_env target-environment)
     export PIPELINE_TOOLCHAIN_ID=$(jq -r '.toolchain_guid' /toolchain/toolchain.json)
     export IDS_JOB_ID=$PIPELINE_RUN_ID
     export IDS_USER=idsorg
@@ -38,26 +34,26 @@ deploy:
     export WAIT_FOR_DEPLOY="true"
     export WAIT_FOR_DEPLOY_MAX="80"
     if [ -f /config/environment-properties/EXCLUDED_FROM_STATUS_CHECK ]; then
-      export EXCLUDED_FROM_STATUS_CHECK=$(cat /config/environment-properties/EXCLUDED_FROM_STATUS_CHECK)
+      export EXCLUDED_FROM_STATUS_CHECK=$(get_env EXCLUDED_FROM_STATUS_CHECK)
     fi
     if [ -f /config/environment-properties/DRY_RUN ]; then
-      export DRY_RUN=$(cat /config/environment-properties/DRY_RUN)
+      export DRY_RUN=$(get_env DRY_RUN)
     fi
     if [ -f /config/environment-properties/SKIP_CLUSTER_DANCE ]; then
-      export SKIP_CLUSTER_DANCE=$(cat /config/environment-properties/SKIP_CLUSTER_DANCE)
+      export SKIP_CLUSTER_DANCE=$(get_env SKIP_CLUSTER_DANCE)
     fi
     if [ -f /config/environment-properties/PAUSE_AFTER_FIRST_CLUSTER ]; then
-      export PAUSE_AFTER_FIRST_CLUSTER=$(cat /config/environment-properties/PAUSE_AFTER_FIRST_CLUSTER)
+      export PAUSE_AFTER_FIRST_CLUSTER=$(get_env PAUSE_AFTER_FIRST_CLUSTER)
     fi
-    export DEPLOYMENT_SLACK_CHANNEL_ID=$(cat /config/environment-properties/DEPLOYMENT_SLACK_CHANNEL_ID)
+    export DEPLOYMENT_SLACK_CHANNEL_ID=$(get_env DEPLOYMENT_SLACK_CHANNEL_ID)
 
     # secrets
-    export IDS_TOKEN=$(cat /config/secure-properties/git-token)
-    export IC_1308775_API_KEY=$(cat /config/secure-properties/IC_1308775_API_KEY)
-    export IC_1651315_API_KEY=$(cat /config/secure-properties/IC_1651315_API_KEY)
-    export IC_1416501_API_KEY=$(cat /config/secure-properties/IC_1416501_API_KEY)
-    export OTC_REGISTRY_API_KEY=$(cat /config/secure-properties/IC_1416501_API_KEY)
-    export DEPLOYMENT_SLACK_TOKEN=$(cat /config/secure-properties/DEPLOYMENT_SLACK_TOKEN)
+    export IDS_TOKEN=$(get_env git-token)
+    export IC_1308775_API_KEY=$(get_env IC_1308775_API_KEY)
+    export IC_1651315_API_KEY=$(get_env IC_1651315_API_KEY)
+    export IC_1416501_API_KEY=$(get_env IC_1416501_API_KEY)
+    export OTC_REGISTRY_API_KEY=$(get_env IC_1416501_API_KEY)
+    export DEPLOYMENT_SLACK_TOKEN=$(get_env DEPLOYMENT_SLACK_TOKEN)
 
     # comment below if using otc-deploy image
     git clone https://$IDS_USER:$IDS_TOKEN@github.ibm.com/org-ids/otc-deploy
@@ -78,11 +74,11 @@ acceptance-test:
   imagePullPolicy: Always
   script: |
     #!/usr/bin/env bash
-    export ENVIRONMENT=$(cat /config/environment-properties/ENVIRONMENT)
-    export TEST_PIPELINE_ID=$(cat /config/environment-properties/TEST_PIPELINE_ID)
-    export IC_1651315_API_KEY=$(cat /config/secure-properties/IC_1651315_API_KEY)
-    export DEPLOYMENT_SLACK_CHANNEL_ID=$(cat /config/environment-properties/DEPLOYMENT_SLACK_CHANNEL_ID)
-    export DEPLOYMENT_SLACK_TOKEN=$(cat /config/secure-properties/DEPLOYMENT_SLACK_TOKEN)
+    export ENVIRONMENT=$(get_env ENVIRONMENT)
+    export TEST_PIPELINE_ID=$(get_env TEST_PIPELINE_ID)
+    export IC_1651315_API_KEY=$(get_env IC_1651315_API_KEY)
+    export DEPLOYMENT_SLACK_CHANNEL_ID=$(get_env DEPLOYMENT_SLACK_CHANNEL_ID)
+    export DEPLOYMENT_SLACK_TOKEN=$(get_env DEPLOYMENT_SLACK_TOKEN)
     . /umbrella/helpers.sh
     runRegionTests status "$ENVIRONMENT" "$PIPELINE_RUN_ID" "d5c0676c-55ed-4c25-b763-60b7afd64c87" "$TEST_PIPELINE_ID" $DEPLOYMENT_SLACK_CHANNEL_ID $DEPLOYMENT_SLACK_TOKEN
     echo "Status of $ENVIRONMENT tests is $status"
