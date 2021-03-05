@@ -59,7 +59,6 @@ deploy:
 
     # build and deploy from inventory
     . /umbrella/helpers.sh
-    set -x
     buildAndDeployFromInventory $ENVIRONMENT $INVENTORY_BRANCH $DEPLOYMENT_SLACK_CHANNEL_ID $DEPLOYMENT_SLACK_TOKEN $SKIP_CLUSTER_DANCE $PAUSE_AFTER_FIRST_CLUSTER
 
 acceptance-test:
