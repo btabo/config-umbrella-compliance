@@ -37,6 +37,6 @@ export ARTIFACTORY_TOKEN_BASE64="$(get_env ARTIFACTORY_TOKEN_BASE64)"
 if [ -f "$COMMON_FOLDER/../$APP_NAME/test.sh" ]; then
     . $COMMON_FOLDER/../$APP_NAME/test.sh
 else
-    chmod +x .jobs/nock
-    .jobs/nock
+    echo "$APP_NAME/test.sh"
+    exit 1
 fi

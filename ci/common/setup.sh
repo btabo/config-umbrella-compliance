@@ -30,8 +30,8 @@ cd $APP_NAME
 if [ -f "$COMMON_FOLDER/../$APP_NAME/setup.sh" ]; then
     . $COMMON_FOLDER/../$APP_NAME/setup.sh
 else
-    chmod +x .jobs/build
-    .jobs/build
+    echo "$APP_NAME/setup.sh is missing"
+    exit 1
 fi
 
 echo cat .pipeline_build_id
