@@ -5,6 +5,8 @@ if [[ "${PIPELINE_DEBUG:-0}" == 1 ]]; then
     set -x
 fi
 
+COMMON_FOLDER="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
 export APP_NAME=$(get_env app-name)
 
 # check branch protection and clone app repo
@@ -25,8 +27,12 @@ export ARTIFACTORY_ID=idsorg@us.ibm.com
 export ARTIFACTORY_TOKEN_BASE64="$(get_env ARTIFACTORY_TOKEN_BASE64)"
 
 cd $APP_NAME
-chmod +x .jobs/build
-.jobs/build
+if [ -f "$COMMON_FOLDER/../$APP_NAME/setup.sh" ]; then
+    . $COMMON_FOLDER/../$APP_NAME/setup.sh
+else
+    chmod +x .jobs/build
+    .jobs/build
+fi
 
 echo cat .pipeline_build_id
 cat .pipeline_build_id

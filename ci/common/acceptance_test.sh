@@ -34,4 +34,8 @@ fi
 echo ".pipeline_build_id=$(<.pipeline_build_id)"
 
 # run tests
-.jobs/test
+if [ -f "$COMMON_FOLDER/../$APP_NAME/acceptance_test.sh" ]; then
+    . $COMMON_FOLDER/../$APP_NAME/acceptance_test.sh
+else
+  .jobs/test
+fi

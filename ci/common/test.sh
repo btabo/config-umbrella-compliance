@@ -34,5 +34,9 @@ fi
 export ARTIFACTORY_ID=idsorg@us.ibm.com
 export ARTIFACTORY_TOKEN_BASE64="$(get_env ARTIFACTORY_TOKEN_BASE64)"
 
-chmod +x .jobs/nock
-.jobs/nock
+if [ -f "$COMMON_FOLDER/../$APP_NAME/test.sh" ]; then
+    . $COMMON_FOLDER/../$APP_NAME/test.sh
+else
+    chmod +x .jobs/nock
+    .jobs/nock
+fi
