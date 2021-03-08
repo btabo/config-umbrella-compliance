@@ -66,12 +66,11 @@ acceptance-test:
   imagePullPolicy: Always
   script: |
     #!/usr/bin/env bash
-    # cannot use get_env because of https://github.ibm.com/one-pipeline/adoption-issues/issues/196
-    export ENVIRONMENT=$(cat /config/environment-properties/ENVIRONMENT)
-    export TEST_PIPELINE_ID=$(cat /config/environment-properties/TEST_PIPELINE_ID)
-    export IC_1651315_API_KEY=$(cat /config/secure-properties/IC_1651315_API_KEY)
-    export DEPLOYMENT_SLACK_CHANNEL_ID=$(cat /config/environment-properties/DEPLOYMENT_SLACK_CHANNEL_ID)
-    export DEPLOYMENT_SLACK_TOKEN=$(cat /config/secure-properties/DEPLOYMENT_SLACK_TOKEN)
+    export ENVIRONMENT=$(get_env ENVIRONMENT)
+    export TEST_PIPELINE_ID=$(get_env TEST_PIPELINE_ID)
+    export IC_1651315_API_KEY=$(get_env IC_1651315_API_KEY)
+    export DEPLOYMENT_SLACK_CHANNEL_ID=$(get_env DEPLOYMENT_SLACK_CHANNEL_ID)
+    export DEPLOYMENT_SLACK_TOKEN=$(get_env DEPLOYMENT_SLACK_TOKEN)
     . /umbrella/helpers.sh
     runRegionTests status "$ENVIRONMENT" "$PIPELINE_RUN_ID" "d5c0676c-55ed-4c25-b763-60b7afd64c87" "$TEST_PIPELINE_ID" $DEPLOYMENT_SLACK_CHANNEL_ID $DEPLOYMENT_SLACK_TOKEN
     echo "Status of $ENVIRONMENT tests is $status"
