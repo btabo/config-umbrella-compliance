@@ -8,6 +8,8 @@ export slack_token=$(get_env otc-slack-broker_slack_token)
 export TIAM_CLIENT_ID=slack
 export services__slack_api=https://slack.com/api
 export slack_domain=https://idstest.slack.com
+export PORT='4000'
+export url=http://localhost:$PORT
 
 # unused?
 export icons__toolchain=https://cloud.ibm.com/devops/graphics/toolchains.svg

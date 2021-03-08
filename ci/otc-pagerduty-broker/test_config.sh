@@ -11,6 +11,8 @@ export TIAM_CLIENT_ID=pagerduty
 export services__pagerduty=https://pagerduty.com
 export pagerduty_site_name=ibmdevops
 export pagerduty_site_name_2=ibmdevops
+export PORT='4000'
+export url=http://localhost:$PORT
 
 # script file
 export TESTS_SCRIPT_FILE=".jobs/nock"
