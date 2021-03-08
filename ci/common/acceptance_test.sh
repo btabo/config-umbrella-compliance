@@ -37,6 +37,7 @@ echo ".pipeline_build_id=$(<.pipeline_build_id)"
 if [ "$ACCEPTANCE_TESTS_SCRIPT_FILE" ]; then
     chmod u+x $ACCEPTANCE_TESTS_SCRIPT_FILE
     if ! $ACCEPTANCE_TESTS_SCRIPT_FILE; then
+        echo "Acceptance tests failed"
         exit 1
     fi
 else

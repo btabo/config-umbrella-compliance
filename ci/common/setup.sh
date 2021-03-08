@@ -39,6 +39,7 @@ fi
 if [ "$SETUP_SCRIPT_FILE" ]; then
     chmod u+x $SETUP_SCRIPT_FILE
     if ! $SETUP_SCRIPT_FILE; then
+        echo "Setup failed"
         exit 1
     fi
 else
