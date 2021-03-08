@@ -35,6 +35,10 @@ fi
 
 # run tests
 if [ "$TESTS_SCRIPT_FILE" ]; then
+    echo "================================================="
+    env | sort
+    echo "================================================="
+    echo
     chmod u+x $TESTS_SCRIPT_FILE
     if ! $TESTS_SCRIPT_FILE; then
         echo "Tests failed"
