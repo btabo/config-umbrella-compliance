@@ -12,3 +12,6 @@ export slack_domain=https://idstest.slack.com
 # unused?
 export icons__toolchain=https://cloud.ibm.com/devops/graphics/toolchains.svg
 export icons__pipeline=https://cloud.ibm.com/devops/pipelines/graphics/pipeline.png
+
+# script file
+export TESTS_SCRIPT_FILE=".jobs/nock"

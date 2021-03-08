@@ -25,18 +25,21 @@ export services__otc_api=http://nock-localhost:3400/api/v1
 export services__otc_ui=http://nock-localhost:3100/devops
 export test_tiam_id=test
 
+# unused?
+export ARTIFACTORY_ID=idsorg@us.ibm.com
+export ARTIFACTORY_TOKEN_BASE64="$(get_env ARTIFACTORY_TOKEN_BASE64)"
+
 # secrets and config specific to the component
 if [ -f "$COMMON_FOLDER/../$APP_NAME/test_config.sh" ]; then
     . $COMMON_FOLDER/../$APP_NAME/test_config.sh
 fi
 
-# unused?
-export ARTIFACTORY_ID=idsorg@us.ibm.com
-export ARTIFACTORY_TOKEN_BASE64="$(get_env ARTIFACTORY_TOKEN_BASE64)"
-
-if [ -f "$COMMON_FOLDER/../$APP_NAME/test.sh" ]; then
-    . $COMMON_FOLDER/../$APP_NAME/test.sh
+# run tests
+if [ "$TESTS_SCRIPT_FILE" ]; then
+    chmod u+x $TESTS_SCRIPT_FILE
+    if ! $TESTS_SCRIPT_FILE; then
+        exit 1
+    fi
 else
-    echo "$APP_NAME/test.sh"
-    exit 1
+    echo "Skipping tests since TESTS_SCRIPT_FILE is not set"
 fi

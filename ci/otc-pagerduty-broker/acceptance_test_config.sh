@@ -9,3 +9,6 @@ export _DEPLOY_OTC_API_BROKER_SECRET=$(get_env otc-pagerduty-broker_OTC_API_SECR
 export pagerduty_site_name="ibmdevops"
 export pagerduty_site_name_2="ibmdevops"
 export test_tiam_id="test"
+
+# script file
+export ACCEPTANCE_TESTS_SCRIPT_FILE=".jobs/test"

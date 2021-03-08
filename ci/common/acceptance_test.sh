@@ -34,9 +34,11 @@ fi
 echo ".pipeline_build_id=$(<.pipeline_build_id)"
 
 # run tests
-if [ -f "$COMMON_FOLDER/../$APP_NAME/acceptance_test.sh" ]; then
-    . $COMMON_FOLDER/../$APP_NAME/acceptance_test.sh
+if [ "$ACCEPTANCE_TESTS_SCRIPT_FILE" ]; then
+    chmod u+x $ACCEPTANCE_TESTS_SCRIPT_FILE
+    if ! $ACCEPTANCE_TESTS_SCRIPT_FILE; then
+        exit 1
+    fi
 else
-    echo "$APP_NAME/acceptance_test.sh is missing"
-    exit 1
+    echo "Skipping tests since ACCEPTANCE_TESTS_SCRIPT_FILE is not set"
 fi
