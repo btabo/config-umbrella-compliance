@@ -22,13 +22,13 @@ git clone -b $REPO_BRANCH https://$GH_TOKEN@github.ibm.com/$OWNER/$REPO_NAME $AP
 cd $APP_NAME
 
 # secrets
-export ARTIFACTORY_TOKEN_BASE64="$(get_env ARTIFACTORY_TOKEN_BASE64)"
+#export ARTIFACTORY_TOKEN_BASE64="$(get_env ARTIFACTORY_TOKEN_BASE64)"
 export IDS_TOKEN=$GH_TOKEN
 
 # config
 export IDS_USER=idsorg
 export GIT_COMMIT=$(git rev-parse HEAD)
-export ARTIFACTORY_ID=idsorg@us.ibm.com
+#export ARTIFACTORY_ID=idsorg@us.ibm.com
 
 # secrets and config specific to the component
 if [ -f "$COMMON_FOLDER/../$APP_NAME/setup_config.sh" ]; then
