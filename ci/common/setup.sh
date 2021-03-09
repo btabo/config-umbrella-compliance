@@ -22,7 +22,8 @@ git clone -b $REPO_BRANCH https://$GH_TOKEN@github.ibm.com/$OWNER/$REPO_NAME $AP
 cd $APP_NAME
 
 # secrets
-export ARTIFACTORY_TOKEN_BASE64="$(get_env ARTIFACTORY_TOKEN_BASE64)"
+export ARTIFACTORY_API_KEY="$(get_env ARTIFACTORY_API_KEY)"
+export ARTIFACTORY_TOKEN_BASE64="$(bas64 <<< $ARTIFACTORY_API_KEY)"
 export IDS_TOKEN=$GH_TOKEN
 
 # config

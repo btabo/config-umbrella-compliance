@@ -61,7 +61,8 @@ export LOGICAL_APP_NAME="$APP_NAME"
 export BUILD_PREFIX="$BRANCH"
 export ENV_BUILD_TIMESTAMP=$(date +%s%3N)
 export ARTIFACTORY_ID=idsorg@us.ibm.com
-export ARTIFACTORY_TOKEN_BASE64="$(get_env ARTIFACTORY_TOKEN_BASE64)"
+#export ARTIFACTORY_TOKEN_BASE64="$(get_env ARTIFACTORY_TOKEN_BASE64)"
+export ARTIFACTORY_API_KEY="$(get_env ARTIFACTORY_API_KEY)"
 
 export IC_1308775_API_KEY=$(get_env IC_1308775_API_KEY)
 . otc-deploy/k8s/scripts/login/clusterLogin.sh "otc-dal12-test" "otc"
@@ -81,7 +82,7 @@ echo "Compute BUILD_NUMBER to $BUILD_NUMBER"
 
 # install cocoa cli
 COCOA_CLI_VERSION=1.5.0
-ARTIFACTORY_API_KEY=$(base64 -d <<< $ARTIFACTORY_TOKEN_BASE64)
+#ARTIFACTORY_API_KEY=$(base64 -d <<< $ARTIFACTORY_TOKEN_BASE64)
 curl -u ${ARTIFACTORY_ID}:${ARTIFACTORY_API_KEY} -O "https://eu.artifactory.swg-devops.com/artifactory/wcp-compliance-automation-team-generic-local/cocoa-linux-${COCOA_CLI_VERSION}"
 cp cocoa-linux-* /usr/local/bin/cocoa
 chmod +x /usr/local/bin/cocoa
