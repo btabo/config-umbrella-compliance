@@ -17,6 +17,7 @@ export test_tiam_secret=$(get_env otc_test_tiam_secret)
 # config
 export CLOUDANT_URL=$(get_env otc_CLOUDANT_URL)
 export DOMAIN=stage1.ng.bluemix.net
+export LOGICAL_APP_NAME=$APP_NAME
 export APP_HOSTNAME_STEM=$APP_NAME
 export APP_MEMORY=128M
 export services__otc_api=http://nock-localhost:3400/api/v1
