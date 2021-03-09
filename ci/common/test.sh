@@ -26,8 +26,8 @@ export TIAM_URL=https://nock-devops-api.stage1.ng.bluemix.net:443/v1/identity
 export test_tiam_id=test
 
 # unused?
-#export ARTIFACTORY_ID=idsorg@us.ibm.com
-#export ARTIFACTORY_TOKEN_BASE64="$(get_env ARTIFACTORY_TOKEN_BASE64)"
+export ARTIFACTORY_ID=idsorg@us.ibm.com
+export ARTIFACTORY_TOKEN_BASE64="$(get_env ARTIFACTORY_TOKEN_BASE64)"
 
 # secrets and config specific to the component
 if [ -f "$COMMON_FOLDER/../$APP_NAME/test_config.sh" ]; then
