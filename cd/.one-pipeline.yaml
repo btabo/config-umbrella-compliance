@@ -11,16 +11,11 @@ setup:
     # TODO
 
 deploy:
-  image: ibmcom/pipeline-base-image:2.6
-  # cannot use otc-deploy:dev while https://github.ibm.com/cocoa/board/issues/1560 is not fixed
-  #image: us.icr.io/otc-ops/otc-deploy:dev
-  #imagePullPolicy: Always
+  #image: ibmcom/pipeline-base-image:2.6
+  image: us.icr.io/otc-ops/otc-deploy:dev
+  imagePullPolicy: Always
   script: |
     #!/usr/bin/env bash
-
-    echo "Options set"
-    printf %s\\n "$-"
-    echo
 
     # config
     export ENVIRONMENT=$(get_env ENVIRONMENT)
@@ -52,11 +47,11 @@ deploy:
     export OTC_REGISTRY_API_KEY=$(get_env IC_1416501_API_KEY)
     export DEPLOYMENT_SLACK_TOKEN=$(get_env DEPLOYMENT_SLACK_TOKEN)
 
-    # comment below if using otc-deploy image
-    git clone https://$IDS_USER:$IDS_TOKEN@github.ibm.com/org-ids/otc-deploy
-    cp -r otc-deploy/k8s/scripts/* /
-    git clone "https://$IDS_USER:$IDS_TOKEN@github.ibm.com/ids-env/devops-config"
-    cp -r devops-config/otc-deploy/* /otc-config
+    # uncomment below if not using otc-deploy image
+    #git clone https://$IDS_USER:$IDS_TOKEN@github.ibm.com/org-ids/otc-deploy
+    #cp -r otc-deploy/k8s/scripts/* /
+    #git clone "https://$IDS_USER:$IDS_TOKEN@github.ibm.com/ids-env/devops-config"
+    #cp -r devops-config/otc-deploy/* /otc-config
 
     # login and check helm version
     . /login/clusterLogin.sh "$(cat /config/cluster)" "otc"
