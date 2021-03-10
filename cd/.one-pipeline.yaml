@@ -14,7 +14,7 @@ version: '1'
 setup:
   image: ibmcom/pipeline-base-image:2.6
   #image: us.icr.io/otc-ops/otc-deploy:test
-  #imagePullPolicy: Always
+  #image_pull_policy: Always
   script: |
     #!/usr/bin/env bash
     export ENVIRONMENT=$(get_env ENVIRONMENT)
@@ -40,7 +40,7 @@ setup:
 deploy:
   #image: ibmcom/pipeline-base-image:2.6
   image: us.icr.io/otc-ops/otc-deploy:dev
-  imagePullPolicy: Always
+  image_pull_policy: Always
   script: |
     #!/usr/bin/env bash
 
@@ -90,7 +90,7 @@ deploy:
 
 acceptance-test:
   image: us.icr.io/otc-ops/otc-deploy:dev
-  imagePullPolicy: Always
+  image_pull_policy: Always
   script: |
     #!/usr/bin/env bash
     export ENVIRONMENT=$(get_env ENVIRONMENT)
