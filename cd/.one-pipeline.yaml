@@ -3,16 +3,34 @@
 
 version: '1'
 
+#setup:
+#  image: ibmcom/pipeline-base-image:2.9
+#  script: |
+#    #!/usr/bin/env bash
+#
+#    # TODO
+
+# temp
 setup:
-  image: ibmcom/pipeline-base-image:2.9
+  image: us.icr.io/otc-ops/otc-deploy:test
+  imagePullPolicy: Always
   script: |
     #!/usr/bin/env bash
-
-    # TODO
+    export ENVIRONMENT=$(get_env ENVIRONMENT)
+    export TEST_PIPELINE_ID=$(get_env TEST_PIPELINE_ID)
+    export IC_1651315_API_KEY=$(get_env IC_1651315_API_KEY)
+    export DEPLOYMENT_SLACK_CHANNEL_ID=$(get_env DEPLOYMENT_SLACK_CHANNEL_ID)
+    export DEPLOYMENT_SLACK_TOKEN=$(get_env DEPLOYMENT_SLACK_TOKEN)
+    . /umbrella/helpers.sh
+    runRegionTests status "$ENVIRONMENT" "$PIPELINE_RUN_ID" "d5c0676c-55ed-4c25-b763-60b7afd64c87" "$TEST_PIPELINE_ID" $DEPLOYMENT_SLACK_CHANNEL_ID $DEPLOYMENT_SLACK_TOKEN
+    echo "Status of $ENVIRONMENT tests is $status"
+    if [ "$status" != "succeeded" ]; then
+      exit 1
+    fi
 
 deploy:
   #image: ibmcom/pipeline-base-image:2.6
-  image: us.icr.io/otc-ops/otc-deploy:test
+  image: us.icr.io/otc-ops/otc-deploy:dev
   imagePullPolicy: Always
   script: |
     #!/usr/bin/env bash
