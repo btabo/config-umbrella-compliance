@@ -25,7 +25,7 @@ setup:
 
     export IDS_USER=idsorg
     export IDS_TOKEN=$(get_env git-token)
-    git clone -b 16260 https://$IDS_USER:$IDS_TOKEN@github.ibm.com/org-ids/otc-deploy
+    git clone -b 16276 https://$IDS_USER:$IDS_TOKEN@github.ibm.com/org-ids/otc-deploy
     cp -r otc-deploy/k8s/scripts/* /
     git clone "https://$IDS_USER:$IDS_TOKEN@github.ibm.com/ids-env/devops-config"
     cp -r devops-config/otc-deploy/* /otc-config
