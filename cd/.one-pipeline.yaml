@@ -18,6 +18,10 @@ deploy:
   script: |
     #!/usr/bin/env bash
 
+    echo "Options set"
+    printf %s\\n "$-"
+    echo
+
     # config
     export ENVIRONMENT=$(get_env ENVIRONMENT)
     export INVENTORY_BRANCH=$(get_env target-environment)
