@@ -24,7 +24,10 @@ cd $APP_NAME
 # secrets
 export ARTIFACTORY_API_KEY="$(get_env ARTIFACTORY_API_KEY)"
 export ARTIFACTORY_TOKEN_BASE64="$(get_env ARTIFACTORY_TOKEN_BASE64)" #"$( echo -n $ARTIFACTORY_API_KEY | base64 )"
-ARTIFACTORY_API_KEY_BASE64="$( echo -n $ARTIFACTORY_API_KEY | base64 )"
+if [[ "$OSTYPE" != "darwin"* ]]; then # if not on MacOS
+    base64Args="-w 0" # -w 0 to disable line wrapping
+fi
+ARTIFACTORY_API_KEY_BASE64="$( echo -n $ARTIFACTORY_API_KEY | base64 $base64Args)"
 if [ "$ARTIFACTORY_API_KEY_BASE64" != "$ARTIFACTORY_TOKEN_BASE64" ]; then
     echo "ARTIFACTORY_API_KEY_BASE64 != ARTIFACTORY_TOKEN_BASE64"
     echo "ARTIFACTORY_API_KEY_BASE64 length=${#ARTIFACTORY_API_KEY_BASE64}"
