@@ -114,13 +114,11 @@ CHART_VERSION=$(yq r -j "k8s/$APP_NAME/Chart.yaml" | jq -r '.version')
 ARTIFACT="https://github.ibm.com/$CHART_ORG/$CHART_REPO/blob/master/charts/$APP_NAME-$CHART_VERSION.tgz"
 IMAGE_ARTIFACT="$(get_env artifact)"
 SIGNATURE="$(get_env signature)"
-if [ "$SIGNATURE" ]; then
-    # using TaaS worker
-    APP_ARTIFACTS='{ "signature": "'${SIGNATURE}'", "provenance": "'${IMAGE_ARTIFACT}'" }'
-else
+if [ -z "$SIGNATURE" ]; then
     # using regular worker, no signature
-    APP_ARTIFACTS='{ "provenance": "'${IMAGE_ARTIFACT}'" }'
+    SIGNATURE="none"
 fi
+APP_ARTIFACTS='{ "signature": "'${SIGNATURE}'", "provenance": "'${IMAGE_ARTIFACT}'" }'
 cocoa inventory add \
     --environment="${INVENTORY_BRANCH}" \
     --artifact="${ARTIFACT}" \
