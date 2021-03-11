@@ -23,7 +23,7 @@ cd $APP_NAME
 
 # secrets
 export ARTIFACTORY_API_KEY="$(get_env ARTIFACTORY_API_KEY)"
-export ARTIFACTORY_TOKEN_BASE64="$( echo -n $ARTIFACTORY_API_KEY | base64 )"
+export ARTIFACTORY_TOKEN_BASE64="$(get_env ARTIFACTORY_TOKEN_BASE64)" #"$( echo -n $ARTIFACTORY_API_KEY | base64 )"
 export IDS_TOKEN=$GH_TOKEN
 
 # config
