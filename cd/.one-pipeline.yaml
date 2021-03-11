@@ -3,43 +3,16 @@
 
 version: '1'
 
-#setup:
-#  image: ibmcom/pipeline-base-image:2.9
-#  script: |
-#    #!/usr/bin/env bash
-#
-#    # TODO
-
-# temp
 setup:
-  image: ibmcom/pipeline-base-image:2.6
-  #image: us.icr.io/otc-ops/otc-deploy:test
-  #image_pull_policy: Always
-  script: |
-    #!/usr/bin/env bash
-    export ENVIRONMENT=$(get_env ENVIRONMENT)
-    export TEST_PIPELINE_ID=$(get_env TEST_PIPELINE_ID)
-    export IC_1651315_API_KEY=$(get_env IC_1651315_API_KEY)
-    export DEPLOYMENT_SLACK_CHANNEL_ID=$(get_env DEPLOYMENT_SLACK_CHANNEL_ID)
-    export DEPLOYMENT_SLACK_TOKEN=$(get_env DEPLOYMENT_SLACK_TOKEN)
+ image: ibmcom/pipeline-base-image:2.9
+ script: |
+   #!/usr/bin/env bash
 
-    export IDS_USER=idsorg
-    export IDS_TOKEN=$(get_env git-token)
-    git clone -b 16276 https://$IDS_USER:$IDS_TOKEN@github.ibm.com/org-ids/otc-deploy
-    cp -r otc-deploy/k8s/scripts/* /
-    git clone "https://$IDS_USER:$IDS_TOKEN@github.ibm.com/ids-env/devops-config"
-    cp -r devops-config/otc-deploy/* /otc-config
-
-    . /umbrella/helpers.sh
-    runRegionTests status "$ENVIRONMENT" "$PIPELINE_RUN_ID" "d5c0676c-55ed-4c25-b763-60b7afd64c87" "$TEST_PIPELINE_ID" $DEPLOYMENT_SLACK_CHANNEL_ID $DEPLOYMENT_SLACK_TOKEN
-    echo "Status of $ENVIRONMENT tests is $status"
-    if [ "$status" != "succeeded" ]; then
-      exit 1
-    fi
+   # TODO
 
 deploy:
   #image: ibmcom/pipeline-base-image:2.6
-  image: us.icr.io/otc-ops/otc-deploy:dev
+  image: us.icr.io/otc-ops/otc-deploy:test
   image_pull_policy: Always
   script: |
     #!/usr/bin/env bash
@@ -89,7 +62,7 @@ deploy:
     buildAndDeployFromInventory $ENVIRONMENT $INVENTORY_BRANCH $DEPLOYMENT_SLACK_CHANNEL_ID $DEPLOYMENT_SLACK_TOKEN $SKIP_CLUSTER_DANCE $PAUSE_AFTER_FIRST_CLUSTER
 
 acceptance-test:
-  image: us.icr.io/otc-ops/otc-deploy:dev
+  image: us.icr.io/otc-ops/otc-deploy:test
   image_pull_policy: Always
   script: |
     #!/usr/bin/env bash
