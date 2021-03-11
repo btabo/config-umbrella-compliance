@@ -119,7 +119,7 @@ if [ -z "$SIGNATURE" ]; then
     # using regular worker, no signature
     SIGNATURE="none"
 fi
-APP_ARTIFACTS='{ "signature": "'${SIGNATURE}'", "provenance": "'${IMAGE_ARTIFACT}'" }'
+APP_ARTIFACTS='{ "signature": "'${SIGNATURE}'", "provenance": "'${ARTIFACT}'" }'
 cocoa inventory add \
     --environment="${INVENTORY_BRANCH}" \
     --artifact="${ARTIFACT}" \
@@ -129,6 +129,7 @@ cocoa inventory add \
     --pipeline-run-id="${PIPELINE_RUN_ID}" \
     --version="$(get_env version)" \
     --name="${APP_NAME}"
+APP_ARTIFACTS='{ "signature": "'${SIGNATURE}'", "provenance": "'${IMAGE_ARTIFACT}'" }'
 cocoa inventory add \
     --environment="${INVENTORY_BRANCH}" \
     --artifact="${IMAGE_ARTIFACT}" \
