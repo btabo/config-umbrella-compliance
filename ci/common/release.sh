@@ -94,7 +94,7 @@ if [ "$BRANCH" == "integration" ]; then
 else
   export INVENTORY_BRANCH="dev"
 fi
-INVENTORY_REPO=$(get_env inventory-url)
+INVENTORY_REPO=$(get_env TEMP_INVENTORY_REPO "$(get_env inventory-url)" )
 GHE_ORG=${INVENTORY_REPO%/*}
 export GHE_ORG=${GHE_ORG##*/}
 GHE_REPO=${INVENTORY_REPO##*/}
