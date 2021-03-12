@@ -48,7 +48,11 @@ if [[ "$BREAK_GLASS" == "true" ]]; then
   IMAGE="$ARTIFACTORY_REGISTRY/$IMAGE_NAME:$IMAGE_TAG"
   jq -j --arg instance_id "$ARTIFACTORY_INTEGRATION_ID" '.services[] | select(.instance_id == $instance_id) | .parameters.token' /toolchain/toolchain.json | docker login -u "$(get_env artifactory | jq -r '.parameters.user_id')" --password-stdin "$(get_env artifactory | jq -r '.parameters.repository_url')"
 else
-  ICR_REGISTRY_NAMESPACE="$(get_env registry-namespace)"
+  if [ "$(get_env app-branch)" == "integration" ]; then
+    ICR_REGISTRY_NAMESPACE="devopsotc"
+  else
+    ICR_REGISTRY_NAMESPACE="$(get_env registry-namespace)"
+  fi
   ICR_REGISTRY_REGION="$(get-icr-region "$(get_env registry-region)")"
   IMAGE="$ICR_REGISTRY_REGION.icr.io/$ICR_REGISTRY_NAMESPACE/$IMAGE_NAME:$IMAGE_TAG"
   docker login -u iamapikey --password-stdin "$ICR_REGISTRY_REGION.icr.io" <<< $(get_env IC_1416501_API_KEY)
