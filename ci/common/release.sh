@@ -64,7 +64,7 @@ export ARTIFACTORY_ID=idsorg@us.ibm.com
 export ARTIFACTORY_API_KEY="$(get_env ARTIFACTORY_API_KEY)"
 
 # override chart org and repo name if specified
-TEMP_CHART_REPO_URL=$(get-env TEMP_CHART_REPO_URL "")
+TEMP_CHART_REPO_URL=$(get_env TEMP_CHART_REPO_URL "")
 if [ "$TEMP_CHART_REPO_URL" ]; then
     CHART_REPO=$(basename $TEMP_CHART_REPO_URL)
     CHART_ORG=$(basename $(dirname $TEMP_CHART_REPO_URL))
