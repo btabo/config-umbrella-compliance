@@ -56,12 +56,19 @@ export NAMESPACE="opentoolchain"
 export RELEASE_NAME="$APP_NAME"
 export MAJOR_VERSION="1"
 export MINOR_VERSION="0"
-export CHART_ORG="jerome-lanneluc" #TODO: replace with "ids-env"
+export CHART_ORG="ids-env"
 export LOGICAL_APP_NAME="$APP_NAME"
 export BUILD_PREFIX="$BRANCH"
 export ENV_BUILD_TIMESTAMP=$(date +%s%3N)
 export ARTIFACTORY_ID=idsorg@us.ibm.com
 export ARTIFACTORY_API_KEY="$(get_env ARTIFACTORY_API_KEY)"
+
+# override chart org and repo name if specified
+TEMP_CHART_REPO_URL=$(get-env TEMP_CHART_REPO_URL "")
+if [ "$TEMP_CHART_REPO_URL" ]; then
+    CHART_REPO=$(basename $TEMP_CHART_REPO_URL)
+    CHART_ORG=$(basename $(dirname $TEMP_CHART_REPO_URL))
+fi
 
 export IC_1308775_API_KEY=$(get_env IC_1308775_API_KEY)
 . otc-deploy/k8s/scripts/login/clusterLogin.sh "otc-dal12-test" "otc"
