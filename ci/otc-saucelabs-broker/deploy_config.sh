@@ -9,3 +9,8 @@ export ENV_ORGANIZATION_GUID="83e0652c-20b3-498e-a19c-402f81625c24"
 export ENV_TEST_USER="pipeauto@us.ibm.com"
 export ENV_TEST_REPORT_USER="theozparksatspooninskull"
 export ENV_TEST_REPORT_URL="https://ci-tru.mybluemix.net/php/utilities/uploadTestResults.php"
+unset ENV_LOG4J_LEVEL
+unset ENV_services__otc_api
+unset ENV_services__otc_ui
+unset ENV_services__otc_ui_env_id
+unset ENV_TIAM_URL
