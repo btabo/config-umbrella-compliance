@@ -31,6 +31,10 @@ if [ -f "$COMMON_FOLDER/../$APP_NAME/test_config.sh" ]; then
 fi
 
 # run tests
+echo =============================
+env | sort
+echo =============================
+echo
 if [ "$TESTS_SCRIPT_FILE" ]; then
     chmod u+x $TESTS_SCRIPT_FILE
     if ! $TESTS_SCRIPT_FILE; then
