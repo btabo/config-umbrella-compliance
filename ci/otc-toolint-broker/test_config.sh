@@ -2,7 +2,9 @@
 
 # secrets
 export OTC_API_BROKER_SECRET=$(get_env otc-toolint-broker_OTC_API_SECRET)
-export ENCRYPTION_KEY$(get_env otc-toolint-broker_ENCRYPTION_KEY)
+export ENCRYPTION_KEY=$(get_env otc-toolint-broker_ENCRYPTION_KEY)
+unset CLOUDANT_IAM_API_KEY
+unset test_tiam_secret
 
 # config
 export DLMS_WS_HOST=https://devops-api.us-south.devops.dev.cloud.ibm.com
@@ -23,7 +25,12 @@ export IAM_CLIENT_ID=otc
 export IAM_URL=https://iam.test.cloud.ibm.com
 export CF_API_URL=https://api.stage1.ng.bluemix.net/v2
 export MCCP_URL=https://mccp.ng.bluemix.net
-
+unset APP_MEMORY
+unset CLOUDANT_URL
+unset DOMAIN
+unset services__otc_api
+unset services__otc_ui
+unset test_tiam_id
 
 # script file
 export TESTS_SCRIPT_FILE=".jobs/mocha-tests"
