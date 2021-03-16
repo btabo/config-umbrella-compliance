@@ -18,7 +18,7 @@ deploy:
     #!/usr/bin/env bash
 
     # config
-    export ENVIRONMENT=$(get_env ENVIRONMENT)
+    export ENVIRONMENT=$(get_env region)
     export INVENTORY_BRANCH=$(get_env target-environment)
     export PIPELINE_TOOLCHAIN_ID=$(jq -r '.toolchain_guid' /toolchain/toolchain.json)
     export IDS_JOB_ID=$PIPELINE_RUN_ID
@@ -66,7 +66,7 @@ acceptance-test:
   image_pull_policy: Always
   script: |
     #!/usr/bin/env bash
-    export ENVIRONMENT=$(get_env ENVIRONMENT)
+    export ENVIRONMENT=$(get_env region)
     export TEST_PIPELINE_ID=$(get_env TEST_PIPELINE_ID)
     export IC_1651315_API_KEY=$(get_env IC_1651315_API_KEY)
     export DEPLOYMENT_SLACK_CHANNEL_ID=$(get_env DEPLOYMENT_SLACK_CHANNEL_ID)
