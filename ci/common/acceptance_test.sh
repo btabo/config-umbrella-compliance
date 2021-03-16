@@ -33,6 +33,31 @@ fi
 # .pipeline_build_id
 echo ".pipeline_build_id=$(<.pipeline_build_id)"
 
+# healthchek of the new deployed service instance
+if [ "$SKIP_HEALTH_CHECK" == "true" ]; then
+    echo "skipping healthcheck on the component status endpoint"
+else
+    TEST_URL="https://$APP_NAME-$NAMESPACE.$DOMAIN/status"
+    echo "TEST_URL=$TEST_URL"
+    # 502 is Bad Gateway that can occurs during the interval while the POD is in creation
+    while [ $(curl -s -k -o /dev/null -w "%{http_code}" "$TEST_URL") == 502 ]; do
+        echo -n '.'
+        sleep 10
+    done
+    while [ $(curl -s -k -o /dev/null -w "%{http_code}" "$TEST_URL") == 501 ]; do
+        echo -n '.'
+        sleep 10
+    done
+
+    http_code_test_url=$(curl -s -k -o /dev/null -w "%{http_code}" "${TEST_URL}")
+    if [ "$http_code_test_url" == "200" ]; then
+        echo "${TEST_URL} is successful"
+    else
+        echo "${TEST_URL} can not be reached (http_code: ${http_code_test_url}) - deployment failed."
+        exit 1
+    fi
+fi
+
 # run tests
 if [ "$ACCEPTANCE_TESTS_SCRIPT_FILE" ]; then
     chmod u+x $ACCEPTANCE_TESTS_SCRIPT_FILE
