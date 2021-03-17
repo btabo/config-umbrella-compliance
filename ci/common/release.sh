@@ -40,7 +40,7 @@ export PIPELINE_KUBERNETES_CLUSTER_NAME="topasshelmlintanddryrun"
 # for building helm chart
 export IDS_USER="idsorg"
 export IDS_TOKEN=$GIT_TOKEN
-export BRANCH=$(get_env app-branch)
+export BRANCH=$(get_env branch)
 if [ "$BRANCH" == "integration" ]; then
     export DOMAIN="stage.us-south.devops.cloud.ibm.com"
     export NUM_INSTANCES="3"
