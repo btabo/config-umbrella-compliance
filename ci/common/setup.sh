@@ -9,9 +9,12 @@ COMMON_FOLDER="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 export APP_NAME=$(get_env app-name)
 
+GH_TOKEN=$(cat "$WORKSPACE/git-token")
+echo ls -l
+ls -l
+echo
 if [ ! -d $APP_NAME ]; then
     # check branch protection and clone app repo
-    GH_TOKEN=$(cat "$WORKSPACE/git-token")
     APP_REPO_URL=$(get_env repository)
     APP_REPO_URL=${APP_REPO_URL%.git}
     OWNER=${APP_REPO_URL%/*}
@@ -20,8 +23,8 @@ if [ ! -d $APP_NAME ]; then
     REPO_BRANCH=$(get_env app-branch)
     curl -u ":$GH_TOKEN" https://github.ibm.com/api/v3/repos/$OWNER/$REPO_NAME/branches/$REPO_BRANCH/protection -XPUT -d '{"required_pull_request_reviews":{"dismiss_stale_reviews":true},"required_status_checks":{"strict":true,"contexts":["tekton/code-branch-protection","tekton/code-unit-tests","tekton/code-cis-check","tekton/code-vulnerability-scan","tekton/code-detect-secrets"]},"enforce_admins":null,"restrictions":null}'
     git clone -b $REPO_BRANCH https://$GH_TOKEN@github.ibm.com/$OWNER/$REPO_NAME $APP_NAME
-    cd $APP_NAME
 fi
+cd $APP_NAME
 
 # secrets
 export ARTIFACTORY_API_KEY="$(get_env ARTIFACTORY_API_KEY)"
