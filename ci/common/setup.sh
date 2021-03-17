@@ -19,6 +19,7 @@ echo
 echo ls -l $WORKSPACE
 ls -l $WORKSPACE
 echo
+cd $WORKSPACE
 if [ ! -d $APP_NAME ]; then
     # check branch protection and clone app repo
     APP_REPO_URL=$(get_env repository)
