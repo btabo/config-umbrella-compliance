@@ -8,7 +8,7 @@ fi
 COMMON_FOLDER="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 export APP_NAME=$(get_env app-name)
-cd $APP_NAME
+cd $WORKSPACE/$APP_NAME
 
 # secrets
 export test_tiam_secret=$(get_env otc_test_tiam_secret)

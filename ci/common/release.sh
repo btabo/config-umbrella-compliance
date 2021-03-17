@@ -8,7 +8,7 @@ fi
 COMMON_FOLDER="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 export APP_NAME=$(get_env app-name)
-cd $APP_NAME
+cd $WORKSPACE/$APP_NAME
 
 # clone otc-deploy and devops-config if needed
 GIT_TOKEN=$(cat "$WORKSPACE/git-token")

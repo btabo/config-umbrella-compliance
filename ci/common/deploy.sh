@@ -8,7 +8,7 @@ fi
 COMMON_FOLDER="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 export APP_NAME=$(get_env app-name)
-cd $APP_NAME
+cd $WORKSPACE/$APP_NAME
 
 # secrets
 export SEC_CLOUDANT_IAM_API_KEY=$(get_env otc_CLOUDANT_IAM_API_KEY)

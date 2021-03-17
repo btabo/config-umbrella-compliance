@@ -8,18 +8,9 @@ fi
 COMMON_FOLDER="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 export APP_NAME=$(get_env app-name)
-
-GH_TOKEN=$(cat "$WORKSPACE/git-token")
-echo pwd
-pwd
-echo
-echo ls -l
-ls -l
-echo
-echo ls -l $WORKSPACE
-ls -l $WORKSPACE
-echo
 cd $WORKSPACE
+
+GH_TOKEN=$(cat "./git-token")
 if [ ! -d $APP_NAME ]; then
     # check branch protection and clone app repo
     APP_REPO_URL=$(get_env repository)

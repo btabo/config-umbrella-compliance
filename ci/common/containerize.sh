@@ -6,7 +6,7 @@ if [[ "${PIPELINE_DEBUG:-0}" == 1 ]]; then
 fi
 
 export APP_NAME=$(get_env app-name)
-cd $APP_NAME
+cd $WORKSPACE/$APP_NAME
 
 get-icr-region() {
   case "$1" in
