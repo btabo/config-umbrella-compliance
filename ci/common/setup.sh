@@ -18,7 +18,7 @@ if [ ! -d $APP_NAME ]; then
     OWNER=${APP_REPO_URL%/*}
     OWNER=${OWNER##*/}
     REPO_NAME=${APP_REPO_URL##*/}
-    REPO_BRANCH=$(get_env app-branch)
+    REPO_BRANCH=$(get_env branch)
     curl -u ":$GH_TOKEN" https://github.ibm.com/api/v3/repos/$OWNER/$REPO_NAME/branches/$REPO_BRANCH/protection -XPUT -d '{"required_pull_request_reviews":{"dismiss_stale_reviews":true},"required_status_checks":{"strict":true,"contexts":["tekton/code-branch-protection","tekton/code-unit-tests","tekton/code-cis-check","tekton/code-vulnerability-scan","tekton/code-detect-secrets"]},"enforce_admins":null,"restrictions":null}'
     git clone -b $REPO_BRANCH https://$GH_TOKEN@github.ibm.com/$OWNER/$REPO_NAME $APP_NAME
 fi

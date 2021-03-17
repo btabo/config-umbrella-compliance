@@ -14,7 +14,7 @@ cd $WORKSPACE/$APP_NAME
 export SEC_CLOUDANT_IAM_API_KEY=$(get_env otc_CLOUDANT_IAM_API_KEY)
 
 # config
-if [ "$(get_env app-branch)" == "integration" ]; then
+if [ "$(get_env branch)" == "integration" ]; then
     export NAMESPACE="otc-int"
     export RELEASE_NAME=$APP_NAME-$NAMESPACE
 else

@@ -14,7 +14,7 @@ cd $WORKSPACE/$APP_NAME
 export test_tiam_secret=$(get_env otc_test_tiam_secret)
 
 # config
-if [ "$(get_env app-branch)" == "integration" ]; then
+if [ "$(get_env branch)" == "integration" ]; then
     export NAMESPACE="otc-int"
     export RELEASE_NAME=$APP_NAME-$NAMESPACE
 else
