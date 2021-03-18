@@ -76,18 +76,18 @@ DOCKER_BUILD_ARGS="-t $IMAGE"
 DOCKER_BUILDKIT=1 docker build $DOCKER_BUILD_ARGS .
 docker push "$IMAGE"
 
-echo -n $(docker inspect --format='{{index .RepoDigests 0}}' "$IMAGE" | awk -F@ '{print $2}') > ../../image-digest
-echo -n "$IMAGE_TAG" > ../../image-tags
-echo -n "$IMAGE" > ../../image
+echo -n $(docker inspect --format='{{index .RepoDigests 0}}' "$IMAGE" | awk -F@ '{print $2}') > $WORKSPACE/app/image-digest
+echo -n "$IMAGE_TAG" > $WORKSPACE/app/image-tags
+echo -n "$IMAGE" > $WORKSPACE/app/image
 
-echo cat ../../image-digest
-cat ../../image-digest
+echo cat $WORKSPACE/app/image-digest
+cat $WORKSPACE/app/image-digest
 echo
-echo cat ../../image-tags
-cat ../../image-tags
+echo cat $WORKSPACE/app/image-tags
+cat $WORKSPACE/app/image-tags
 echo
-echo cat ../../image
-cat ../../image
+echo cat $WORKSPACE/app/image
+cat $WORKSPACE/app/image
 echo
 
 # pass image information along via build.properties
