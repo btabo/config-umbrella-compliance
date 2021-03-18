@@ -51,6 +51,7 @@ release:
     chmod +x /usr/local/bin/cocoa
     export PATH="$PATH:/usr/local/bin/"
 
+    export GHE_TOKEN="$(cat $WORKSPACE/git-token)"
     export COMMIT_SHA="$(get_env git-commit)"
     INVENTORY_REPO=$(get_env TEMP_INVENTORY_REPO "$(get_env inventory-url)" )
 
