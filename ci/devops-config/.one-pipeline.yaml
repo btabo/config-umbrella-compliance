@@ -68,7 +68,7 @@ release:
         --build-number="${BUILD_NUMBER}" \
         --pipeline-run-id="${PIPELINE_RUN_ID}" \
         --version="$(get_env version)" \
-        --name="devops-config"
+        --name="config"
 
     cocoa inventory add \
         --environment="staging" \
@@ -78,4 +78,4 @@ release:
         --build-number="${BUILD_NUMBER}" \
         --pipeline-run-id="${PIPELINE_RUN_ID}" \
         --version="$(get_env version)" \
-        --name="devops-config"
+        --name="config"
