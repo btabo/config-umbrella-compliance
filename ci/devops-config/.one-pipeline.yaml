@@ -52,16 +52,10 @@ release:
     export PATH="$PATH:/usr/local/bin/"
 
     export COMMIT_SHA="$(get_env git-commit)"
-    export BRANCH=$(get_env branch)
-    if [ "$BRANCH" == "integration" ]; then
-      export INVENTORY_BRANCH="staging"
-    else
-      export INVENTORY_BRANCH="dev"
-    fi
     INVENTORY_REPO=$(get_env TEMP_INVENTORY_REPO "$(get_env inventory-url)" )
 
     cocoa inventory add \
-        --environment="${INVENTORY_BRANCH}" \
+        --environment="dev" \
         --artifact="https://github.ibm.com/ids-env/devops-config/tree/${COMMIT_SHA}/environments" \
         --repository-url="$(get_env repository)" \
         --commit-sha="${COMMIT_SHA}" \
@@ -70,3 +64,12 @@ release:
         --version="$(get_env version)" \
         --name="devops-config"
 
+    cocoa inventory add \
+        --environment="staging" \
+        --artifact="https://github.ibm.com/ids-env/devops-config/tree/${COMMIT_SHA}/environments" \
+        --repository-url="$(get_env repository)" \
+        --commit-sha="${COMMIT_SHA}" \
+        --build-number="${BUILD_NUMBER}" \
+        --pipeline-run-id="${PIPELINE_RUN_ID}" \
+        --version="$(get_env version)" \
+        --name="devops-config"
