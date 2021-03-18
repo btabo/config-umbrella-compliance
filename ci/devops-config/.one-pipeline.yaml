@@ -51,8 +51,14 @@ release:
     chmod +x /usr/local/bin/cocoa
     export PATH="$PATH:/usr/local/bin/"
 
+    # for cocoa cli
+    export GHE_TOKEN="$(cat $WORKSPACE/git-token)"
     export COMMIT_SHA="$(get_env git-commit)"
     INVENTORY_REPO=$(get_env TEMP_INVENTORY_REPO "$(get_env inventory-url)" )
+    GHE_ORG=${INVENTORY_REPO%/*}
+    export GHE_ORG=${GHE_ORG##*/}
+    GHE_REPO=${INVENTORY_REPO##*/}
+    export GHE_REPO=${GHE_REPO%.git}
 
     cocoa inventory add \
         --environment="dev" \
@@ -62,7 +68,7 @@ release:
         --build-number="${BUILD_NUMBER}" \
         --pipeline-run-id="${PIPELINE_RUN_ID}" \
         --version="$(get_env version)" \
-        --name="devops-config"
+        --name="config"
 
     cocoa inventory add \
         --environment="staging" \
@@ -72,4 +78,4 @@ release:
         --build-number="${BUILD_NUMBER}" \
         --pipeline-run-id="${PIPELINE_RUN_ID}" \
         --version="$(get_env version)" \
-        --name="devops-config"
+        --name="config"
