@@ -11,9 +11,9 @@ setup:
    # TODO
 
 deploy:
-  #image: ibmcom/pipeline-base-image:2.6
-  image: us.icr.io/otc-ops/otc-deploy:dev
-  image_pull_policy: Always
+  image: ibmcom/pipeline-base-image:2.6
+  #image: us.icr.io/otc-ops/otc-deploy:dev
+  #image_pull_policy: Always
   script: |
     #!/usr/bin/env bash
 
@@ -48,10 +48,10 @@ deploy:
     export DEPLOYMENT_SLACK_TOKEN=$(get_env DEPLOYMENT_SLACK_TOKEN)
 
     # uncomment below if not using otc-deploy image
-    #git clone https://$IDS_USER:$IDS_TOKEN@github.ibm.com/org-ids/otc-deploy
-    #cp -r otc-deploy/k8s/scripts/* /
-    #git clone "https://$IDS_USER:$IDS_TOKEN@github.ibm.com/ids-env/devops-config"
-    #cp -r devops-config/otc-deploy/* /otc-config
+    git clone -b 16391 https://$IDS_USER:$IDS_TOKEN@github.ibm.com/org-ids/otc-deploy
+    cp -r otc-deploy/k8s/scripts/* /
+    git clone "https://$IDS_USER:$IDS_TOKEN@github.ibm.com/ids-env/devops-config"
+    cp -r devops-config/otc-deploy/* /otc-config
 
     # login and check helm version
     . /login/clusterLogin.sh "$(cat /config/cluster)" "otc"
