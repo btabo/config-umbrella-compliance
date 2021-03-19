@@ -16,7 +16,7 @@ GRIT_SECRET_TOKEN=$(get_env otc-git-broker_ta-grit-secret-token)
 GRIT_SITE_ADMIN_TOKEN=$(get_env otc-git-broker_ta-grit-site-admin-token)
 IAM_CLIENT_SECRET=$(get_env otc-git-broker_test-app-iam-client-secret)
 UAA_CLIENT_SECRET=$(get_env otc-git-broker_ta-uaa-client-secret)
-USER_ARRAY_API_KEY=$(get_env otc-git-broker_ta-uaa-client-secret)
+USER_ARRAY_API_KEY=$(get_env otc-git-broker_ta-userarray-api-key)
 
 # cat > /artifacts/deploy-to-test-env << EOF
 export GLOBAL_ENV_SECGRP="GRP3DEVS"
