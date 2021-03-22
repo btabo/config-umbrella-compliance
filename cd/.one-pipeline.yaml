@@ -43,24 +43,31 @@ deploy:
     export WAIT_FOR_DEPLOY_MAX="80"
     export EXCLUDED_FROM_STATUS_CHECK=$(get_env EXCLUDED_FROM_STATUS_CHECK "")
     export DRY_RUN=$(get_env DRY_RUN "")
-    export SKIP_CLUSTER_DANCE=$(get_env SKIP_CLUSTER_DANCE "")
-    export PAUSE_AFTER_FIRST_CLUSTER=$(get_env PAUSE_AFTER_FIRST_CLUSTER "")
     export DEPLOYMENT_SLACK_CHANNEL_ID=$(get_env DEPLOYMENT_SLACK_CHANNEL_ID)
     case $ENVIRONMENT in
       dev)
         export CHART_REPO="devops-dev"
         export CHART_BRANCH="umbrella"
         export DOMAIN="us-south.devops.dev.cloud.ibm.com"
+        export PAUSE_AFTER_FIRST_CLUSTER="false"
+        export SKIP_CLUSTER_DANCE="true"
+        export TEST_PIPELINE_ID="000d42c0-a9f7-4d7d-86f8-01160f04d1fb"
         ;;
       jp-osa)
         export CHART_REPO="devops-int"
         export CHART_BRANCH="umbrella"
         export DOMAIN="$ENVIRONMENT.devops.cloud.ibm.com"
+        export PAUSE_AFTER_FIRST_CLUSTER="false"
+        export SKIP_CLUSTER_DANCE="true"
+        export TEST_PIPELINE_ID="000d42c0-a9f7-4d7d-86f8-01160f04d1fb"
         ;;
       *)
         export CHART_REPO="devops-prod"
         export CHART_BRANCH="umbrella-$ENVIRONMENT"
         export DOMAIN="$ENVIRONMENT.devops.cloud.ibm.com"
+        export PAUSE_AFTER_FIRST_CLUSTER=$(get_env PAUSE_AFTER_FIRST_CLUSTER "")
+        export SKIP_CLUSTER_DANCE=$(get_env SKIP_CLUSTER_DANCE "")
+        export TEST_PIPELINE_ID="4ed59ae8-3e48-4c5f-9ba8-66ebd4331a60"
         ;;
     esac
 
