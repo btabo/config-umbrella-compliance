@@ -25,10 +25,24 @@ deploy:
     export IDS_USER=idsorg
     export REGISTRY_TOKEN_ID="10d3bc02-1aa0-5f94-a42a-92208f626af9"
     export OTC_REGISTRY=registry.ng.bluemix.net
-    export CHART_REPO="devops-prod"
-    export CHART_BRANCH="umbrella-$ENVIRONMENT"
+    case $ENVIRONMENT in
+      dev)
+        export CHART_REPO="devops-dev"
+        export CHART_BRANCH="umbrella"
+        export DOMAIN="us-south.devops.dev.cloud.ibm.com"
+        ;;
+      jp-osa)
+        export CHART_REPO="devops-int"
+        export CHART_BRANCH="umbrella"
+        export DOMAIN="$ENVIRONMENT.devops.cloud.ibm.com"
+        ;;
+      *)
+        export CHART_REPO="devops-prod"
+        export CHART_BRANCH="umbrella-$ENVIRONMENT"
+        export DOMAIN="$ENVIRONMENT.devops.cloud.ibm.com"
+        ;;
+    esac
     export PRUNE_CHART_REPO="true"
-    export DOMAIN="$ENVIRONMENT.devops.cloud.ibm.com"
     export NAMESPACE=opentoolchain
     export WAIT_FOR_DEPLOY="true"
     export WAIT_FOR_DEPLOY_MAX="80"
