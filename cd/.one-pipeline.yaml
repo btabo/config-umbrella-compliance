@@ -86,9 +86,8 @@ deploy:
     #git clone "https://$IDS_USER:$IDS_TOKEN@github.ibm.com/ids-env/devops-config"
     #cp -r devops-config/otc-deploy/* /otc-config
 
-    # login and check helm version
+    # login
     . /login/clusterLogin.sh "$(cat /config/cluster)" "otc"
-    . /helpers/checkHelmVersion.sh
 
     # build and deploy from inventory
     . /umbrella/helpers.sh
