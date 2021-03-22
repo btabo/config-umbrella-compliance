@@ -4,6 +4,7 @@ RUN_WEBPACK_BUILD="true"
 export HOME=/root
 . ~/.nvm/nvm.sh
 npm --version
+ls -l ~
 if [[ ! -f ~/.netrc ]]; then
     cat > ~/.netrc <<NETRC
 machine github.ibm.com
