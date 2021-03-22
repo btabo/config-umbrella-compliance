@@ -99,7 +99,17 @@ acceptance-test:
   script: |
     #!/usr/bin/env bash
     export ENVIRONMENT=$(get_env region)
-    export TEST_PIPELINE_ID=$(get_env TEST_PIPELINE_ID)
+    case $ENVIRONMENT in
+      dev)
+        export TEST_PIPELINE_ID="000d42c0-a9f7-4d7d-86f8-01160f04d1fb"
+        ;;
+      jp-osa)
+        export TEST_PIPELINE_ID="000d42c0-a9f7-4d7d-86f8-01160f04d1fb"
+        ;;
+      *)
+        export TEST_PIPELINE_ID="4ed59ae8-3e48-4c5f-9ba8-66ebd4331a60"
+        ;;
+    esac
     export IC_1651315_API_KEY=$(get_env IC_1651315_API_KEY)
     export DEPLOYMENT_SLACK_CHANNEL_ID=$(get_env DEPLOYMENT_SLACK_CHANNEL_ID)
     export DEPLOYMENT_SLACK_TOKEN=$(get_env DEPLOYMENT_SLACK_TOKEN)
