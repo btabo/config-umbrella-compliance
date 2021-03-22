@@ -1,3 +1,6 @@
+INSTALL_BUILD_ESSENTIAL="true"
+RUN_WEBPACK_BUILD="true"
+############
 export HOME=/root
 . ~/.nvm/nvm.sh
 npm --version
