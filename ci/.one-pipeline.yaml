@@ -34,7 +34,7 @@ acceptance-test:
     source ./ci/common/acceptance_test.sh
 
 release:
-  image: icr.io/continuous-delivery/pipeline/pipeline-base-image:2.11
+  image: icr.io/continuous-delivery/pipeline/pipeline-base-image:2.8
   script: |
     #!/usr/bin/env bash
     source ./ci/common/release.sh
