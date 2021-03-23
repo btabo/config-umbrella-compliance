@@ -9,7 +9,7 @@ if [[ ! -f ~/.netrc ]]; then
     cat > ~/.netrc <<NETRC
 machine github.ibm.com
 login idsorg
-password $IDSORG_TOKEN
+password $IDS_TOKEN
 NETRC
     chmod 600 ~/.netrc
 fi
@@ -17,8 +17,6 @@ if [ "$INSTALL_BUILD_ESSENTIAL" ]; then
 DEBIAN_FRONTEND=noninteractive apt-get -y update
 DEBIAN_FRONTEND=noninteractive apt-get -y install build-essential
 fi
-
-rm -r -f node_modules
 
 echo -e "@otc-core:registry=https://na.artifactory.swg-devops.com/artifactory/api/npm/wcp-otc-core-team-npm-local/ \n_password=${ARTIFACTORY_TOKEN_BASE64} \nalways-auth=true \nemail=${ARTIFACTORY_ID} \nusername=${ARTIFACTORY_ID}\n@console:registry=https://na.artifactory.swg-devops.com/artifactory/api/npm/wcp-tmp-ace-fr-team-npm-virtual/ \n_password=${ARTIFACTORY_TOKEN_BASE64} \nalways-auth=true \nemail=${ARTIFACTORY_ID} \nusername=${ARTIFACTORY_ID}" > .npmrc
 GIT_COMMIT=$(git log --format="%H" -n 1)
