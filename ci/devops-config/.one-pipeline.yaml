@@ -4,7 +4,9 @@ setup:
   image: icr.io/continuous-delivery/pipeline/pipeline-base-image:2.7@sha256:282677e79ccb9d20c699d384a54093894de03675752cd848a3133266c898c14c
   script: |
     #!/usr/bin/env bash
-    # nothing to do
+    
+    # the artifact is devops-config/environments, remove everything else
+    find $WORKSPACE/devops-config -mindepth 1 ! -regex '^$WORKSPACE/devops-config/environments\(/.*\)?' -delete
 
 test:
   abort_on_failure: false
