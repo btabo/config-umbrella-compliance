@@ -6,7 +6,7 @@ setup:
     #!/usr/bin/env bash
     
     # the artifact is devops-config/environments, remove everything else
-    find $WORKSPACE/devops-config -mindepth 1 ! -regex '^$WORKSPACE/devops-config/environments\(/.*\)?' -delete
+    find $WORKSPACE/devops-config -mindepth 1 ! -name 'environments' ! -name '.git' ! -name '.secrets.baseline' -delete
 
 test:
   abort_on_failure: false
