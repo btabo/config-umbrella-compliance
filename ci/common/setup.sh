@@ -54,9 +54,15 @@ else
 fi
 
 # cleanup
-rm -rf "$WORKSPACE/$APP_NAME/otc-deploy"
-rm -rf "$WORKSPACE/$APP_NAME/otc-cf-deploy"
-rm -rf "$WORKSPACE/$APP_NAME/$APP_NAME"
+if [ -d "$WORKSPACE/$APP_NAME/otc-deploy"]; then
+    rm -rf "$WORKSPACE/$APP_NAME/otc-deploy"
+fi
+if [ -d "$WORKSPACE/$APP_NAME/otc-cf-deploy"]; then
+    rm -rf "$WORKSPACE/$APP_NAME/otc-cf-deploy"
+fi
+if [ -d "$WORKSPACE/$APP_NAME/$APP_NAME"]; then
+    rm -rf "$WORKSPACE/$APP_NAME/$APP_NAME"
+fi
 
 echo cat .pipeline_build_id
 cat .pipeline_build_id
