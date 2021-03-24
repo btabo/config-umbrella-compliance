@@ -14,7 +14,7 @@ setup:
     
     # the artifact is devops-config/environments, remove everything else
     #echo find $WORKSPACE/devops-config -mindepth 1 ! -name '.' ! -name '..' ! -name '.git' ! -name '.secrets.baseline' ! -name 'secrets.yaml' ! -name 'environments' -delete
-    find $WORKSPACE/devops-config -maxdepth 1 -type d ! -name '.' ! -name '.git' ! -name '.secrets.baseline' ! -name 'environments' -delete
+    find $WORKSPACE/devops-config -maxdepth 1 -type d ! -name '.' ! -name '.git' ! -name '.secrets.baseline' ! -name 'environments' -exec rm -rf {} \;
     #echo
     # rm $WORKSPACE/devops-config/README.md
     # rm -rf $WORKSPACE/devops-config/certificates
