@@ -53,6 +53,11 @@ else
     echo "Skipping setup since SETUP_SCRIPT_FILE is not set"
 fi
 
+# cleanup
+rm -rf "$WORKSPACE/$APP_NAME/otc-deploy"
+rm -rf "$WORKSPACE/$APP_NAME/otc-cf-deploy"
+rm -rf "$WORKSPACE/$APP_NAME/$APP_NAME"
+
 echo cat .pipeline_build_id
 cat .pipeline_build_id
 echo
