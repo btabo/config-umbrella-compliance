@@ -14,18 +14,18 @@ setup:
     
     # the artifact is devops-config/environments, remove everything else
     #echo find $WORKSPACE/devops-config -mindepth 1 ! -name '.' ! -name '..' ! -name '.git' ! -name '.secrets.baseline' ! -name 'secrets.yaml' ! -name 'environments' -delete
-    #find $WORKSPACE/devops-config -mindepth 1 ! -name '.' ! -name '..' ! -name '.git' ! -name '.secrets.baseline' ! -name 'secrets.yaml' ! -name 'environments' -delete
+    find $WORKSPACE/devops-config -maxdepth 1 -type d ! -name '.' ! -name '.git' ! -name '.secrets.baseline' ! -name 'environments' -delete
     #echo
-    rm $WORKSPACE/devops-config/README.md
-    rm -rf $WORKSPACE/devops-config/certificates
-    rm -rf $WORKSPACE/devops-config/charts
-    rm -rf $WORKSPACE/devops-config/cis
-    rm -rf $WORKSPACE/devops-config/clusters
-    rm -rf $WORKSPACE/devops-config/databases
-    rm -rf $WORKSPACE/devops-config/dns
-    rm -rf $WORKSPACE/devops-config/docker
-    rm -rf $WORKSPACE/devops-config/network-policies
-    rm -rf $WORKSPACE/devops-config/otc-deploy
+    # rm $WORKSPACE/devops-config/README.md
+    # rm -rf $WORKSPACE/devops-config/certificates
+    # rm -rf $WORKSPACE/devops-config/charts
+    # rm -rf $WORKSPACE/devops-config/cis
+    # rm -rf $WORKSPACE/devops-config/clusters
+    # rm -rf $WORKSPACE/devops-config/databases
+    # rm -rf $WORKSPACE/devops-config/dns
+    # rm -rf $WORKSPACE/devops-config/docker
+    # rm -rf $WORKSPACE/devops-config/network-policies
+    # rm -rf $WORKSPACE/devops-config/otc-deploy
 
     echo ls -la $WORKSPACE/devops-config
     ls -la $WORKSPACE/devops-config
