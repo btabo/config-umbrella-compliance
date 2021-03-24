@@ -40,3 +40,15 @@ if [ "$TESTS_SCRIPT_FILE" ]; then
 else
     echo "Skipping tests since TESTS_SCRIPT_FILE is not set"
 fi
+
+echo pwd
+pwd
+echo
+
+echo ls -la $WORKSPACE
+ls -la $WORKSPACE
+echo
+
+echo ls -la $WORKSPACE/$APP_NAME
+ls -la $WORKSPACE/$APP_NAME
+echo

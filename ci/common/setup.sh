@@ -56,3 +56,15 @@ fi
 echo cat .pipeline_build_id
 cat .pipeline_build_id
 echo
+
+echo pwd
+pwd
+echo
+
+echo ls -la $WORKSPACE
+ls -la $WORKSPACE
+echo
+
+echo ls -la $WORKSPACE/$APP_NAME
+ls -la $WORKSPACE/$APP_NAME
+echo
