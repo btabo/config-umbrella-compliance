@@ -5,35 +5,11 @@ setup:
   script: |
     #!/usr/bin/env bash
 
-    echo ls -la $WORKSPACE/devops-config
-    ls -la $WORKSPACE/devops-config
-    echo
-    echo ls -la $WORKSPACE/devops-config/environments
-    ls -la $WORKSPACE/devops-config/environments
+    echo "The artifact is devops-config/environments, remove everything else"
+    echo find $WORKSPACE/devops-config/* -maxdepth 0 -type d ! -name '.' ! -name '.git' ! -name '.secrets.baseline' ! -name 'environments' -exec rm -rf {} \;
+    find $WORKSPACE/devops-config/* -maxdepth 0 -type d ! -name '.' ! -name '.git' ! -name '.secrets.baseline' ! -name 'environments' -exec rm -rf {} \;
     echo
     
-    # the artifact is devops-config/environments, remove everything else
-    #echo find $WORKSPACE/devops-config -mindepth 1 ! -name '.' ! -name '..' ! -name '.git' ! -name '.secrets.baseline' ! -name 'secrets.yaml' ! -name 'environments' -delete
-    find $WORKSPACE/devops-config/* -maxdepth 0 -type d ! -name '.' ! -name '.git' ! -name '.secrets.baseline' ! -name 'environments' -exec rm -rf {} \;
-    #echo
-    # rm $WORKSPACE/devops-config/README.md
-    # rm -rf $WORKSPACE/devops-config/certificates
-    # rm -rf $WORKSPACE/devops-config/charts
-    # rm -rf $WORKSPACE/devops-config/cis
-    # rm -rf $WORKSPACE/devops-config/clusters
-    # rm -rf $WORKSPACE/devops-config/databases
-    # rm -rf $WORKSPACE/devops-config/dns
-    # rm -rf $WORKSPACE/devops-config/docker
-    # rm -rf $WORKSPACE/devops-config/network-policies
-    # rm -rf $WORKSPACE/devops-config/otc-deploy
-
-    echo ls -la $WORKSPACE/devops-config
-    ls -la $WORKSPACE/devops-config
-    echo
-    echo ls -la $WORKSPACE/devops-config/environments
-    ls -la $WORKSPACE/devops-config/environments
-    echo
-
 test:
   abort_on_failure: false
   image: icr.io/continuous-delivery/pipeline/pipeline-base-image:2.7@sha256:282677e79ccb9d20c699d384a54093894de03675752cd848a3133266c898c14c
