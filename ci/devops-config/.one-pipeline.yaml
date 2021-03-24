@@ -8,20 +8,20 @@ setup:
     echo ls -la $WORKSPACE/devops-config
     ls -la $WORKSPACE/devops-config
     echo
-    echo ls -la /artifacts/devops-config
-    ls -la /artifacts/devops-config
+    echo ls -la $WORKSPACE/devops-config/environments
+    ls -la $WORKSPACE/devops-config/environments
     echo
     
     # the artifact is devops-config/environments, remove everything else
-    echo find $WORKSPACE/devops-config -mindepth 1 ! -name '.' ! -name '..' ! -name '.git' ! -name '.secrets.baseline' ! -name 'secrets.yaml' ! -name 'environments' -delete
-    find $WORKSPACE/devops-config -mindepth 1 ! -name '.' ! -name '..' ! -name '.git' ! -name '.secrets.baseline' ! -name 'secrets.yaml' ! -name 'environments' -delete
-    echo
+    #echo find $WORKSPACE/devops-config -mindepth 1 ! -name '.' ! -name '..' ! -name '.git' ! -name '.secrets.baseline' ! -name 'secrets.yaml' ! -name 'environments' -delete
+    #find $WORKSPACE/devops-config -mindepth 1 ! -name '.' ! -name '..' ! -name '.git' ! -name '.secrets.baseline' ! -name 'secrets.yaml' ! -name 'environments' -delete
+    #echo
 
     echo ls -la $WORKSPACE/devops-config
     ls -la $WORKSPACE/devops-config
     echo
-    echo ls -la /artifacts/devops-config
-    ls -la /artifacts/devops-config
+    echo ls -la $WORKSPACE/devops-config/environments
+    ls -la $WORKSPACE/devops-config/environments
     echo
 
 test:
