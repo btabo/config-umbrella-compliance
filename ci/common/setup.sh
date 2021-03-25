@@ -30,6 +30,7 @@ if [[ "$OSTYPE" != "darwin"* ]]; then # if not on MacOS
     base64Args="-w 0" # -w 0 to disable line wrapping
 fi
 export ARTIFACTORY_TOKEN_BASE64="$( echo -n $ARTIFACTORY_API_KEY | base64 $base64Args )"
+export ARTIFACTORY_AUTH_BASE64="$(get_env ARTIFACTORY_AUTH_BASE64 "")"
 export IDS_TOKEN=$GH_TOKEN
 
 # config
