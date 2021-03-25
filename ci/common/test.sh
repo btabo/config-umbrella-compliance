@@ -13,6 +13,7 @@ cd $WORKSPACE/$APP_NAME
 # secrets
 export CLOUDANT_IAM_API_KEY=$(get_env otc_CLOUDANT_IAM_API_KEY)
 export test_tiam_secret=$(get_env otc_test_tiam_secret)
+export ARTIFACTORY_AUTH_BASE64="$(get_env ARTIFACTORY_AUTH_BASE64 "")"
 
 # config
 export CLOUDANT_URL=$(get_env otc_CLOUDANT_URL)
