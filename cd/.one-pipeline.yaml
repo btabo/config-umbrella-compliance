@@ -32,7 +32,7 @@ deploy:
     # config
     export ENVIRONMENT=$(get_env region)
     export INVENTORY_BRANCH=$(get_env target-environment)
-    export DOI_TOOLCHAIN_ID="68213c68-4794-4d5e-ab50-f33d0d6190e4"
+    export DOI_TOOLCHAIN_ID=$(get_env doi-toolchain-id)
     export IDS_JOB_ID=$PIPELINE_RUN_ID
     export IDS_USER=idsorg
     export REGISTRY_TOKEN_ID="10d3bc02-1aa0-5f94-a42a-92208f626af9"
