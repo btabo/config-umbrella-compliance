@@ -16,7 +16,7 @@ export test_tiam_secret=$(get_env otc_test_tiam_secret)
 export ARTIFACTORY_AUTH_BASE64="$(get_env otc_ARTIFACTORY_AUTH_BASE64 "")"
 
 # config
-export CLOUDANT_URL=$(get_env otc_CLOUDANT_URL)
+export CLOUDANT_URL="https://b3a94817-edbc-4fc2-8c47-33d3752bc6a0-bluemix.cloudantnosqldb.appdomain.cloud/"
 export DOMAIN=stage1.ng.bluemix.net
 export LOGICAL_APP_NAME=$APP_NAME
 export APP_HOSTNAME_STEM=$APP_NAME
