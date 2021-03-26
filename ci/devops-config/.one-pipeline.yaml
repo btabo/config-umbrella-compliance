@@ -63,7 +63,7 @@ release:
 
     # install cocoa cli
     export ARTIFACTORY_ID=idsorg@us.ibm.com
-    export ARTIFACTORY_API_KEY="$(get_env ARTIFACTORY_API_KEY)"
+    export ARTIFACTORY_API_KEY="$(get_env otc_ARTIFACTORY_API_KEY)"
     COCOA_CLI_VERSION=1.5.0
     curl -u ${ARTIFACTORY_ID}:${ARTIFACTORY_API_KEY} -O "https://eu.artifactory.swg-devops.com/artifactory/wcp-compliance-automation-team-generic-local/cocoa-linux-${COCOA_CLI_VERSION}"
     cp cocoa-linux-* /usr/local/bin/cocoa

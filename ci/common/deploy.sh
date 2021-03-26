@@ -52,7 +52,7 @@ if [ ! -d "devops-config" ]; then
 fi 
 
 # login and check helm version
-export IC_1308775_API_KEY=$(get_env IC_1308775_API_KEY)
+export IC_1308775_API_KEY=$(get_env otc_IC_1308775_API_KEY)
 . otc-deploy/k8s/scripts/login/clusterLogin.sh "otc-dal12-test" "otc"
 . otc-deploy/k8s/scripts/helpers/checkHelmVersion.sh
 

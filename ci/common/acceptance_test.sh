@@ -12,7 +12,7 @@ cd $WORKSPACE/$APP_NAME
 
 # secrets
 export test_tiam_secret=$(get_env otc_test_tiam_secret)
-export ARTIFACTORY_AUTH_BASE64="$(get_env ARTIFACTORY_AUTH_BASE64 "")"
+export ARTIFACTORY_AUTH_BASE64="$(get_env otc_ARTIFACTORY_AUTH_BASE64 "")"
 
 # config
 if [ "$(get_env branch)" == "integration" ]; then

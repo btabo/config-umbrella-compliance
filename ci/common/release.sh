@@ -61,7 +61,7 @@ export LOGICAL_APP_NAME="$APP_NAME"
 export BUILD_PREFIX="$BRANCH"
 export ENV_BUILD_TIMESTAMP=$(date +%s%3N)
 export ARTIFACTORY_ID=idsorg@us.ibm.com
-export ARTIFACTORY_API_KEY="$(get_env ARTIFACTORY_API_KEY)"
+export ARTIFACTORY_API_KEY="$(get_env otc_ARTIFACTORY_API_KEY)"
 
 # override chart org and repo name if specified
 TEMP_CHART_REPO_URL=$(get_env TEMP_CHART_REPO_URL "")
@@ -70,7 +70,7 @@ if [ "$TEMP_CHART_REPO_URL" ]; then
     CHART_ORG=$(basename $(dirname $TEMP_CHART_REPO_URL))
 fi
 
-export IC_1308775_API_KEY=$(get_env IC_1308775_API_KEY)
+export IC_1308775_API_KEY=$(get_env otc_IC_1308775_API_KEY)
 . otc-deploy/k8s/scripts/login/clusterLogin.sh "otc-dal12-test" "otc"
 
 # compute BUILD_NUMBER
