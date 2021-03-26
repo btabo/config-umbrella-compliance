@@ -42,6 +42,17 @@ else
     echo "Skipping tests since TESTS_SCRIPT_FILE is not set"
 fi
 
+# cleanup
+if [ -d "$WORKSPACE/$APP_NAME/otc-deploy"]; then
+    rm -rf "$WORKSPACE/$APP_NAME/otc-deploy"
+fi
+if [ -d "$WORKSPACE/$APP_NAME/otc-cf-deploy"]; then
+    rm -rf "$WORKSPACE/$APP_NAME/otc-cf-deploy"
+fi
+if [ -d "$WORKSPACE/$APP_NAME/$APP_NAME"]; then
+    rm -rf "$WORKSPACE/$APP_NAME/$APP_NAME"
+fi
+
 echo pwd
 pwd
 echo
