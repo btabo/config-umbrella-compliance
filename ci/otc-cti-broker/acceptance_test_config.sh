@@ -7,4 +7,4 @@
 # none
 
 # script file
-# none
+export ACCEPTANCE_TESTS_SCRIPT_FILE=""
