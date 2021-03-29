@@ -11,7 +11,7 @@ cd $WORKSPACE/$APP_REPO_FOLDER
 
 export APP_NAME=$(get_env app-name)
 
-GH_TOKEN=$(cat "./git-token")
+GH_TOKEN=$(cat "$WORKSPACE/git-token")
 
 # secrets
 export ARTIFACTORY_API_KEY="$(get_env otc_ARTIFACTORY_API_KEY)"
