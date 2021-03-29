@@ -7,8 +7,9 @@ fi
 
 COMMON_FOLDER="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
+cd $WORKSPACE/$APP_REPO_FOLDER
+
 export APP_NAME=$(get_env app-name)
-cd $WORKSPACE/$APP_NAME
 
 # secrets
 export CLOUDANT_IAM_API_KEY=$(get_env otc_CLOUDANT_IAM_API_KEY)
@@ -43,11 +44,11 @@ else
 fi
 
 # cleanup
-if [ -d "$WORKSPACE/$APP_NAME/otc-deploy" ]; then
-    rm -rf "$WORKSPACE/$APP_NAME/otc-deploy"
+if [ -d "$WORKSPACE/$APP_REPO_FOLDER/otc-deploy" ]; then
+    rm -rf "$WORKSPACE/$APP_REPO_FOLDER/otc-deploy"
 fi
-if [ -d "$WORKSPACE/$APP_NAME/otc-cf-deploy" ]; then
-    rm -rf "$WORKSPACE/$APP_NAME/otc-cf-deploy"
+if [ -d "$WORKSPACE/$APP_REPO_FOLDER/otc-cf-deploy" ]; then
+    rm -rf "$WORKSPACE/$APP_REPO_FOLDER/otc-cf-deploy"
 fi
 
 echo pwd
@@ -58,6 +59,6 @@ echo ls -la $WORKSPACE
 ls -la $WORKSPACE
 echo
 
-echo ls -la $WORKSPACE/$APP_NAME
-ls -la $WORKSPACE/$APP_NAME
+echo ls -la $WORKSPACE/$APP_REPO_FOLDER
+ls -la $WORKSPACE/$APP_REPO_FOLDER
 echo
