@@ -7,6 +7,8 @@ fi
 
 COMMON_FOLDER="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
+REPO_FOLDER=$(load_repo app-repo path)
+echo "REPO_FOLDER=$REPO_FOLDER"
 cd $WORKSPACE/$APP_REPO_FOLDER
 
 export APP_NAME=$(get_env app-name)
