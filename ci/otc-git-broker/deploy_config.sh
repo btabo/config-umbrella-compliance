@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 
 # secrets
+export SEC_OTC_TIAM_CLIENTS=$(get_env otc-git-broker_OTC_TIAM_CLIENTS)
+
 # config 
 # none
 
