@@ -5,7 +5,8 @@ if [[ "${PIPELINE_DEBUG:-0}" == 1 ]]; then
     set -x
 fi
 
-cd $WORKSPACE/$APP_REPO_FOLDER
+REPO_FOLDER=$(load_repo app-repo path)
+cd $WORKSPACE/$REPO_FOLDER
 
 export APP_NAME=$(get_env app-name)
 

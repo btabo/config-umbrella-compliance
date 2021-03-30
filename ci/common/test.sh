@@ -6,8 +6,8 @@ if [[ "${PIPELINE_DEBUG:-0}" == 1 ]]; then
 fi
 
 COMMON_FOLDER="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-
-cd $WORKSPACE/$APP_REPO_FOLDER
+REPO_FOLDER=$(load_repo app-repo path)
+cd $WORKSPACE/$REPO_FOLDER
 
 export APP_NAME=$(get_env app-name)
 
@@ -44,11 +44,11 @@ else
 fi
 
 # cleanup
-if [ -d "$WORKSPACE/$APP_REPO_FOLDER/otc-deploy" ]; then
-    rm -rf "$WORKSPACE/$APP_REPO_FOLDER/otc-deploy"
+if [ -d "$WORKSPACE/$REPO_FOLDER/otc-deploy" ]; then
+    rm -rf "$WORKSPACE/$REPO_FOLDER/otc-deploy"
 fi
-if [ -d "$WORKSPACE/$APP_REPO_FOLDER/otc-cf-deploy" ]; then
-    rm -rf "$WORKSPACE/$APP_REPO_FOLDER/otc-cf-deploy"
+if [ -d "$WORKSPACE/$REPO_FOLDER/otc-cf-deploy" ]; then
+    rm -rf "$WORKSPACE/$REPO_FOLDER/otc-cf-deploy"
 fi
 
 echo pwd
@@ -59,6 +59,6 @@ echo ls -la $WORKSPACE
 ls -la $WORKSPACE
 echo
 
-echo ls -la $WORKSPACE/$APP_REPO_FOLDER
-ls -la $WORKSPACE/$APP_REPO_FOLDER
+echo ls -la $WORKSPACE/$REPO_FOLDER
+ls -la $WORKSPACE/$REPO_FOLDER
 echo
