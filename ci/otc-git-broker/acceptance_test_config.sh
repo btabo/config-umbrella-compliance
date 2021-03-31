@@ -3,7 +3,7 @@
 # secrets
 
 # config
-#export SKIP_HEALTH_CHECK="true"
+export TEST_URL="https://otc-github-consolidated-broker-$NAMESPACE.$DOMAIN/status"
 
 # script file
 export ACCEPTANCE_TESTS_SCRIPT_FILE=""
