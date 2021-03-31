@@ -27,6 +27,9 @@ export TIAM_URL="https://tiam.us-south.devops.dev.cloud.ibm.com/identity/v1"
 export DOMAIN="otc-dal12-test.us-south.containers.mybluemix.net"
 export _DEPLOY_url="https://$APP_NAME-$NAMESPACE.$DOMAIN"
 
+# Define the TEST_URL but let's the script 'acceptance_test_config.sh' being able to refine it
+export TEST_URL="https://$APP_NAME-$NAMESPACE.$DOMAIN/status"
+
 # secrets and config specific to the component
 if [ -f "$COMMON_FOLDER/../$APP_NAME/acceptance_test_config.sh" ]; then
     . $COMMON_FOLDER/../$APP_NAME/acceptance_test_config.sh
@@ -36,7 +39,6 @@ fi
 if [ "$SKIP_HEALTH_CHECK" == "true" ]; then
     echo "Skipping healthcheck on the component status endpoint"
 else
-    TEST_URL="https://$APP_NAME-$NAMESPACE.$DOMAIN/status"
     echo "TEST_URL=$TEST_URL"
     # 502 is Bad Gateway that can occurs during the interval while the POD is in creation
     while [ $(curl -s -k -o /dev/null -w "%{http_code}" "$TEST_URL") == 502 ]; do
