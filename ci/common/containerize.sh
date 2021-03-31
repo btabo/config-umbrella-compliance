@@ -74,27 +74,28 @@ else
   fi
 fi
 
-# Prevent the .git subdirectory to be copy in the Docker content
+# Prevent the .git subdirectory to be copied in the Docker content
 echo ".git/" >> .dockerignore
 echo cat .dockerignore
 cat .dockerignore
 
+echo "Building image $IMAGE with arguments $DOCKER_BUILD_ARGS"
 DOCKER_BUILD_ARGS="-t $IMAGE"
 DOCKER_BUILDKIT=1 docker build $DOCKER_BUILD_ARGS .
 docker push "$IMAGE"
-
-echo -n $(docker inspect --format='{{index .RepoDigests 0}}' "$IMAGE" | awk -F@ '{print $2}') > $WORKSPACE/image-digest
-echo -n "$IMAGE_TAG" > $WORKSPACE/image-tags
-echo -n "$IMAGE" > $WORKSPACE/image
-
-echo cat $WORKSPACE/image-digest
-cat $WORKSPACE/image-digest
+echo "Done"
 echo
-echo cat $WORKSPACE/image-tags
-cat $WORKSPACE/image-tags
-echo
-echo cat $WORKSPACE/image
-cat $WORKSPACE/image
+
+echo "Saving image artifact..."
+MANIFEST_SHA=$(docker inspect --format='{{index .RepoDigests 0}}' "$IMAGE" | awk -F@ '{print $2}')
+echo "IMAGE=$IMAGE"
+echo "MANIFEST_SHA=$MANIFEST_SHA"
+echo "IMAGE_TAG=$IMAGE_TAG"
+save_artifact service type=image \
+  name="${IMAGE}" \
+  digest="${MANIFEST_SHA}" \
+  tags="${IMAGE_TAG}"
+echo "Done"
 echo
 
 # pass image information along via build.properties
