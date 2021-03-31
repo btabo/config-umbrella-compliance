@@ -43,14 +43,6 @@ else
     echo "Skipping setup since SETUP_SCRIPT_FILE is not set"
 fi
 
-# cleanup
-if [ -d "$WORKSPACE/$REPO_FOLDER/otc-deploy" ]; then
-    rm -rf "$WORKSPACE/$REPO_FOLDER/otc-deploy"
-fi
-if [ -d "$WORKSPACE/$REPO_FOLDER/otc-cf-deploy" ]; then
-    rm -rf "$WORKSPACE/$REPO_FOLDER/otc-cf-deploy"
-fi
-
 echo cat .pipeline_build_id
 cat .pipeline_build_id
 echo
