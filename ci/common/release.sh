@@ -73,6 +73,7 @@ fi
 
 export IC_1308775_API_KEY=$(get_env otc_IC_1308775_API_KEY)
 . otc-deploy/k8s/scripts/login/clusterLogin.sh "otc-dal12-test" "otc"
+. otc-deploy/k8s/scripts/helpers/checkHelmVersion.sh
 
 # compute BUILD_NUMBER
 echo "Workaround to find a suitable BUILD_NUMBER for helm chart revision number"
