@@ -16,7 +16,7 @@ export test_tiam_secret=$(get_env otc_test_tiam_secret)
 export ARTIFACTORY_AUTH_BASE64="$(get_env otc_ARTIFACTORY_AUTH_BASE64 "")"
 
 # config
-if [ "$(get_env branch)" == "integration" ]; then
+if [ "$(get_env branch "$(get_env git-branch "")")" == "integration" ]; then
     export NAMESPACE="otc-int"
     export RELEASE_NAME=$APP_NAME-$NAMESPACE
 else
