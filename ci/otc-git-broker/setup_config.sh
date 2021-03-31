@@ -18,7 +18,7 @@ DEBIAN_FRONTEND=noninteractive apt-get -y update
 DEBIAN_FRONTEND=noninteractive apt-get -y install build-essential
 fi
 
-echo -e "@otc-core:registry=https://na.artifactory.swg-devops.com/artifactory/api/npm/wcp-otc-core-team-npm-local/ \n_password=${ARTIFACTORY_TOKEN_BASE64} \nalways-auth=true \nemail=${ARTIFACTORY_ID} \nusername=${ARTIFACTORY_ID}\n@console:registry=https://na.artifactory.swg-devops.com/artifactory/api/npm/wcp-tmp-ace-fr-team-npm-virtual/ \n_password=${ARTIFACTORY_TOKEN_BASE64} \nalways-auth=true \nemail=${ARTIFACTORY_ID} \nusername=${ARTIFACTORY_ID}" > .npmrc
+echo -e "@otc-core:registry=https://na.artifactory.swg-devops.com/artifactory/api/npm/wcp-otc-core-team-npm-local/ \n_password=${ARTIFACTORY_TOKEN_BASE64} \nalways-auth=true \nemail=${ARTIFACTORY_ID} \nusername=${ARTIFACTORY_ID}\n@console:registry=https://na.artifactory.swg-devops.com/artifactory/api/npm/wcp-tmp-ace-fr-team-npm-virtual/ \n_password=${ARTIFACTORY_TOKEN_BASE64} \nalways-auth=true \nemail=${ARTIFACTORY_ID} \nusername=${ARTIFACTORY_ID} \nregistry=https://na.artifactory.swg-devops.com/artifactory/api/npm/wcp-otc-common-team-npm-virtual/ \n_auth=${ARTIFACTORY_AUTH_BASE64} \nalways-auth=true \nemail=${ARTIFACTORY_ID}" > .npmrc
 GIT_COMMIT=$(git log --format="%H" -n 1)
 if [ "$RUN_WEBPACK_BUILD" ]; then
 npm install
