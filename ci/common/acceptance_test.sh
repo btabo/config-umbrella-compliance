@@ -32,12 +32,9 @@ if [ -f "$COMMON_FOLDER/../$APP_NAME/acceptance_test_config.sh" ]; then
     . $COMMON_FOLDER/../$APP_NAME/acceptance_test_config.sh
 fi
 
-# .pipeline_build_id
-echo ".pipeline_build_id=$(<.pipeline_build_id)"
-
 # healthchek of the new deployed service instance
 if [ "$SKIP_HEALTH_CHECK" == "true" ]; then
-    echo "skipping healthcheck on the component status endpoint"
+    echo "Skipping healthcheck on the component status endpoint"
 else
     TEST_URL="https://$APP_NAME-$NAMESPACE.$DOMAIN/status"
     echo "TEST_URL=$TEST_URL"
@@ -58,6 +55,7 @@ else
         echo "${TEST_URL} can not be reached (http_code: ${http_code_test_url}) - deployment failed."
         exit 1
     fi
+    echo
 fi
 
 # run tests
