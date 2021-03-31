@@ -76,6 +76,8 @@ fi
 
 # Prevent the .git subdirectory to be copy in the Docker content
 echo ".git/" >> .dockerignore
+echo cat .dockerignore
+cat .dockerignore
 
 DOCKER_BUILD_ARGS="-t $IMAGE"
 DOCKER_BUILDKIT=1 docker build $DOCKER_BUILD_ARGS .
