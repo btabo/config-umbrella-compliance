@@ -35,5 +35,5 @@ echo -e "{\"build\":\""$(date +%Y%m%d%H%M%S%Z)"\", \"appName\":\""${APP_NAME}"\"
 echo "Build id: $(cat .pipeline_build_id)"
 
 # Force .dockerignore file content
-echo ".git/" >> .dockerignore
+echo ".git/" > .dockerignore
 echo "Dockerfile" >> .dockerignore
