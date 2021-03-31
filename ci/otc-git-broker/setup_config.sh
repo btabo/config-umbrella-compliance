@@ -34,5 +34,6 @@ echo "${GIT_COMMIT}-$(date +%Y%m%d%H%M%Z)" > .k8s_build_id
 echo -e "{\"build\":\""$(date +%Y%m%d%H%M%S%Z)"\", \"appName\":\""${APP_NAME}"\", \"platform\":\""Armada"\", \"commit\":\""$GIT_COMMIT"\"}" > build.json
 echo "Build id: $(cat .pipeline_build_id)"
 
-# remove .dockerignore file
-rm -r -f .dockerignore
+# Force .dockerignore file content
+echo ".git/" >> .dockerignore
+echo "Dockerfile" >> .dockerignore
