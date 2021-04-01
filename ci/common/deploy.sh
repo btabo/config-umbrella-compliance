@@ -15,7 +15,7 @@ export APP_NAME=$(get_env app-name)
 export SEC_CLOUDANT_IAM_API_KEY=$(get_env otc_CLOUDANT_IAM_API_KEY)
 
 # config
-if [ "$(get_env branch "$(get_env git-branch "")")" == "integration" ]; then
+if [ "$(load_repo app-repo branch)" == "integration" ]; then
     export NAMESPACE="otc-int"
     export RELEASE_NAME=$APP_NAME-$NAMESPACE
 else
