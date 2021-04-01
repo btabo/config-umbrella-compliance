@@ -11,10 +11,6 @@ cd $WORKSPACE/$REPO_FOLDER
 
 export APP_NAME=$(get_env app-name)
 
-# debug
-echo "load_repo app-repo branch=$(load_repo app-repo branch)"
-echo "load_repo app-repo url=$(load_repo app-repo url)"
-
 # secrets
 export CLOUDANT_IAM_API_KEY=$(get_env otc_CLOUDANT_IAM_API_KEY)
 export test_tiam_secret=$(get_env otc_test_tiam_secret)
