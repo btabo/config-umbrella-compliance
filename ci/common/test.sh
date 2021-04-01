@@ -13,10 +13,7 @@ export APP_NAME=$(get_env app-name)
 
 # debug
 echo "load_repo app-repo branch=$(load_repo app-repo branch)"
-echo "load_repo app-repo git-branch=$(load_repo app-repo git-branch)"
 echo "load_repo app-repo url=$(load_repo app-repo url)"
-echo "load_repo app-repo repository-url=$(load_repo app-repo repository-url)"
-echo "load_repo app-repo repository=$(load_repo app-repo repository)"
 
 # secrets
 export CLOUDANT_IAM_API_KEY=$(get_env otc_CLOUDANT_IAM_API_KEY)
