@@ -1,0 +1,23 @@
+version: '1'
+
+setup:
+  image: icr.io/continuous-delivery/pipeline/pipeline-base-image:2.11@sha256:61d35cdad7e77dbcedbf6ab47591b38121b03c5a4f41041f2d628cb8485602e1
+  script: |
+    #!/usr/bin/env bash
+    source ./ci/common/setup.sh
+
+test:
+  abort_on_failure: false
+  image: icr.io/continuous-delivery/pipeline/pipeline-base-image:2.7@sha256:282677e79ccb9d20c699d384a54093894de03675752cd848a3133266c898c14c
+  script: |
+    #!/usr/bin/env bash
+    #source ./ci/common/test.sh
+
+    # cleanup
+    REPO_FOLDER=$(load_repo app-repo path)
+    if [ -d "$WORKSPACE/$REPO_FOLDER/otc-deploy" ]; then
+        rm -rf "$WORKSPACE/$REPO_FOLDER/otc-deploy"
+    fi
+    if [ -d "$WORKSPACE/$REPO_FOLDER/otc-cf-deploy" ]; then
+        rm -rf "$WORKSPACE/$REPO_FOLDER/otc-cf-deploy"
+    fi
