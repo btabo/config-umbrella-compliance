@@ -12,3 +12,12 @@ test:
   script: |
     #!/usr/bin/env bash
     #source ./ci/common/test.sh
+
+    # cleanup
+    REPO_FOLDER=$(load_repo app-repo path)
+    if [ -d "$WORKSPACE/$REPO_FOLDER/otc-deploy" ]; then
+        rm -rf "$WORKSPACE/$REPO_FOLDER/otc-deploy"
+    fi
+    if [ -d "$WORKSPACE/$REPO_FOLDER/otc-cf-deploy" ]; then
+        rm -rf "$WORKSPACE/$REPO_FOLDER/otc-cf-deploy"
+    fi
