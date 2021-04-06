@@ -32,11 +32,34 @@ if [ -f "$COMMON_FOLDER/../$APP_NAME/test_config.sh" ]; then
     . $COMMON_FOLDER/../$APP_NAME/test_config.sh
 fi
 
+function cleanupOtcDeploy() {
+    if [ -d "$WORKSPACE/$REPO_FOLDER/otc-deploy" ]; then
+        rm -rf "$WORKSPACE/$REPO_FOLDER/otc-deploy"
+    fi
+    if [ -d "$WORKSPACE/$REPO_FOLDER/otc-cf-deploy" ]; then
+        rm -rf "$WORKSPACE/$REPO_FOLDER/otc-cf-deploy"
+    fi
+
+    echo pwd
+    pwd
+    echo
+
+    echo ls -la $WORKSPACE
+    ls -la $WORKSPACE
+    echo
+
+    echo ls -la $WORKSPACE/$REPO_FOLDER
+    ls -la $WORKSPACE/$REPO_FOLDER
+    echo
+}
+
 # run tests
 if [ "$TESTS_SCRIPT_FILE" ]; then
     chmod u+x $TESTS_SCRIPT_FILE
     if ! $TESTS_SCRIPT_FILE; then
         echo "Tests failed"
+        echo
+        cleanupOtcDeploy
         exit 1
     fi
 else
@@ -44,21 +67,4 @@ else
 fi
 
 # cleanup
-if [ -d "$WORKSPACE/$REPO_FOLDER/otc-deploy" ]; then
-    rm -rf "$WORKSPACE/$REPO_FOLDER/otc-deploy"
-fi
-if [ -d "$WORKSPACE/$REPO_FOLDER/otc-cf-deploy" ]; then
-    rm -rf "$WORKSPACE/$REPO_FOLDER/otc-cf-deploy"
-fi
-
-echo pwd
-pwd
-echo
-
-echo ls -la $WORKSPACE
-ls -la $WORKSPACE
-echo
-
-echo ls -la $WORKSPACE/$REPO_FOLDER
-ls -la $WORKSPACE/$REPO_FOLDER
-echo
+cleanupOtcDeploy
