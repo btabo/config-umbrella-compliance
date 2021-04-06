@@ -5,7 +5,15 @@ if [[ "${PIPELINE_DEBUG:-0}" == 1 ]]; then
     set -x
 fi
 
-echo "DETECT_SECRETS_STATUS=$DETECT_SECRETS_STATUS"
+# do not add to inventory or publish component chart if it cannot be deployed
+# uses undocumented env vars as workacound for https://github.ibm.com/one-pipeline/adoption-issues/issues/254
+ALL_STATUS_VARS="STAGE_TEST_STATUS CRA_VULNERABILITY_RESULTS_STATUS CIS_CHECK_VULNERABILITY_RESULTS_STATUS CRA_BOM_CHECK_RESULTS_STATUS BRANCH_PROTECTION_STATUS STAGE_SCAN_ARTIFACT_STATUS STAGE_SIGN_ARTIFACT_STATUS STAGE_ACCEPTANCE_TEST_STATUS"
+for STATUS_VAR in $ALL_STATUS_VARS; do
+    if [ "${!STATUS_VAR}" != "success" ]; then
+        echo "$STATUS_VAR=${!STATUS_VAR}. Aborting release."
+        exit 1
+    fi
+done
 
 COMMON_FOLDER="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 REPO_FOLDER=$(load_repo app-repo path)
