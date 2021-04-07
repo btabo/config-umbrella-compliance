@@ -57,7 +57,15 @@ release:
   script: |
     #!/usr/bin/env bash
 
-    echo BUILD_NUMBER=$BUILD_NUMBER
+    # do not add to inventory if it cannot be deployed
+    # uses undocumented env vars as workaround for https://github.ibm.com/one-pipeline/adoption-issues/issues/254
+    ALL_STATUS_VARS="STAGE_TEST_STATUS CRA_VULNERABILITY_RESULTS_STATUS CIS_CHECK_VULNERABILITY_RESULTS_STATUS CRA_BOM_CHECK_RESULTS_STATUS BRANCH_PROTECTION_STATUS STAGE_SCAN_ARTIFACT_STATUS STAGE_SIGN_ARTIFACT_STATUS STAGE_ACCEPTANCE_TEST_STATUS"
+    for STATUS_VAR in $ALL_STATUS_VARS; do
+        if [ "${!STATUS_VAR}" != "success" ]; then
+            echo "$STATUS_VAR=${!STATUS_VAR}. Skipping release stage."
+            exit 0
+        fi
+    done
 
     cd $WORKSPACE/devops-config
 
