@@ -4,18 +4,15 @@ if [[ "${PIPELINE_DEBUG:-0}" == 1 ]]; then
     env | sort
     set -x
 fi
+COMMON_FOLDER="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+source $COMMON_FOLDER/helpers.sh
 
 # do not add to inventory or publish component chart if it cannot be deployed
-# uses undocumented env vars as workacound for https://github.ibm.com/one-pipeline/adoption-issues/issues/254
-ALL_STATUS_VARS="STAGE_TEST_STATUS CRA_VULNERABILITY_RESULTS_STATUS CIS_CHECK_VULNERABILITY_RESULTS_STATUS CRA_BOM_CHECK_RESULTS_STATUS BRANCH_PROTECTION_STATUS STAGE_SCAN_ARTIFACT_STATUS STAGE_SIGN_ARTIFACT_STATUS STAGE_ACCEPTANCE_TEST_STATUS"
-for STATUS_VAR in $ALL_STATUS_VARS; do
-    if [ "${!STATUS_VAR}" != "success" ]; then
-        echo "$STATUS_VAR=${!STATUS_VAR}. Skipping release stage."
-        exit 0
-    fi
-done
+if ! checkStatuses; then
+    echo "Skipping release stage."
+    exit 0
+fi
 
-COMMON_FOLDER="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 REPO_FOLDER=$(load_repo app-repo path)
 cd $WORKSPACE/$REPO_FOLDER
 
@@ -81,12 +78,15 @@ if [ "$TEMP_CHART_REPO_URL" ]; then
     CHART_ORG=$(basename $(dirname $TEMP_CHART_REPO_URL))
 fi
 
+echo "Cheking helm version"
 export IC_1308775_API_KEY=$(get_env otc_IC_1308775_API_KEY)
 . otc-deploy/k8s/scripts/login/clusterLogin.sh "otc-dal12-test" "otc"
 . otc-deploy/k8s/scripts/helpers/checkHelmVersion.sh
+echo "Done checking helm version"
+echo
 
 # compute BUILD_NUMBER
-echo "Workaround to find a suitable BUILD_NUMBER for helm chart revision number"
+echo "Finding a suitable BUILD_NUMBER for helm chart revision number"
 git clone --depth 1 https://$IDS_USER:$IDS_TOKEN@github.ibm.com/ids-env/$CHART_REPO || true
 NEXT_VERSION=$(ls -v ${CHART_REPO}/charts/${LOGICAL_APP_NAME}* 2> /dev/null | tail -n -1 | grep -Eo '[0-9]+\.[0-9]+\.[0-9]+' | awk -F'.' -v OFS='.' '{$3=sprintf("%d",++$3)}7')
 if [ -z "$NEXT_VERSION" ]; then
@@ -95,14 +95,18 @@ fi
 export BUILD_NUMBER=$(echo "$NEXT_VERSION" | awk -F. '{print $3}')
 rm -r -f $CHART_REPO
 echo "Next helm chart version will be $NEXT_VERSION"
-echo "Compute BUILD_NUMBER to $BUILD_NUMBER"
+echo "Computed BUILD_NUMBER is $BUILD_NUMBER"
+echo
+
+# build and publish component chart to solution repo
+echo "Publishing component chart to solution repo"
+chmod u+x otc-deploy/k8s/scripts/ci/publishHelmChart.sh
+./otc-deploy/k8s/scripts/ci/publishHelmChart.sh
+echo "Done publishing component chart"
+echo
 
 # install cocoa cli
-COCOA_CLI_VERSION=1.5.0
-curl -u ${ARTIFACTORY_ID}:${ARTIFACTORY_API_KEY} -O "https://eu.artifactory.swg-devops.com/artifactory/wcp-compliance-automation-team-generic-local/cocoa-linux-${COCOA_CLI_VERSION}"
-cp cocoa-linux-* /usr/local/bin/cocoa
-chmod +x /usr/local/bin/cocoa
-export PATH="$PATH:/usr/local/bin/"
+installCocoa
 
 # for cocoa cli
 export GHE_TOKEN="$(cat $WORKSPACE/git-token)"
@@ -123,11 +127,8 @@ export APP_REPO_ORG=${APP_REPO_ORG##*/}
 APP_REPO_NAME=${APP_REPO##*/}
 export APP_REPO_NAME=${APP_REPO_NAME%.git}
 
-# build and publish component chart to solution repo
-chmod u+x otc-deploy/k8s/scripts/ci/publishHelmChart.sh
-./otc-deploy/k8s/scripts/ci/publishHelmChart.sh
-
 # add to inventory
+echo "Adding to inventory"
 CHART_VERSION=$(yq r -j "k8s/$APP_NAME/Chart.yaml" | jq -r '.version')
 ARTIFACT="https://github.ibm.com/$CHART_ORG/$CHART_REPO/blob/master/charts/$APP_NAME-$CHART_VERSION.tgz"
 IMAGE_ARTIFACT="$(get_env artifact)"
@@ -158,3 +159,5 @@ cocoa inventory add \
     --version="$(get_env version)" \
     --name="${APP_NAME}_image" \
     --app-artifacts="${APP_ARTIFACTS}"
+echo "Inventory updated"
+echo
