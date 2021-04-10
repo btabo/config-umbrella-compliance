@@ -6,6 +6,7 @@ if [[ "${PIPELINE_DEBUG:-0}" == 1 ]]; then
 fi
 
 COMMON_FOLDER="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+source $COMMON_FOLDER/helpers.sh
 REPO_FOLDER=$(load_repo app-repo path)
 cd $WORKSPACE/$REPO_FOLDER
 
@@ -31,30 +32,6 @@ export test_tiam_id=test
 if [ -f "$COMMON_FOLDER/../$APP_NAME/test_config.sh" ]; then
     . $COMMON_FOLDER/../$APP_NAME/test_config.sh
 fi
-
-function cleanupOtcDeploy() {
-    if [ -d "$WORKSPACE/$REPO_FOLDER/otc-deploy" ]; then
-        echo rm -rf "$WORKSPACE/$REPO_FOLDER/otc-deploy"
-        rm -rf "$WORKSPACE/$REPO_FOLDER/otc-deploy"
-    fi
-    if [ -d "$WORKSPACE/$REPO_FOLDER/otc-cf-deploy" ]; then
-        echo rm -rf "$WORKSPACE/$REPO_FOLDER/otc-cf-deploy"
-        rm -rf "$WORKSPACE/$REPO_FOLDER/otc-cf-deploy"
-    fi
-
-    echo
-    echo pwd
-    pwd
-    echo
-
-    echo ls -la $WORKSPACE
-    ls -la $WORKSPACE
-    echo
-
-    echo ls -la $WORKSPACE/$REPO_FOLDER
-    ls -la $WORKSPACE/$REPO_FOLDER
-    echo
-}
 
 # run tests
 if [ "$TESTS_SCRIPT_FILE" ]; then

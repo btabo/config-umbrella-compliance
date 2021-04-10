@@ -6,6 +6,7 @@ if [[ "${PIPELINE_DEBUG:-0}" == 1 ]]; then
 fi
 
 COMMON_FOLDER="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+source $COMMON_FOLDER/helpers.sh
 REPO_FOLDER=$(load_repo app-repo path)
 cd $WORKSPACE/$REPO_FOLDER
 
@@ -43,18 +44,4 @@ else
     echo "Skipping setup since SETUP_SCRIPT_FILE is not set"
 fi
 
-echo cat .pipeline_build_id
-cat .pipeline_build_id
-echo
-
-echo pwd
-pwd
-echo
-
-echo ls -la $WORKSPACE
-ls -la $WORKSPACE
-echo
-
-echo ls -la $WORKSPACE/$REPO_FOLDER
-ls -la $WORKSPACE/$REPO_FOLDER
-echo
+cleanupOtcDeploy
