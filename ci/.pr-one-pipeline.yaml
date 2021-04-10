@@ -12,3 +12,7 @@ test:
   script: |
     #!/usr/bin/env bash
     #source ./ci/common/test.sh
+
+    # cleanup
+    source ./ci/common/helpers.sh
+    cleanupOtcDeploy

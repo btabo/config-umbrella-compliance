@@ -43,5 +43,3 @@ if [ "$SETUP_SCRIPT_FILE" ]; then
 else
     echo "Skipping setup since SETUP_SCRIPT_FILE is not set"
 fi
-
-cleanupOtcDeploy
