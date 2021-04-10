@@ -34,12 +34,15 @@ fi
 
 function cleanupOtcDeploy() {
     if [ -d "$WORKSPACE/$REPO_FOLDER/otc-deploy" ]; then
+        echo rm -rf "$WORKSPACE/$REPO_FOLDER/otc-deploy"
         rm -rf "$WORKSPACE/$REPO_FOLDER/otc-deploy"
     fi
     if [ -d "$WORKSPACE/$REPO_FOLDER/otc-cf-deploy" ]; then
+        echo rm -rf "$WORKSPACE/$REPO_FOLDER/otc-cf-deploy"
         rm -rf "$WORKSPACE/$REPO_FOLDER/otc-cf-deploy"
     fi
 
+    echo
     echo pwd
     pwd
     echo
