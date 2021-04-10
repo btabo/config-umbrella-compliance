@@ -39,12 +39,6 @@ function cleanupOtcDeploy() {
     fi
     echo "Done"
     echo
-    echo pwd
-    pwd
-    echo
-    echo ls -la $WORKSPACE
-    ls -la $WORKSPACE
-    echo
     echo ls -la $WORKSPACE/$REPO_FOLDER
     ls -la $WORKSPACE/$REPO_FOLDER
     echo

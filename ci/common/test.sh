@@ -33,24 +33,26 @@ if [ -f "$COMMON_FOLDER/../$APP_NAME/test_config.sh" ]; then
     . $COMMON_FOLDER/../$APP_NAME/test_config.sh
 fi
 
-# clone otc-deploy as it is needed by some tests
-if [ ! -d "otc-deploy" ]; then
-    IDS_TOKEN=$(cat "$WORKSPACE/git-token")
-    git clone "https://$IDS_TOKEN@github.ibm.com/org-ids/otc-deploy"
-fi
-
 # run tests
 if [ "$TESTS_SCRIPT_FILE" ]; then
+    # clone otc-deploy as it is needed by some tests
+    if [ ! -d "otc-deploy" ]; then
+        echo "Cloning otc-deploy"
+        IDS_TOKEN=$(cat "$WORKSPACE/git-token")
+        git clone "https://$IDS_TOKEN@github.ibm.com/org-ids/otc-deploy"
+        echo "Done"
+        echo
+    fi
+
     chmod u+x $TESTS_SCRIPT_FILE
     if ! $TESTS_SCRIPT_FILE; then
         echo "Tests failed"
         echo
         cleanupOtcDeploy
         exit 1
+    else
+        cleanupOtcDeploy
     fi
 else
     echo "Skipping tests since TESTS_SCRIPT_FILE is not set"
 fi
-
-# cleanup
-cleanupOtcDeploy
