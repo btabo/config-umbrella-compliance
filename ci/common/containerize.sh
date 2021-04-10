@@ -5,6 +5,18 @@ if [[ "${PIPELINE_DEBUG:-0}" == 1 ]]; then
     set -x
 fi
 
+echo pwd
+pwd
+echo
+
+echo ls -la $WORKSPACE
+ls -la $WORKSPACE
+echo
+
+echo ls -la $WORKSPACE/$REPO_FOLDER
+ls -la $WORKSPACE/$REPO_FOLDER
+echo
+
 REPO_FOLDER=$(load_repo app-repo path)
 cd $WORKSPACE/$REPO_FOLDER
 
