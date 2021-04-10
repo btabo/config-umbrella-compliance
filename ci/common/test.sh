@@ -33,6 +33,12 @@ if [ -f "$COMMON_FOLDER/../$APP_NAME/test_config.sh" ]; then
     . $COMMON_FOLDER/../$APP_NAME/test_config.sh
 fi
 
+# clone otc-deploy as it is needed by some tests
+if [ ! -d "otc-deploy" ]; then
+    IDS_TOKEN=$(cat "$WORKSPACE/git-token")
+    git clone "https://$IDS_TOKEN@github.ibm.com/org-ids/otc-deploy"
+fi
+
 # run tests
 if [ "$TESTS_SCRIPT_FILE" ]; then
     chmod u+x $TESTS_SCRIPT_FILE
