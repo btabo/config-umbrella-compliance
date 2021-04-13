@@ -41,7 +41,7 @@ get-icr-region() {
 IMAGE_NAME="$(get_env app-name)"
 IMAGE_TAG="$(get_env git-commit)-$(date +%Y%m%d%H%M%Z)" # need this exact format as it is used a BUILD_NUMBER passed to deployed app
 
-BREAK_GLASS=$(get_env break_glass || true)
+BREAK_GLASS=$(get_env break_glass "false")
 
 if [[ "$BREAK_GLASS" == "true" ]]; then
   ARTIFACTORY_URL="$(get_env artifactory | jq -r .parameters.repository_url)"
