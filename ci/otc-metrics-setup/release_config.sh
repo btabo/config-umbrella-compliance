@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+# to pass helm lint --strict
+export SEC_CLOUDANT_IAM_API_KEY=topasshelmlintstrict
+export SEC_CLOUDANT_IAM_CLIENT_SECRET_METRICS_SETUP=topasshelmlintstrict
+export ENV_CLOUDANT_URL=topasshelmlintstrict
+export ENV_CLOUDANT_IAM_CLIENT_ID_METRICS_SETUP=topasshelmlintstrict
+export ENV_FUNCTIONAL_USERID=topasshelmlintstrict
+export ENV_METRICS_EVENTS_DB_NAME=topasshelmlintstrict
+export ENV_METRICS_WAREHOUSE_DB_NAME=topasshelmlintstrict
+export ENV_SECGRP=topasshelmlintstrict
