@@ -49,7 +49,7 @@ function cleanupOtcDeploy() {
     fi
     if [ -d "$WORKSPACE/$REPO_FOLDER/devops-config" ]; then
         echo rm -rf "$WORKSPACE/$REPO_FOLDER/devops-config"
-        rm -rf "$WORKSPACE/$REPO_FOLDER/otc-deploy"
+        rm -rf "$WORKSPACE/$REPO_FOLDER/devops-config"
     fi
     if [ -d "$WORKSPACE/$REPO_FOLDER/otc-cf-deploy" ]; then
         echo rm -rf "$WORKSPACE/$REPO_FOLDER/otc-cf-deploy"
