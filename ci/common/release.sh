@@ -19,13 +19,7 @@ cd $WORKSPACE/$REPO_FOLDER
 export APP_NAME=$(get_env app-name)
 
 # clone otc-deploy and devops-config if needed
-GIT_TOKEN=$(cat "$WORKSPACE/git-token")
-if [ ! -d "otc-deploy" ]; then
-  git clone "https://$GIT_TOKEN@github.ibm.com/org-ids/otc-deploy"
-fi 
-if [ ! -d "devops-config" ]; then
-  git clone "https://$GIT_TOKEN@github.ibm.com/ids-env/devops-config"
-fi 
+cloneOtcDeploy
 
 # secrets and config
 if [ -f "$COMMON_FOLDER/../$APP_NAME/release_config.sh" ]; then
@@ -47,7 +41,7 @@ export PIPELINE_KUBERNETES_CLUSTER_NAME="topasshelmlintanddryrun"
 
 # for building helm chart
 export IDS_USER="idsorg"
-export IDS_TOKEN=$GIT_TOKEN
+export IDS_TOKEN=$(cat "$WORKSPACE/git-token")
 export BRANCH=$(load_repo app-repo branch)
 if [ "$BRANCH" == "integration" ]; then
     export DOMAIN="stage.us-south.devops.cloud.ibm.com"

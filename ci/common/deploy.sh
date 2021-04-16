@@ -6,6 +6,7 @@ if [[ "${PIPELINE_DEBUG:-0}" == 1 ]]; then
 fi
 
 COMMON_FOLDER="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+source $COMMON_FOLDER/helpers.sh
 REPO_FOLDER=$(load_repo app-repo path)
 cd $WORKSPACE/$REPO_FOLDER
 
@@ -44,13 +45,7 @@ if [ -f "$COMMON_FOLDER/../$APP_NAME/deploy_config.sh" ]; then
 fi
 
 # clone otc-deploy and devops-config if needed
-GIT_TOKEN=$(cat "$WORKSPACE/git-token")
-if [ ! -d "otc-deploy" ]; then
-  git clone "https://$GIT_TOKEN@github.ibm.com/org-ids/otc-deploy"
-fi 
-if [ ! -d "devops-config" ]; then
-  git clone "https://$GIT_TOKEN@github.ibm.com/ids-env/devops-config"
-fi 
+cloneOtcDeploy
 
 # login and check helm version
 export IC_1308775_API_KEY=$(get_env otc_IC_1308775_API_KEY)

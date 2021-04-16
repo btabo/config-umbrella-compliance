@@ -43,6 +43,7 @@ if [ "$SETUP_SCRIPT_FILE" ]; then
 else
     echo "Skipping setup since SETUP_SCRIPT_FILE is not set"
 fi
+echo
 
 # cleanup otc-deploy so that cra doesn't consider it
 cleanupOtcDeploy

@@ -25,12 +25,30 @@ function installCocoa() {
     echo
 }
 
-# Remove otc-deploy and otc-cf-deploy folders created by components
+# Clone otc-deploy and devops-config if needed
+function cloneOtcDeploy() {
+    local gitToken=$(cat "$WORKSPACE/git-token")
+    if [ ! -d "otc-deploy" ]; then
+        git clone "https://$gitToken@github.ibm.com/org-ids/otc-deploy"
+        echo "Done"
+        echo
+    fi 
+    if [ ! -d "devops-config" ]; then
+        git clone "https://$gitToken@github.ibm.com/ids-env/devops-config"
+        echo "Done"
+        echo
+    fi 
+}
+
+# Remove otc-deploy, devos-config and otc-cf-deploy folders created by components
 function cleanupOtcDeploy() {
-    echo
-    echo "Cleaning up otc-deploy and otc-cf-deploy"
+    echo "Cleaning up otc-deploy, devops-config, and otc-cf-deploy"
     if [ -d "$WORKSPACE/$REPO_FOLDER/otc-deploy" ]; then
         echo rm -rf "$WORKSPACE/$REPO_FOLDER/otc-deploy"
+        rm -rf "$WORKSPACE/$REPO_FOLDER/otc-deploy"
+    fi
+    if [ -d "$WORKSPACE/$REPO_FOLDER/devops-config" ]; then
+        echo rm -rf "$WORKSPACE/$REPO_FOLDER/devops-config"
         rm -rf "$WORKSPACE/$REPO_FOLDER/otc-deploy"
     fi
     if [ -d "$WORKSPACE/$REPO_FOLDER/otc-cf-deploy" ]; then
