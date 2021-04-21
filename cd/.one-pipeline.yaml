@@ -8,168 +8,18 @@ setup:
   image_pull_policy: Always
   script: |
     #!/usr/bin/env bash
-
-    # post deployment started message
-    export ENVIRONMENT=$(get_env region)
-    export DEPLOYMENT_SLACK_CHANNEL_ID=$(get_env DEPLOYMENT_SLACK_CHANNEL_ID "unknown")
-    export DEPLOYMENT_SLACK_TOKEN=$(get_env DEPLOYMENT_SLACK_TOKEN "unknown")
-    if [ "$DEPLOYMENT_SLACK_CHANNEL_ID" != "unknown" ]; then
-      echo "Posting slack message: Umbrella deployment to $ENVIRONMENT started."
-      . /umbrella/helpers.sh
-      postSlackMessage unused "<$PIPELINE_RUN_URL|Umbrella deployment> to *${ENVIRONMENT}* started." $DEPLOYMENT_SLACK_CHANNEL_ID $DEPLOYMENT_SLACK_TOKEN
-      echo "Done"
-      echo
-    fi
-
-    # TEMP: manually build inventory for dev, will remove when all components have switched to shiftleft ci pipelines
-    if [ "$ENVIRONMENT" == "dev" ]; then
-      export IDS_USER=idsorg
-      export IDS_TOKEN=$(get_env git-token)
-      export INVENTORY_URL=https://github.ibm.com/org-ids/inventory-umbrella-compliance
-      export INVENTORY_BRANCH=dev
-      mkdir temp
-      cd temp
-      updateInventory $BUILD_NUMBER $PIPELINE_RUN_ID "0a86e449-cd54-4ccf-9704-28eb39c02a13" "crn:v1:bluemix:public:toolchain:us-south:a/779c0808c946b9e15cc2e63013fded8c:16bb7fb7-4284-479f-b57f-ec08a12eb603::" $INVENTORY_URL $INVENTORY_BRANCH
-      cd ..
-      rm -rf temp
-    fi
-
+    source ./cd/setup.sh
+    
 deploy:
-  #image: ibmcom/pipeline-base-image:2.6
   image: us.icr.io/otc-ops/otc-deploy:dev
   image_pull_policy: Always
   script: |
     #!/usr/bin/env bash
-
-    # config
-    export ENVIRONMENT=$(get_env region)
-    export INVENTORY_URL=https://github.ibm.com/org-ids/inventory-umbrella-compliance
-    export INVENTORY_BRANCH=$(get_env target-environment)
-    export DOI_TOOLCHAIN_ID=$(get_env doi-toolchain-id)
-    export IDS_JOB_ID=$PIPELINE_RUN_ID
-    export IDS_USER=idsorg
-    export REGISTRY_TOKEN_ID="10d3bc02-1aa0-5f94-a42a-92208f626af9"
-    export OTC_REGISTRY=registry.ng.bluemix.net
-    export PRUNE_CHART_REPO="true"
-    export NAMESPACE=opentoolchain
-    export WAIT_FOR_DEPLOY="true"
-    export WAIT_FOR_DEPLOY_MAX="80"
-    export EXCLUDED_FROM_STATUS_CHECK=$(get_env EXCLUDED_FROM_STATUS_CHECK "")
-    export DRY_RUN=$(get_env DRY_RUN "")
-    export DEPLOYMENT_SLACK_CHANNEL_ID=$(get_env DEPLOYMENT_SLACK_CHANNEL_ID "unknown")
-    case $ENVIRONMENT in
-      dev)
-        export CHART_REPO="devops-dev"
-        export CHART_BRANCH="umbrella"
-        export DOMAIN="us-south.devops.dev.cloud.ibm.com"
-        export PAUSE_AFTER_FIRST_CLUSTER="false"
-        export SKIP_CLUSTER_DANCE="true"
-        ;;
-      jp-osa)
-        export CHART_REPO="devops-int"
-        export CHART_BRANCH="umbrella"
-        export DOMAIN="$ENVIRONMENT.devops.cloud.ibm.com"
-        export PAUSE_AFTER_FIRST_CLUSTER="false"
-        export SKIP_CLUSTER_DANCE="true"
-        ;;
-      *)
-        export CHART_REPO="devops-prod"
-        export CHART_BRANCH="umbrella-$ENVIRONMENT"
-        export DOMAIN="$ENVIRONMENT.devops.cloud.ibm.com"
-        export PAUSE_AFTER_FIRST_CLUSTER=$(get_env PAUSE_AFTER_FIRST_CLUSTER "")
-        export SKIP_CLUSTER_DANCE=$(get_env SKIP_CLUSTER_DANCE "")
-        ;;
-    esac
-
-    # secrets
-    export IDS_TOKEN=$(get_env git-token)
-    export IC_1308775_API_KEY=$(get_env IC_1308775_API_KEY "")
-    export IC_1651315_API_KEY=$(get_env IC_1651315_API_KEY "")
-    export IC_1416501_API_KEY=$(get_env IC_1416501_API_KEY "")
-    export IC_1561947_API_KEY=$(get_env IC_1561947_API_KEY "")
-    export IC_1562047_API_KEY=$(get_env IC_1562047_API_KEY "")
-    export IC_2113612_API_KEY=$(get_env IC_2113612_API_KEY "")
-    export NR_1783376_API_KEY=$(get_env NR_1783376_API_KEY "")
-    export OTC_REGISTRY_API_KEY=$(get_env IC_1416501_API_KEY "")
-    export DEPLOYMENT_SLACK_TOKEN=$(get_env DEPLOYMENT_SLACK_TOKEN "unknown")
-
-    # uncomment below if not using otc-deploy image
-    # source ./ci/helpers.sh
-    # cloneOtcDeploy
-
-    # login
-    . /login/clusterLogin.sh "$(cat /config/cluster)" "otc"
-
-    # build and deploy from inventory
-    . /umbrella/helpers.sh
-    if ! buildAndDeployFromInventory $ENVIRONMENT $INVENTORY_URL $INVENTORY_BRANCH $DEPLOYMENT_SLACK_CHANNEL_ID $DEPLOYMENT_SLACK_TOKEN $SKIP_CLUSTER_DANCE $PAUSE_AFTER_FIRST_CLUSTER; then
-      echo "Posting slack message: Umbrella deployment to $ENVIRONMENT aborted by deployment coordinator."
-      postSlackMessage unused "<$PIPELINE_RUN_URL|Umbrella deployment> to *${ENVIRONMENT}* aborted by deployment coordinator." $DEPLOYMENT_SLACK_CHANNEL_ID $DEPLOYMENT_SLACK_TOKEN
-      echo "Done"
-      echo
-      exit 1
-    fi
+    source ./cd/deploy.sh
 
 acceptance-test:
   image: us.icr.io/otc-ops/otc-deploy:dev
   image_pull_policy: Always
   script: |
     #!/usr/bin/env bash
-    export ENVIRONMENT=$(get_env region)
-    case $ENVIRONMENT in
-      dev)
-        export TEST_TOOLCHAIN_ID="d5c0676c-55ed-4c25-b763-60b7afd64c87"
-        export TEST_PIPELINE_ID="000d42c0-a9f7-4d7d-86f8-01160f04d1fb"
-        export TEST_PIPELINE_REGION="us-south"
-        ;;
-      old-staging) # old staging
-        export TEST_TOOLCHAIN_ID="d5c0676c-55ed-4c25-b763-60b7afd64c87"
-        export TEST_PIPELINE_ID="0a86e449-cd54-4ccf-9704-28eb39c02a13"
-        export TEST_PIPELINE_REGION="us-south"
-        ;;
-      jp-osa) # new staging
-        export TEST_TOOLCHAIN_ID="d5c0676c-55ed-4c25-b763-60b7afd64c87"
-        export TEST_PIPELINE_ID="000d42c0-a9f7-4d7d-86f8-01160f04d1fb"
-        export TEST_PIPELINE_REGION="us-south"
-        ;;
-      eu-de)
-        export TEST_TOOLCHAIN_ID="62f17f5e-b4a9-44c4-b485-e0d6f3efc28c"
-        export TEST_PIPELINE_ID="e4f451b3-f832-4f48-b4d8-c7b086d447f0"
-        export TEST_PIPELINE_REGION="eu-de"
-        ;;
-      eu-fr2)
-        export TEST_TOOLCHAIN_ID="62f17f5e-b4a9-44c4-b485-e0d6f3efc28c"
-        export TEST_PIPELINE_ID="ddb619d5-79a5-4de0-a4b0-e736d7253292"
-        export TEST_PIPELINE_REGION="eu-de"
-        ;;
-      *)
-        export TEST_TOOLCHAIN_ID="d5c0676c-55ed-4c25-b763-60b7afd64c87"
-        export TEST_PIPELINE_ID="4ed59ae8-3e48-4c5f-9ba8-66ebd4331a60"
-        export TEST_PIPELINE_REGION="us-south"
-        ;;
-    esac
-    export IC_1651315_API_KEY=$(get_env IC_1651315_API_KEY "")
-    export IC_1561947_API_KEY=$(get_env IC_1561947_API_KEY "")
-    export DEPLOYMENT_SLACK_CHANNEL_ID=$(get_env DEPLOYMENT_SLACK_CHANNEL_ID "unknown")
-    export DEPLOYMENT_SLACK_TOKEN=$(get_env DEPLOYMENT_SLACK_TOKEN "unknown")
-    . /umbrella/helpers.sh
-    runRegionTests status "$ENVIRONMENT" "$PIPELINE_RUN_ID" "$TEST_TOOLCHAIN_ID" "$TEST_PIPELINE_ID" "$TEST_PIPELINE_REGION" $DEPLOYMENT_SLACK_CHANNEL_ID $DEPLOYMENT_SLACK_TOKEN
-    echo "Status of $ENVIRONMENT tests is $status"
-    echo
-
-    if [ "$DEPLOYMENT_SLACK_CHANNEL_ID" != "unknown" ]; then
-      # post deployment complete message
-      if [ "$status" == "succeeded" ]; then
-        DEPLOYMENT_STATUS="complete"
-      else
-        DEPLOYMENT_STATUS="failed"
-      fi
-      echo "Posting slack message: Umbrella deployment to $ENVIRONMENT $DEPLOYMENT_STATUS."
-      postSlackMessage unused "<$PIPELINE_RUN_URL|Umbrella deployment> to *${ENVIRONMENT}* $DEPLOYMENT_STATUS." $DEPLOYMENT_SLACK_CHANNEL_ID $DEPLOYMENT_SLACK_TOKEN
-      echo "Done"
-      echo
-    fi
-
-    if [ "$status" != "succeeded" ]; then
-      exit 1
-    fi
+    source ./cd/acceptance_test.sh
