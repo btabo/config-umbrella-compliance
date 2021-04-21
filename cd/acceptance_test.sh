@@ -11,7 +11,7 @@ case $ENVIRONMENT in
         export TEST_PIPELINE_ID="0a86e449-cd54-4ccf-9704-28eb39c02a13"
         export TEST_PIPELINE_REGION="us-south"
     ;;
-    jp-osa) # new staging
+    mon01) # new staging
         export TEST_TOOLCHAIN_ID="d5c0676c-55ed-4c25-b763-60b7afd64c87"
         export TEST_PIPELINE_ID="000d42c0-a9f7-4d7d-86f8-01160f04d1fb"
         export TEST_PIPELINE_REGION="us-south"
