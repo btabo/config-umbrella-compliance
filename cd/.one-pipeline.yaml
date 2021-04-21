@@ -11,9 +11,9 @@ setup:
 
     # post deployment started message
     export ENVIRONMENT=$(get_env region)
-    export DEPLOYMENT_SLACK_CHANNEL_ID=$(get_env DEPLOYMENT_SLACK_CHANNEL_ID "")
-    export DEPLOYMENT_SLACK_TOKEN=$(get_env DEPLOYMENT_SLACK_TOKEN "")
-    if [ "$DEPLOYMENT_SLACK_CHANNEL_ID" ]; then
+    export DEPLOYMENT_SLACK_CHANNEL_ID=$(get_env DEPLOYMENT_SLACK_CHANNEL_ID "unknown")
+    export DEPLOYMENT_SLACK_TOKEN=$(get_env DEPLOYMENT_SLACK_TOKEN "unknown")
+    if [ "$DEPLOYMENT_SLACK_CHANNEL_ID" != "unknown" ]; then
       echo "Posting slack message: Umbrella deployment to $ENVIRONMENT started."
       . /umbrella/helpers.sh
       postSlackMessage unused "<$PIPELINE_RUN_URL|Umbrella deployment> to *${ENVIRONMENT}* started." $DEPLOYMENT_SLACK_CHANNEL_ID $DEPLOYMENT_SLACK_TOKEN
@@ -56,7 +56,7 @@ deploy:
     export WAIT_FOR_DEPLOY_MAX="80"
     export EXCLUDED_FROM_STATUS_CHECK=$(get_env EXCLUDED_FROM_STATUS_CHECK "")
     export DRY_RUN=$(get_env DRY_RUN "")
-    export DEPLOYMENT_SLACK_CHANNEL_ID=$(get_env DEPLOYMENT_SLACK_CHANNEL_ID)
+    export DEPLOYMENT_SLACK_CHANNEL_ID=$(get_env DEPLOYMENT_SLACK_CHANNEL_ID "unknown")
     case $ENVIRONMENT in
       dev)
         export CHART_REPO="devops-dev"
@@ -89,9 +89,9 @@ deploy:
     export IC_1561947_API_KEY=$(get_env IC_1561947_API_KEY "")
     export IC_1562047_API_KEY=$(get_env IC_1562047_API_KEY "")
     export IC_2113612_API_KEY=$(get_env IC_2113612_API_KEY "")
-    export NR_1783376_API_KEY=$(get_env NR_1783376_API_KEY)
+    export NR_1783376_API_KEY=$(get_env NR_1783376_API_KEY "")
     export OTC_REGISTRY_API_KEY=$(get_env IC_1416501_API_KEY "")
-    export DEPLOYMENT_SLACK_TOKEN=$(get_env DEPLOYMENT_SLACK_TOKEN)
+    export DEPLOYMENT_SLACK_TOKEN=$(get_env DEPLOYMENT_SLACK_TOKEN "unknown")
 
     # uncomment below if not using otc-deploy image
     # source ./ci/helpers.sh
@@ -150,23 +150,25 @@ acceptance-test:
     esac
     export IC_1651315_API_KEY=$(get_env IC_1651315_API_KEY "")
     export IC_1561947_API_KEY=$(get_env IC_1561947_API_KEY "")
-    export DEPLOYMENT_SLACK_CHANNEL_ID=$(get_env DEPLOYMENT_SLACK_CHANNEL_ID)
-    export DEPLOYMENT_SLACK_TOKEN=$(get_env DEPLOYMENT_SLACK_TOKEN)
+    export DEPLOYMENT_SLACK_CHANNEL_ID=$(get_env DEPLOYMENT_SLACK_CHANNEL_ID "unknown")
+    export DEPLOYMENT_SLACK_TOKEN=$(get_env DEPLOYMENT_SLACK_TOKEN "unknown")
     . /umbrella/helpers.sh
     runRegionTests status "$ENVIRONMENT" "$PIPELINE_RUN_ID" "$TEST_TOOLCHAIN_ID" "$TEST_PIPELINE_ID" "$TEST_PIPELINE_REGION" $DEPLOYMENT_SLACK_CHANNEL_ID $DEPLOYMENT_SLACK_TOKEN
     echo "Status of $ENVIRONMENT tests is $status"
     echo
 
-    # post deployment complete message
-    if [ "$status" == "succeeded" ]; then
-      DEPLOYMENT_STATUS="complete"
-    else
-      DEPLOYMENT_STATUS="failed"
+    if [ "$DEPLOYMENT_SLACK_CHANNEL_ID" != "unknown" ]; then
+      # post deployment complete message
+      if [ "$status" == "succeeded" ]; then
+        DEPLOYMENT_STATUS="complete"
+      else
+        DEPLOYMENT_STATUS="failed"
+      fi
+      echo "Posting slack message: Umbrella deployment to $ENVIRONMENT $DEPLOYMENT_STATUS."
+      postSlackMessage unused "<$PIPELINE_RUN_URL|Umbrella deployment> to *${ENVIRONMENT}* $DEPLOYMENT_STATUS." $DEPLOYMENT_SLACK_CHANNEL_ID $DEPLOYMENT_SLACK_TOKEN
+      echo "Done"
+      echo
     fi
-    echo "Posting slack message: Umbrella deployment to $ENVIRONMENT $DEPLOYMENT_STATUS."
-    postSlackMessage unused "<$PIPELINE_RUN_URL|Umbrella deployment> to *${ENVIRONMENT}* $DEPLOYMENT_STATUS." $DEPLOYMENT_SLACK_CHANNEL_ID $DEPLOYMENT_SLACK_TOKEN
-    echo "Done"
-    echo
 
     if [ "$status" != "succeeded" ]; then
       exit 1
