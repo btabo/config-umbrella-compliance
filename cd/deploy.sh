@@ -21,13 +21,15 @@ case $ENVIRONMENT in
         export CHART_REPO="devops-dev"
         export CHART_BRANCH="umbrella"
         export DOMAIN="us-south.devops.dev.cloud.ibm.com"
+        export FIRST_CLUSTER="otc-us-south-dev"
         export PAUSE_AFTER_FIRST_CLUSTER="false"
         export SKIP_CLUSTER_DANCE="true"
     ;;
-    jp-osa)
+    mon01)
         export CHART_REPO="devops-int"
         export CHART_BRANCH="umbrella"
         export DOMAIN="$ENVIRONMENT.devops.cloud.ibm.com"
+        export FIRST_CLUSTER="otc-dal10-stage"
         export PAUSE_AFTER_FIRST_CLUSTER="false"
         export SKIP_CLUSTER_DANCE="true"
         ;;
@@ -35,6 +37,7 @@ case $ENVIRONMENT in
         export CHART_REPO="devops-prod"
         export CHART_BRANCH="umbrella-$ENVIRONMENT"
         export DOMAIN="$ENVIRONMENT.devops.cloud.ibm.com"
+        export FIRST_CLUSTER=$(get_env cluster)
         export PAUSE_AFTER_FIRST_CLUSTER=$(get_env PAUSE_AFTER_FIRST_CLUSTER "")
         export SKIP_CLUSTER_DANCE=$(get_env SKIP_CLUSTER_DANCE "")
     ;;
@@ -43,8 +46,8 @@ esac
 # secrets
 export IDS_TOKEN=$(get_env git-token)
 export IC_1308775_API_KEY=$(get_env IC_1308775_API_KEY "")
-export IC_1651315_API_KEY=$(get_env IC_1651315_API_KEY "")
-export IC_1416501_API_KEY=$(get_env IC_1416501_API_KEY "")
+export IC_1651315_API_KEY=$(get_env IC_1651315_API_KEY "$(get_env otc_IC_1651315_API_KEY "")")
+export IC_1416501_API_KEY=$(get_env IC_1416501_API_KEY "$(get_env otc_IC_1416501_API_KEY "")")
 export IC_1561947_API_KEY=$(get_env IC_1561947_API_KEY "")
 export IC_1562047_API_KEY=$(get_env IC_1562047_API_KEY "")
 export IC_2113612_API_KEY=$(get_env IC_2113612_API_KEY "")
@@ -57,14 +60,18 @@ export DEPLOYMENT_SLACK_TOKEN=$(get_env DEPLOYMENT_SLACK_TOKEN "unknown")
 # cloneOtcDeploy
 
 # login
-. /login/clusterLogin.sh "$(cat /config/cluster)" "otc"
+. /login/clusterLogin.sh "$FIRST_CLUSTER" "otc"
 
 # build and deploy from inventory
 . /umbrella/helpers.sh
 if ! buildAndDeployFromInventory $ENVIRONMENT $INVENTORY_URL $INVENTORY_BRANCH $DEPLOYMENT_SLACK_CHANNEL_ID $DEPLOYMENT_SLACK_TOKEN $SKIP_CLUSTER_DANCE $PAUSE_AFTER_FIRST_CLUSTER; then
-    echo "Posting slack message: Umbrella deployment to $ENVIRONMENT aborted by deployment coordinator."
-    postSlackMessage unused "<$PIPELINE_RUN_URL|Umbrella deployment> to *${ENVIRONMENT}* aborted by deployment coordinator." $DEPLOYMENT_SLACK_CHANNEL_ID $DEPLOYMENT_SLACK_TOKEN
-    echo "Done"
+    if [ "$DEPLOYMENT_SLACK_CHANNEL_ID" != "unknown" ]; then
+        echo "Posting slack message: Umbrella deployment to $ENVIRONMENT aborted by deployment coordinator."
+        postSlackMessage unused "<$PIPELINE_RUN_URL|Umbrella deployment> to *${ENVIRONMENT}* aborted by deployment coordinator." $DEPLOYMENT_SLACK_CHANNEL_ID $DEPLOYMENT_SLACK_TOKEN
+        echo "Done"
+    else
+        echo "Umbrella deployment to $ENVIRONMENT aborted"
+    fi
     echo
     exit 1
 fi
