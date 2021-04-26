@@ -59,7 +59,7 @@ release:
     source ./ci/common/helpers.sh
 
     # do not add to inventory if it cannot be deployed
-    if ! checkStatuses; then
+    if ! checkComplianceStatuses; then
         echo "Skipping release stage."
         exit 0
     fi

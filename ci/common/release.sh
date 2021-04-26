@@ -8,7 +8,7 @@ COMMON_FOLDER="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 source $COMMON_FOLDER/helpers.sh
 
 # do not add to inventory or publish component chart if it cannot be deployed
-if ! checkStatuses; then
+if ! checkComplianceStatuses; then
     echo "Skipping release stage."
     exit 0
 fi

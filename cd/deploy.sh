@@ -3,7 +3,6 @@
 # config
 export ENVIRONMENT=$(get_env region)
 export INVENTORY_URL=https://github.ibm.com/org-ids/inventory-umbrella-compliance
-export INVENTORY_BRANCH=$(get_env target-environment)
 export DOI_TOOLCHAIN_ID=$(get_env doi-toolchain-id)
 export IDS_JOB_ID=$PIPELINE_RUN_ID
 export IDS_USER=idsorg
@@ -18,6 +17,7 @@ export DRY_RUN=$(get_env DRY_RUN "")
 export DEPLOYMENT_SLACK_CHANNEL_ID=$(get_env DEPLOYMENT_SLACK_CHANNEL_ID "unknown")
 case $ENVIRONMENT in
     dev)
+        export INVENTORY_BRANCH="dev"
         export CHART_REPO="devops-dev"
         export CHART_BRANCH="umbrella"
         export DOMAIN="us-south.devops.dev.cloud.ibm.com"
@@ -26,6 +26,7 @@ case $ENVIRONMENT in
         export SKIP_CLUSTER_DANCE="true"
     ;;
     mon01)
+        export INVENTORY_BRANCH="staging"
         export CHART_REPO="devops-int"
         export CHART_BRANCH="umbrella"
         export DOMAIN="$ENVIRONMENT.devops.cloud.ibm.com"
@@ -34,6 +35,7 @@ case $ENVIRONMENT in
         export SKIP_CLUSTER_DANCE="true"
         ;;
     *)
+        export INVENTORY_BRANCH=$(get_env target-environment)
         export CHART_REPO="devops-prod"
         export CHART_BRANCH="umbrella-$ENVIRONMENT"
         export DOMAIN="$ENVIRONMENT.devops.cloud.ibm.com"

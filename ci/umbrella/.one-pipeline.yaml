@@ -49,7 +49,7 @@ acceptance-test:
     source ./cd/acceptance_test.sh
 
 release:
-  image: icr.io/continuous-delivery/pipeline/pipeline-base-image:2.12@sha256:ff4053b0bca784d6d105fee1d008cfb20db206011453071e86b69ca3fde706a4
+  image: wcp-compliance-automation-team-docker-local.artifactory.swg-devops.com/ibm-compliance-automation:1.7.1@sha256:69a4677edc4b40849b95d29870992aa467988ef254e1de052299383785b80a7e
   script: |
     #!/usr/bin/env bash
-    echo "TODO: save to inventory"
+    source ./ci/umbrella/release.sh
