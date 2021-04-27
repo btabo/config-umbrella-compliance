@@ -60,6 +60,8 @@ export DEPLOYMENT_SLACK_TOKEN=$(get_env DEPLOYMENT_SLACK_TOKEN "unknown")
 # uncomment below if not using otc-deploy image
 # source ./ci/helpers.sh
 # cloneOtcDeploy
+# cp -r otc-deploy/k8s/scripts/* /
+# cp -r devops-config/otc-deploy/* /otc-config
 
 # login
 . /login/clusterLogin.sh "$FIRST_CLUSTER" "otc"
