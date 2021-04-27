@@ -13,6 +13,9 @@ if ! checkComplianceStatuses; then
     exit 0
 fi
 
+# install cocoa cli	
+installCocoa	
+
 # for cocoa cli
 export GHE_TOKEN="$(cat $WORKSPACE/git-token)"
 export COMMIT_SHA="$(get_env git-commit)"
