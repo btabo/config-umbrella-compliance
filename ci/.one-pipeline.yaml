@@ -1,14 +1,14 @@
 version: '1'
 
 setup:
-  image: us.icr.io/otc-ops/otc-deploy:dev
+  image: icr.io/continuous-delivery/pipeline/pipeline-base-image:2.12@sha256:ff4053b0bca784d6d105fee1d008cfb20db206011453071e86b69ca3fde706a4
   script: |
     #!/usr/bin/env bash
     source ./ci/common/setup.sh
 
 test:
   abort_on_failure: false
-  image: us.icr.io/otc-ops/otc-deploy:dev
+  image: icr.io/continuous-delivery/pipeline/pipeline-base-image:2.12@sha256:ff4053b0bca784d6d105fee1d008cfb20db206011453071e86b69ca3fde706a4
   script: |
     #!/usr/bin/env bash
     source ./ci/common/test.sh
@@ -33,14 +33,14 @@ sign-artifact:
     source ./ci/common/sign_artifact.sh
 
 deploy:
-  image: us.icr.io/otc-ops/otc-deploy:dev
+  image: icr.io/continuous-delivery/pipeline/pipeline-base-image:2.12@sha256:ff4053b0bca784d6d105fee1d008cfb20db206011453071e86b69ca3fde706a4
   script: |
     #!/usr/bin/env bash
     source ./ci/common/deploy.sh
 
 acceptance-test:
   abort_on_failure: false
-  image: us.icr.io/otc-ops/otc-deploy:dev
+  image: icr.io/continuous-delivery/pipeline/pipeline-base-image:2.12@sha256:ff4053b0bca784d6d105fee1d008cfb20db206011453071e86b69ca3fde706a4
   script: |
     #!/usr/bin/env bash
     source ./ci/common/acceptance_test.sh
