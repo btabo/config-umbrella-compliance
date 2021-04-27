@@ -4,7 +4,14 @@ if [[ "${PIPELINE_DEBUG:-0}" == 1 ]]; then
     env | sort
     set -x
 fi
+
 COMMON_FOLDER="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+export APP_NAME=$(get_env app-name)
+if [ -f $COMMON_FOLDER/../$APP_NAME/release.sh ]; then
+    source $COMMON_FOLDER/../$APP_NAME/release.sh
+    exit 0
+fi
+
 source $COMMON_FOLDER/helpers.sh
 
 # do not add to inventory or publish component chart if it cannot be deployed
@@ -15,8 +22,6 @@ fi
 
 REPO_FOLDER=$(load_repo app-repo path)
 cd $WORKSPACE/$REPO_FOLDER
-
-export APP_NAME=$(get_env app-name)
 
 # clone otc-deploy and devops-config if needed
 cloneOtcDeploy
@@ -98,9 +103,6 @@ chmod u+x otc-deploy/k8s/scripts/ci/publishHelmChart.sh
 ./otc-deploy/k8s/scripts/ci/publishHelmChart.sh
 echo "Done publishing component chart"
 echo
-
-# install cocoa cli
-installCocoa
 
 # for cocoa cli
 export GHE_TOKEN="$(cat $WORKSPACE/git-token)"

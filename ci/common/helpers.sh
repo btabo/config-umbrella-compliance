@@ -14,18 +14,6 @@ function checkComplianceStatuses() {
     return 0
 }
 
-# Install cocoa cli
-function installCocoa() {
-    local cocoaVersion=1.5.0
-    echo "Installing cocoa cli $cocoaVersion"
-    curl -u ${ARTIFACTORY_ID}:${ARTIFACTORY_API_KEY} -O "https://eu.artifactory.swg-devops.com/artifactory/wcp-compliance-automation-team-generic-local/cocoa-linux-${cocoaVersion}"
-    cp cocoa-linux-* /usr/local/bin/cocoa
-    chmod +x /usr/local/bin/cocoa
-    export PATH="$PATH:/usr/local/bin/"
-    echo "Done"
-    echo
-}
-
 # Clone otc-deploy and devops-config if needed
 function cloneOtcDeploy() {
     local gitToken=$(cat "$WORKSPACE/git-token")

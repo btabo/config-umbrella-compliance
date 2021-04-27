@@ -1,14 +1,14 @@
 version: '1'
 
 setup:
-  image: icr.io/continuous-delivery/pipeline/pipeline-base-image:2.11@sha256:61d35cdad7e77dbcedbf6ab47591b38121b03c5a4f41041f2d628cb8485602e1
+  image: us.icr.io/otc-ops/otc-deploy:dev
   script: |
     #!/usr/bin/env bash
     source ./ci/common/setup.sh
 
 test:
   abort_on_failure: false
-  image: icr.io/continuous-delivery/pipeline/pipeline-base-image:2.7@sha256:282677e79ccb9d20c699d384a54093894de03675752cd848a3133266c898c14c
+  image: us.icr.io/otc-ops/otc-deploy:dev
   script: |
     #!/usr/bin/env bash
     source ./ci/common/test.sh
@@ -20,21 +20,33 @@ containerize:
     #!/usr/bin/env bash
     source ./ci/common/containerize.sh
 
+scan-artifact:
+  image: icr.io/continuous-delivery/pipeline/pipeline-base-image:2.12@sha256:ff4053b0bca784d6d105fee1d008cfb20db206011453071e86b69ca3fde706a4
+  script: |
+    #!/usr/bin/env bash
+    source ./ci/common/scan_artifact.sh
+
+sign-artifact:
+  image: wcp-compliance-automation-team-docker-local.artifactory.swg-devops.com/csso-image-sign@sha256:cb22e6ad6b3469155719f6bf09bde641208a1e349e5ccc09407204bb069f7b4e
+  script: |
+    #!/usr/bin/env bash
+    source ./ci/common/sign_artifact.sh
+
 deploy:
-  image: icr.io/continuous-delivery/pipeline/pipeline-base-image:2.6@sha256:7f588468622a981f89cf5e1212aaf75fface9da6169b5345ca52ab63d8215907
+  image: us.icr.io/otc-ops/otc-deploy:dev
   script: |
     #!/usr/bin/env bash
     source ./ci/common/deploy.sh
 
 acceptance-test:
   abort_on_failure: false
-  image: icr.io/continuous-delivery/pipeline/pipeline-base-image:2.7@sha256:282677e79ccb9d20c699d384a54093894de03675752cd848a3133266c898c14c
+  image: us.icr.io/otc-ops/otc-deploy:dev
   script: |
     #!/usr/bin/env bash
     source ./ci/common/acceptance_test.sh
 
 release:
-  image: icr.io/continuous-delivery/pipeline/pipeline-base-image:2.6@sha256:7f588468622a981f89cf5e1212aaf75fface9da6169b5345ca52ab63d8215907
+  image: wcp-compliance-automation-team-docker-local.artifactory.swg-devops.com/ibm-compliance-automation:1.7.1@sha256:69a4677edc4b40849b95d29870992aa467988ef254e1de052299383785b80a7e
   script: |
     #!/usr/bin/env bash
     source ./ci/common/release.sh

@@ -6,11 +6,15 @@ if [[ "${PIPELINE_DEBUG:-0}" == 1 ]]; then
 fi
 
 COMMON_FOLDER="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+export APP_NAME=$(get_env app-name)
+if [ -f $COMMON_FOLDER/../$APP_NAME/setup.sh ]; then
+    source $COMMON_FOLDER/../$APP_NAME/setup.sh
+    exit 0
+fi
+
 source $COMMON_FOLDER/helpers.sh
 REPO_FOLDER=$(load_repo app-repo path)
 cd $WORKSPACE/$REPO_FOLDER
-
-export APP_NAME=$(get_env app-name)
 
 GH_TOKEN=$(cat "$WORKSPACE/git-token")
 

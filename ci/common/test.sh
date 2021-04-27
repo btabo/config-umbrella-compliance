@@ -6,11 +6,15 @@ if [[ "${PIPELINE_DEBUG:-0}" == 1 ]]; then
 fi
 
 COMMON_FOLDER="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+export APP_NAME=$(get_env app-name)
+if [ -f $COMMON_FOLDER/../$APP_NAME/test.sh ]; then
+    source $COMMON_FOLDER/../$APP_NAME/test.sh
+    exit 0
+fi
+
 source $COMMON_FOLDER/helpers.sh
 REPO_FOLDER=$(load_repo app-repo path)
 cd $WORKSPACE/$REPO_FOLDER
-
-export APP_NAME=$(get_env app-name)
 
 # secrets
 export CLOUDANT_IAM_API_KEY=$(get_env otc_CLOUDANT_IAM_API_KEY)
