@@ -4,8 +4,15 @@
 # UMBRELLA_FOLDER="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 # source $UMBRELLA_FOLDER/../common/helpers.sh
 # cloneOtcDeploy
+echo ls -la /
+ls -la /
+echo
+
+echo "Copying scripts"
 cp -r otc-deploy/k8s/scripts/* /
 cp -r devops-config/otc-deploy/* /otc-config
+echo "Done"
+echo
 
 echo ls -la /
 ls -la /
