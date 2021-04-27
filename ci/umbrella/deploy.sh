@@ -7,4 +7,4 @@ cloneOtcDeploy
 cp -r otc-deploy/k8s/scripts/* /
 cp -r devops-config/otc-deploy/* /otc-config
 
-source ./cd/deploy.sh
+#source ./cd/deploy.sh
