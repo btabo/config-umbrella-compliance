@@ -26,7 +26,7 @@ echo "Adding to inventory"
 cocoa inventory add \
     --environment="dev" \
     --artifact="https://github.ibm.com/ids-env/devops-config/tree/${COMMIT_SHA}/environments" \
-    --repository-url="$APP_REPO" \
+    --repository-url="${APP_REPO}" \
     --commit-sha="${COMMIT_SHA}" \
     --build-number="${BUILD_NUMBER}" \
     --pipeline-run-id="${PIPELINE_RUN_ID}" \
@@ -36,7 +36,7 @@ cocoa inventory add \
 cocoa inventory add \
     --environment="staging" \
     --artifact="https://github.ibm.com/ids-env/devops-config/tree/${COMMIT_SHA}/environments" \
-    --repository-url="$APP_REPO" \
+    --repository-url="${APP_REPO}" \
     --commit-sha="${COMMIT_SHA}" \
     --build-number="${BUILD_NUMBER}" \
     --pipeline-run-id="${PIPELINE_RUN_ID}" \
