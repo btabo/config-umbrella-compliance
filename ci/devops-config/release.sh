@@ -9,7 +9,11 @@ fi
 
 cd $WORKSPACE/devops-config
 
+# install cocoa cli	
+installCocoa	
+
 # for cocoa cli
+APP_REPO=$(load_repo app-repo url)
 export GHE_TOKEN="$(cat $WORKSPACE/git-token)"
 export COMMIT_SHA="$(get_env git-commit)"
 INVENTORY_REPO=$(get_env TEMP_INVENTORY_REPO "$(get_env inventory-url)" )
@@ -18,10 +22,11 @@ export GHE_ORG=${GHE_ORG##*/}
 GHE_REPO=${INVENTORY_REPO##*/}
 export GHE_REPO=${GHE_REPO%.git}
 
+echo "Adding to inventory"
 cocoa inventory add \
     --environment="dev" \
     --artifact="https://github.ibm.com/ids-env/devops-config/tree/${COMMIT_SHA}/environments" \
-    --repository-url="$(get_env repository)" \
+    --repository-url="$APP_REPO" \
     --commit-sha="${COMMIT_SHA}" \
     --build-number="${BUILD_NUMBER}" \
     --pipeline-run-id="${PIPELINE_RUN_ID}" \
@@ -31,9 +36,11 @@ cocoa inventory add \
 cocoa inventory add \
     --environment="staging" \
     --artifact="https://github.ibm.com/ids-env/devops-config/tree/${COMMIT_SHA}/environments" \
-    --repository-url="$(get_env repository)" \
+    --repository-url="$APP_REPO" \
     --commit-sha="${COMMIT_SHA}" \
     --build-number="${BUILD_NUMBER}" \
     --pipeline-run-id="${PIPELINE_RUN_ID}" \
     --version="$(get_env version)" \
     --name="config"
+echo "Inventory updated"
+echo
