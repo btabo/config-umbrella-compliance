@@ -2,15 +2,17 @@
 
 # post deployment started message
 export ENVIRONMENT=$(get_env region)
-export DEPLOYMENT_SLACK_CHANNEL_ID=$(get_env DEPLOYMENT_SLACK_CHANNEL_ID "unknown")
-export DEPLOYMENT_SLACK_TOKEN=$(get_env DEPLOYMENT_SLACK_TOKEN "unknown")
-if [ "$DEPLOYMENT_SLACK_CHANNEL_ID" != "unknown" ]; then
+export DEPLOYMENT_SLACK_CHANNEL_ID=$(get_env DEPLOYMENT_SLACK_CHANNEL_ID "none")
+export DEPLOYMENT_SLACK_TOKEN=$(get_env DEPLOYMENT_SLACK_TOKEN "none")
+if [ "$DEPLOYMENT_SLACK_CHANNEL_ID" != "none" ]; then
     echo "Posting slack message: Umbrella deployment to $ENVIRONMENT started."
     . /umbrella/helpers.sh
     postSlackMessage unused "<$PIPELINE_RUN_URL|Umbrella deployment> to *${ENVIRONMENT}* started." $DEPLOYMENT_SLACK_CHANNEL_ID $DEPLOYMENT_SLACK_TOKEN
     echo "Done"
-    echo
+else
+    echo "Umbrella deployment to $ENVIRONMENT started."
 fi
+echo
 
 # TEMP: manually build inventory for dev, will remove when all components have switched to shiftleft ci pipelines
 if [ "$ENVIRONMENT" == "dev" ]; then

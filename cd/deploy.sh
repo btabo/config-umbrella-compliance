@@ -14,7 +14,7 @@ export WAIT_FOR_DEPLOY="true"
 export WAIT_FOR_DEPLOY_MAX="80"
 export EXCLUDED_FROM_STATUS_CHECK=$(get_env EXCLUDED_FROM_STATUS_CHECK "")
 export DRY_RUN=$(get_env DRY_RUN "")
-export DEPLOYMENT_SLACK_CHANNEL_ID=$(get_env DEPLOYMENT_SLACK_CHANNEL_ID "unknown")
+export DEPLOYMENT_SLACK_CHANNEL_ID=$(get_env DEPLOYMENT_SLACK_CHANNEL_ID "none")
 case $ENVIRONMENT in
     dev)
         export INVENTORY_BRANCH="dev"
@@ -55,7 +55,7 @@ export IC_1562047_API_KEY=$(get_env IC_1562047_API_KEY "")
 export IC_2113612_API_KEY=$(get_env IC_2113612_API_KEY "")
 export NR_1783376_API_KEY=$(get_env NR_1783376_API_KEY "")
 export OTC_REGISTRY_API_KEY=$(get_env IC_1416501_API_KEY "")
-export DEPLOYMENT_SLACK_TOKEN=$(get_env DEPLOYMENT_SLACK_TOKEN "unknown")
+export DEPLOYMENT_SLACK_TOKEN=$(get_env DEPLOYMENT_SLACK_TOKEN "none")
 
 # uncomment below if not using otc-deploy image
 # source ./ci/helpers.sh
@@ -85,12 +85,12 @@ case $rc in
     ;;
 esac
 if [ "$message" ]; then
-    if [ "$DEPLOYMENT_SLACK_CHANNEL_ID" != "unknown" ]; then
+    if [ "$DEPLOYMENT_SLACK_CHANNEL_ID" != "none" ]; then
         echo "Posting slack message: $message"
         postSlackMessage unused "<$PIPELINE_RUN_URL|Umbrella deployment> to *${ENVIRONMENT}* $message" $DEPLOYMENT_SLACK_CHANNEL_ID $DEPLOYMENT_SLACK_TOKEN
         echo "Done"
     else
-        echo "$message"
+        echo "Umbrella deployment to ${ENVIRONMENT} $message"
     fi
     echo
     exit 1
