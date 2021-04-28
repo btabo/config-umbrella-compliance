@@ -33,7 +33,7 @@ case $ENVIRONMENT in
         export FIRST_CLUSTER="otc-dal10-stage"
         export PAUSE_AFTER_FIRST_CLUSTER="false"
         export SKIP_CLUSTER_DANCE="true"
-        ;;
+    ;;
     *)
         export INVENTORY_BRANCH=$(get_env target-environment)
         export CHART_REPO="devops-prod"
@@ -68,13 +68,29 @@ export DEPLOYMENT_SLACK_TOKEN=$(get_env DEPLOYMENT_SLACK_TOKEN "unknown")
 
 # build and deploy from inventory
 . /umbrella/helpers.sh
-if ! buildAndDeployFromInventory $ENVIRONMENT $INVENTORY_URL $INVENTORY_BRANCH $DEPLOYMENT_SLACK_CHANNEL_ID $DEPLOYMENT_SLACK_TOKEN $SKIP_CLUSTER_DANCE $PAUSE_AFTER_FIRST_CLUSTER; then
+buildAndDeployFromInventory $ENVIRONMENT $INVENTORY_URL $INVENTORY_BRANCH $DEPLOYMENT_SLACK_CHANNEL_ID $DEPLOYMENT_SLACK_TOKEN $SKIP_CLUSTER_DANCE $PAUSE_AFTER_FIRST_CLUSTER
+rc=$?
+case $rc in
+    1)
+        message="failed as ${ENVIRONMENT} is unknown."
+    ;;
+    2)
+        message="failed due to cluster health check failure."
+    ;;
+    3)
+        message="aborted by deployment coordinator."
+    ;;
+    *)
+        unset message
+    ;;
+esac
+if [ "$message" ]; then
     if [ "$DEPLOYMENT_SLACK_CHANNEL_ID" != "unknown" ]; then
-        echo "Posting slack message: Umbrella deployment to $ENVIRONMENT aborted by deployment coordinator."
-        postSlackMessage unused "<$PIPELINE_RUN_URL|Umbrella deployment> to *${ENVIRONMENT}* aborted by deployment coordinator." $DEPLOYMENT_SLACK_CHANNEL_ID $DEPLOYMENT_SLACK_TOKEN
+        echo "Posting slack message: $message"
+        postSlackMessage unused "<$PIPELINE_RUN_URL|Umbrella deployment> to *${ENVIRONMENT}* $message" $DEPLOYMENT_SLACK_CHANNEL_ID $DEPLOYMENT_SLACK_TOKEN
         echo "Done"
     else
-        echo "Umbrella deployment to $ENVIRONMENT aborted"
+        echo "$message"
     fi
     echo
     exit 1
