@@ -14,6 +14,8 @@ if ! checkComplianceStatuses; then
 fi
 
 # install cocoa cli	
+export ARTIFACTORY_ID=idsorg@us.ibm.com
+export ARTIFACTORY_API_KEY="$(get_env otc_ARTIFACTORY_API_KEY)"
 installCocoa	
 
 # for cocoa cli
