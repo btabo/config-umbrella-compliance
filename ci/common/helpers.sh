@@ -28,7 +28,7 @@ function installCocoa() {
 
 # Clone otc-deploy and devops-config if needed
 function cloneOtcDeploy() {
-    local gitToken=$(cat "$WORKSPACE/git-token")
+    local gitToken=$(get_env git-token)
     if [ ! -d "otc-deploy" ]; then
         git clone "https://$gitToken@github.ibm.com/org-ids/otc-deploy"
         echo "Done"
@@ -63,3 +63,54 @@ function cleanupOtcDeploy() {
     echo
 }
 
+# Process changes in devops-config from previous commit to given commit
+# and if it is an umbrella related change, return the inventory branches that should be updated (dev and/or staging)
+# or none if no inventory entry should be added.
+function processDevopsConfigChange() {
+    local result=$1
+    local toCommit=$2
+
+    local fromCommit=$(git rev-parse $toCommit^)
+
+    echo "Processing config changes between $fromCommit and $toCommit"
+    echo
+
+    # Get list of files that changed (this includes relative paths)
+    local inventoryBranches=""
+    local allChanges=$( git diff --name-only $fromCommit $toCommit | grep "environments/" )
+    if [ "$allChanges" ]; then
+        # check dev changes
+        local devChanges=$( echo "$allChanges" | grep "/dev/" )
+        if [ "$devChanges" ]; then
+            local hasChanges
+            hasChangesForUmbrellaComponents hasChanges "$devChanges" devops-dev $fromCommit $toCommit
+            if [ "$hasChanges" == "true" ]; then
+                echo "Changes detected in dev"
+                inventoryBranches="dev $inventoryBranches"
+            fi
+        fi
+
+        # check staging and prod changes (everything that is not dev)
+        local stagingCHanges=$( echo "$allChanges" | grep -v "/dev/" ) 
+        if [ "$stagingCHanges" ]; then
+            local hasChanges
+            hasChangesForUmbrellaComponents hasChanges "$stagingCHanges" devops-int $fromCommit $toCommit
+            if [ "$hasChanges" == "true" ]; then
+                echo "Changes detected in staging/prod"
+                inventoryBranches="staging $inventoryBranches"
+            fi
+        fi
+
+        if [ "$inventoryBranches" ]; then
+            echo "Done processing config changes"
+        else
+            echo "No config changes detected"
+        fi
+    else
+        echo "No config changes detected"
+    fi 
+    echo
+
+    printf -v inventoryBranches '%q' "$inventoryBranches"
+    eval "$result=$inventoryBranches"
+}

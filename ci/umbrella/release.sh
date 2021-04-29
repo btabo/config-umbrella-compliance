@@ -19,7 +19,7 @@ export ARTIFACTORY_API_KEY="$(get_env otc_ARTIFACTORY_API_KEY)"
 installCocoa	
 
 # for cocoa cli
-export GHE_TOKEN="$(cat $WORKSPACE/git-token)"
+export GHE_TOKEN="$(get_env git-token)"
 export COMMIT_SHA="$(get_env git-commit)"
 INVENTORY_REPO=$(get_env TEMP_INVENTORY_REPO "$(get_env inventory-url)" )
 GHE_ORG=${INVENTORY_REPO%/*}

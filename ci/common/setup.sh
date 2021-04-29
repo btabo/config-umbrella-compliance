@@ -16,7 +16,7 @@ source $COMMON_FOLDER/helpers.sh
 REPO_FOLDER=$(load_repo app-repo path)
 cd $WORKSPACE/$REPO_FOLDER
 
-GH_TOKEN=$(cat "$WORKSPACE/git-token")
+GH_TOKEN=$(get_env git-token)
 
 # secrets
 export ARTIFACTORY_API_KEY="$(get_env otc_ARTIFACTORY_API_KEY)"

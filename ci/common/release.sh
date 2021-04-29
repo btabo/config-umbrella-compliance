@@ -46,7 +46,7 @@ export PIPELINE_KUBERNETES_CLUSTER_NAME="topasshelmlintanddryrun"
 
 # for building helm chart
 export IDS_USER="idsorg"
-export IDS_TOKEN=$(cat "$WORKSPACE/git-token")
+export IDS_TOKEN=$(get_env git-token)
 export BRANCH=$(load_repo app-repo branch)
 if [ "$BRANCH" == "integration" ]; then
     export DOMAIN="stage.us-south.devops.cloud.ibm.com"
@@ -108,7 +108,7 @@ echo
 installCocoa	
 
 # for cocoa cli
-export GHE_TOKEN="$(cat $WORKSPACE/git-token)"
+export GHE_TOKEN="$(get_env git-token)"
 export COMMIT_SHA="$(get_env git-commit)"
 if [ "$BRANCH" == "integration" ]; then
   export INVENTORY_BRANCH="staging"
