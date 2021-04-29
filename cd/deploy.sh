@@ -86,7 +86,7 @@ case $rc in
 esac
 if [ "$message" ]; then
     if [ "$DEPLOYMENT_SLACK_CHANNEL_ID" != "none" ]; then
-        echo "Posting slack message: $message"
+        echo "Posting slack message: Umbrella deployment to ${ENVIRONMENT} $message"
         postSlackMessage unused "<$PIPELINE_RUN_URL|Umbrella deployment> to *${ENVIRONMENT}* $message" $DEPLOYMENT_SLACK_CHANNEL_ID $DEPLOYMENT_SLACK_TOKEN
         echo "Done"
     else
