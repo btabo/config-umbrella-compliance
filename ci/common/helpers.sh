@@ -1,7 +1,11 @@
 #!/usr/bin/env bash
 
 # Check compliance statuses. Return 1 if one of them is set and it is not "success"
+# Return 0 if all statuses are success, or if EMERGENCY is set to true.
 function checkComplianceStatuses() {
+    if [ "$(get_env EMERGENCY "")" == "true" ]; then
+        return 0
+    fi
     # uses undocumented env vars as workaround for https://github.ibm.com/one-pipeline/adoption-issues/issues/254
     local allStatusVars="STAGE_TEST_STATUS CRA_VULNERABILITY_RESULTS_STATUS CIS_CHECK_VULNERABILITY_RESULTS_STATUS CRA_BOM_CHECK_RESULTS_STATUS BRANCH_PROTECTION_STATUS STAGE_SCAN_ARTIFACT_STATUS STAGE_SIGN_ARTIFACT_STATUS STAGE_ACCEPTANCE_TEST_STATUS"
     for statusVar in $allStatusVars; do
