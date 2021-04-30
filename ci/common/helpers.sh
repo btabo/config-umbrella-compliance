@@ -63,54 +63,49 @@ function cleanupOtcDeploy() {
     echo
 }
 
-# Process changes in devops-config from previous commit to given commit
-# and if it is an umbrella related change, return the inventory branches that should be updated (dev and/or staging)
-# or none if no inventory entry should be added.
-function processDevopsConfigChange() {
+# Detect changes in devops-config between the 2 given commits for the given environment.
+# Return true if it is an umbrella related change and the inventory branch should be updated.
+# Return false none if no inventory entry should be updated.
+function detectDevopsConfigChange() {
     local result=$1
-    local toCommit=$2
+    local env=$2
+    local toCommit=$3
+    local inventoryOrg=$4
+    local inventoryRepo=$5
 
-    local fromCommit=$(git rev-parse $toCommit^)
-
-    echo "Processing config changes between $fromCommit and $toCommit"
+    # Get previous commit from inventory
+    echo "Getting previous commit from inventory"
+    local expected=( 200 )
+    local curlGetArgs="-X GET -s -u :$GHE_TOKEN https://raw.github.ibm.com/$inventoryOrg/$inventoryRepo/$env/config"
+    curlCli hide $GHE_TOKEN getResult "$curlGetArgs" expected
+    local fromCommit=$(echo "$getResult"  | jq -r '.commit_sha')
+    echo "Done"
     echo
 
-    # Get list of files that changed (this includes relative paths)
-    local inventoryBranches=""
-    local allChanges=$( git diff --name-only $fromCommit $toCommit | grep "environments/" )
+    echo "Detecting config changes between $fromCommit and $toCommit in $env"
+    echo
+    local hasChanges="false"
+    local allChanges=$( git diff --name-only $fromCommit $toCommit | grep "environments/" ) # Get list of files that changed (this includes relative paths)
     if [ "$allChanges" ]; then
-        # check dev changes
-        local devChanges=$( echo "$allChanges" | grep "/dev/" )
-        if [ "$devChanges" ]; then
-            local hasChanges
-            hasChangesForUmbrellaComponents hasChanges "$devChanges" devops-dev $fromCommit $toCommit
-            if [ "$hasChanges" == "true" ]; then
-                echo "Changes detected in dev"
-                inventoryBranches="dev $inventoryBranches"
-            fi
-        fi
-
-        # check staging and prod changes (everything that is not dev)
-        local stagingCHanges=$( echo "$allChanges" | grep -v "/dev/" ) 
-        if [ "$stagingCHanges" ]; then
-            local hasChanges
-            hasChangesForUmbrellaComponents hasChanges "$stagingCHanges" devops-int $fromCommit $toCommit
-            if [ "$hasChanges" == "true" ]; then
-                echo "Changes detected in staging/prod"
-                inventoryBranches="staging $inventoryBranches"
-            fi
-        fi
-
-        if [ "$inventoryBranches" ]; then
-            echo "Done processing config changes"
+        local envChanges=""
+        local chartRepo=""
+        if [ "$env" == "dev" ]; then
+            envChanges=$( echo "$allChanges" | grep "/dev/" )
+            chartRepo="devops-dev"
         else
-            echo "No config changes detected"
+            envChanges=$( echo "$allChanges" | grep -v "/dev/" ) # check staging and prod changes (everything that is not dev)
+            chartRepo="devops-int"
         fi
-    else
-        echo "No config changes detected"
+        if [ "$envChanges" ]; then
+            hasChangesForUmbrellaComponents hasChanges "$envChanges" $chartRepo $fromCommit $toCommit
+        fi
     fi 
+    if [ "$hasChanges" == "true" ]; then
+        echo "Config changes detected in $env"
+    else
+        echo "No config changes detected in $env"
+    fi
     echo
 
-    printf -v inventoryBranches '%q' "$inventoryBranches"
-    eval "$result=$inventoryBranches"
+    eval "$result=$hasChanges"
 }

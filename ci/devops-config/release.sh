@@ -15,11 +15,22 @@ export COMMIT_SHA="$(get_env git-commit)"
 cloneOtcDeploy
 source otc-deploy/k8s/scripts/umbrella/helpers.sh
 
-# get the inventory branches that should be updated
-export IDS_TOKEN=$(get_env git-token)
-INVENTORY_BRANCHES=""
-processDevopsConfigChange INVENTORY_BRANCHES $COMMIT_SHA
-if [ -z "$INVENTORY_BRANCHES" ]; then
+# for cocoa cli
+export GHE_TOKEN=$(get_env git-token)
+APP_REPO=$(load_repo app-repo url)
+INVENTORY_REPO_URL=$(get_env TEMP_INVENTORY_REPO "$(get_env inventory-url)" )
+INVENTORY_ORG=${INVENTORY_REPO_URL%/*}
+INVENTORY_ORG=${INVENTORY_ORG##*/}
+INVENTORY_REPO=${INVENTORY_REPO_URL##*/}
+INVENTORY_REPO=${INVENTORY_REPO%.git}
+
+# detect the inventory branches that should be updated
+export IDS_TOKEN=$GHE_TOKEN
+HAS_DEV_CHANGES="false"
+detectDevopsConfigChange HAS_DEV_CHANGES "dev" $COMMIT_SHA $INVENTORY_ORG $INVENTORY_REPO
+HAS_STAGING_CHANGES="false"
+detectDevopsConfigChange HAS_STAGING_CHANGES "staging" $COMMIT_SHA $INVENTORY_ORG $INVENTORY_REPO
+if [ "$HAS_DEV_CHANGES" == "false" ] && [ "$HAS_STAGING_CHANGES" == "false" ]; then
     exit 0
 fi
 
@@ -28,37 +39,32 @@ export ARTIFACTORY_ID=idsorg@us.ibm.com
 export ARTIFACTORY_API_KEY="$(get_env otc_ARTIFACTORY_API_KEY)"
 installCocoa	
 
-# for cocoa cli
-APP_REPO=$(load_repo app-repo url)
-export GHE_TOKEN="$(get_env git-token)"
-INVENTORY_REPO=$(get_env TEMP_INVENTORY_REPO "$(get_env inventory-url)" )
-GHE_ORG=${INVENTORY_REPO%/*}
-export GHE_ORG=${GHE_ORG##*/}
-GHE_REPO=${INVENTORY_REPO##*/}
-export GHE_REPO=${GHE_REPO%.git}
-
 echo "Adding to inventory"
-if [ "$( echo "$INVENTORY_BRANCHES" | grep dev )" ]; then
+if [ "$HAS_DEV_CHANGES" == "true" ]; then
     cocoa inventory add \
+        --org="$INVENTORY_ORG" \
+        --repo="$INVENTORY_REPO" \
         --environment="dev" \
+        --name="config" \
         --artifact="https://github.ibm.com/ids-env/devops-config/tree/${COMMIT_SHA}/environments" \
         --repository-url="${APP_REPO}" \
         --commit-sha="${COMMIT_SHA}" \
         --build-number="${BUILD_NUMBER}" \
         --pipeline-run-id="${PIPELINE_RUN_ID}" \
-        --version="$(get_env version)" \
-        --name="config"
+        --version="$(get_env version)"
 fi
-if [ "$( echo "$INVENTORY_BRANCHES" | grep staging )" ]; then
+if [ "$HAS_STAGING_CHANGES" == "true" ]; then
     cocoa inventory add \
+        --org="$INVENTORY_ORG" \
+        --repo="$INVENTORY_REPO" \
         --environment="staging" \
+        --name="config" \
         --artifact="https://github.ibm.com/ids-env/devops-config/tree/${COMMIT_SHA}/environments" \
         --repository-url="${APP_REPO}" \
         --commit-sha="${COMMIT_SHA}" \
         --build-number="${BUILD_NUMBER}" \
         --pipeline-run-id="${PIPELINE_RUN_ID}" \
-        --version="$(get_env version)" \
-        --name="config"
+        --version="$(get_env version)"
 fi
 echo "Inventory updated"
 echo
