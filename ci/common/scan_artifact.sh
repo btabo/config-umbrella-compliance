@@ -14,5 +14,4 @@ fi
 
 echo "Using the built-in default script for checking VA scan results"
 echo
-trap "{ echo 'va_scan exited'; }" EXIT
 ${ONE_PIPELINE_PATH}/internal/container-registry/va_scan

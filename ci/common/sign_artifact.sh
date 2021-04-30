@@ -14,5 +14,4 @@ fi
 
 echo "Using the built-in default script for CISO signing"
 echo
-trap "{ echo 'sign_icr exited'; }" EXIT
 ${ONE_PIPELINE_PATH}/internal/ciso/sign_icr
