@@ -148,15 +148,6 @@ cocoa inventory add \
     --pipeline-run-id="${PIPELINE_RUN_ID}" \
     --version="$(get_env version)" \
     --name="${APP_NAME}"
-cocoa inventory add \
-    --environment="${INVENTORY_BRANCH}" \
-    --artifact="${IMAGE_ARTIFACT}" \
-    --repository-url="${APP_REPO}" \
-    --commit-sha="${COMMIT_SHA}" \
-    --build-number="${BUILD_NUMBER}" \
-    --pipeline-run-id="${PIPELINE_RUN_ID}" \
-    --version="$(get_env version)" \
-    --name="${APP_NAME}_image" \
     --app-artifacts="${APP_ARTIFACTS}"
 echo "Inventory updated"
 echo
