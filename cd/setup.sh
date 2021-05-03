@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # post deployment started message
-export ENVIRONMENT=$(get_env region)
+export ENVIRONMENT=$(get_env ENVIRONMENT "get_env cluster-region")
 export DEPLOYMENT_SLACK_CHANNEL_ID=$(get_env DEPLOYMENT_SLACK_CHANNEL_ID "none")
 export DEPLOYMENT_SLACK_TOKEN=$(get_env DEPLOYMENT_SLACK_TOKEN "none")
 if [ "$DEPLOYMENT_SLACK_CHANNEL_ID" != "none" ]; then

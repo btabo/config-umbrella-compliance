@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-export ENVIRONMENT=$(get_env region)
+export ENVIRONMENT=$(get_env ENVIRONMENT "get_env cluster-region")
 case $ENVIRONMENT in
     dev)
         export TEST_TOOLCHAIN_ID="d5c0676c-55ed-4c25-b763-60b7afd64c87"

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # config
-export ENVIRONMENT=$(get_env region)
+export ENVIRONMENT=$(get_env ENVIRONMENT "get_env cluster-region")
 export INVENTORY_URL=https://github.ibm.com/org-ids/inventory-umbrella-compliance
 export DOI_TOOLCHAIN_ID=$(get_env doi-toolchain-id)
 export IDS_JOB_ID=$PIPELINE_RUN_ID
