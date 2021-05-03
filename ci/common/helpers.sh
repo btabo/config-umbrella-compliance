@@ -10,6 +10,7 @@ function checkComplianceStatuses() {
         if [ "$status" ] && [ "$status" != "success" ]; then
             if [ "$(get_env EMERGENCY "")" == "true" ]; then
                 echo "$statusVar=$status. Ignoring since EMERGENCY == true."
+                echo
                 return 0
             else
                 echo "$statusVar=$status"
