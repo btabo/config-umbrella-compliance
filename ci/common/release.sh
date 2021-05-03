@@ -147,7 +147,7 @@ cocoa inventory add \
     --build-number="${BUILD_NUMBER}" \
     --pipeline-run-id="${PIPELINE_RUN_ID}" \
     --version="$(get_env version)" \
-    --name="${APP_NAME}"
+    --name="${APP_NAME}" \
     --app-artifacts="${APP_ARTIFACTS}"
 echo "Inventory updated"
 echo
