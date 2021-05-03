@@ -72,7 +72,7 @@ function cleanupOtcDeploy() {
 
 # Detect changes in devops-config between the 2 given commits for the given environment.
 # Return true if it is an umbrella related change and the inventory branch should be updated.
-# Return false none if no inventory entry should be updated.
+# Return false if no inventory entry should be updated.
 function detectDevopsConfigChange() {
     local result=$1
     local env=$2
