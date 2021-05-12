@@ -49,25 +49,29 @@ else
 fi
 echo
 
-# run pii
-echo "Running PII"
-echo
-if [ -z "$TOOLCHAIN_DATA_PATH" ]; then
-    echo "Setting TOOLCHAIN_DATA_PATH to /toolchain/toolchain.json"
-    TOOLCHAIN_DATA_PATH="/toolchain/toolchain.json"
+echo "ONE_PIPELINE_PATH=$ONE_PIPELINE_PATH"
+
+if [ "$ONE_PIPELINE_PATH" == "ci/.one-pipeline.yaml" ]; then
+    # run pii
+    echo "Running PII"
+    echo
+    if [ -z "$TOOLCHAIN_DATA_PATH" ]; then
+        echo "Setting TOOLCHAIN_DATA_PATH to /toolchain/toolchain.json"
+        TOOLCHAIN_DATA_PATH="/toolchain/toolchain.json"
+        echo
+    fi
+    export TOOLCHAIN_ID=$(jq -r '.toolchain_guid' $TOOLCHAIN_DATA_PATH)
+    export REGION=$(jq -r '.region_id' $TOOLCHAIN_DATA_PATH | awk -F: '{print $3}')
+    export RESOURCE_GROUP=$(jq -r 'select(.container.type=="resource_group_id") | .container.guid' $TOOLCHAIN_DATA_PATH)
+    export PIPELINE_TOOLCHAIN_ID=$TOOLCHAIN_ID
+    git clone --depth 1 "https://$IDS_TOKEN@github.ibm.com/org-ids/pii"
+    echo "Done"
+    echo
+    pii/run
+    echo
+    echo "Done running PII"
     echo
 fi
-export TOOLCHAIN_ID=$(jq -r '.toolchain_guid' $TOOLCHAIN_DATA_PATH)
-export REGION=$(jq -r '.region_id' $TOOLCHAIN_DATA_PATH | awk -F: '{print $3}')
-export RESOURCE_GROUP=$(jq -r 'select(.container.type=="resource_group_id") | .container.guid' $TOOLCHAIN_DATA_PATH)
-export PIPELINE_TOOLCHAIN_ID=$TOOLCHAIN_ID
-git clone --depth 1 "https://$IDS_TOKEN@github.ibm.com/org-ids/pii"
-echo "Done"
-echo
-pii/run
-echo
-echo "Done running PII"
-echo
 
 # cleanup otc-deploy so that cra doesn't consider it
 cleanupOtcDeploy
