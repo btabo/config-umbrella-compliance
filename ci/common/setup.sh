@@ -5,6 +5,8 @@ if [[ "${PIPELINE_DEBUG:-0}" == 1 ]]; then
     set -x
 fi
 
+PIPELINE_TYPE=$1 #CI or PR
+
 COMMON_FOLDER="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 export APP_NAME=$(get_env app-name)
 if [ -f $COMMON_FOLDER/../$APP_NAME/setup.sh ]; then
@@ -49,9 +51,7 @@ else
 fi
 echo
 
-echo "ONE_PIPELINE_PATH=$ONE_PIPELINE_PATH"
-
-if [ "$ONE_PIPELINE_PATH" == "ci/.one-pipeline.yaml" ]; then
+if [ "$PIPELINE_TYPE" == "CI" ]; then
     # run pii
     echo "Running PII"
     echo
