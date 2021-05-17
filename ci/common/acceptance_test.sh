@@ -45,7 +45,9 @@ if [ "$SKIP_HEALTH_CHECK" == "true" ]; then
     echo "Skipping healthcheck on the component status endpoint"
 else
     http_code_test_url=$(curl -s -k -o /dev/null -w "%{http_code}" "${TEST_URL}")
-    while true; do
+    timeout=300 # time out after 5 min
+    end=$((SECONDS+$timeout))
+    while [ $SECONDS -lt $end ]; do 
         case $http_code_test_url in
             200)
                 echo "${TEST_URL} is successful"
@@ -64,6 +66,10 @@ else
                 ;;
         esac
     done
+     if [ $SECONDS -ge $end ]; then
+        echo "Timing out after $timeout seconds"
+        exit 1
+    fi
     echo
 fi
 
