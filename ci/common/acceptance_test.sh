@@ -44,18 +44,21 @@ fi
 if [ "$SKIP_HEALTH_CHECK" == "true" ]; then
     echo "Skipping healthcheck on the component status endpoint"
 else
-    echo "TEST_URL=$TEST_URL"
-    # 502 is Bad Gateway that can occurs during the interval while the POD is in creation
-    while [ $(curl -s -k -o /dev/null -w "%{http_code}" "$TEST_URL") == 502 ]; do
-        echo -n '.'
-        sleep 10
-    done
-    while [ $(curl -s -k -o /dev/null -w "%{http_code}" "$TEST_URL") == 501 ]; do
-        echo -n '.'
-        sleep 10
-    done
-
     http_code_test_url=$(curl -s -k -o /dev/null -w "%{http_code}" "${TEST_URL}")
+
+    # 502 is Bad Gateway that can occurs during the interval while the POD is in creation
+    while [ "$http_code_test_url" == "502" ]; do
+        echo "Got a 502 on $TEST_URL"
+        echo "Assuming the app is starting and retrying in 30s ..."
+        sleep 30
+        http_code_test_url=$(curl -s -k -o /dev/null -w "%{http_code}" "${TEST_URL}")
+    done
+    while [ "$http_code_test_url" == "501" ]; do
+        echo "Got a 501 on $TEST_URL"
+        echo "Assuming the app is starting and retrying in 30s ..."
+        sleep 30
+        http_code_test_url=$(curl -s -k -o /dev/null -w "%{http_code}" "${TEST_URL}")
+    done
     if [ "$http_code_test_url" == "200" ]; then
         echo "${TEST_URL} is successful"
     else
