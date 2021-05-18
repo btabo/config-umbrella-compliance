@@ -19,18 +19,6 @@ case $ENVIRONMENT in
         export TEST_PIPELINE_ID="000d42c0-a9f7-4d7d-86f8-01160f04d1fb"
         export TEST_PIPELINE_REGION="us-south"
     ;;
-    eu-de)
-        export PAUSE_BEFORE_TESTS=$(get_env PAUSE_BEFORE_TESTS "false")
-        export TEST_TOOLCHAIN_ID="62f17f5e-b4a9-44c4-b485-e0d6f3efc28c"
-        export TEST_PIPELINE_ID="e4f451b3-f832-4f48-b4d8-c7b086d447f0"
-        export TEST_PIPELINE_REGION="eu-de"
-    ;;
-    eu-fr2)
-        export PAUSE_BEFORE_TESTS=$(get_env PAUSE_BEFORE_TESTS "false")
-        export TEST_TOOLCHAIN_ID="62f17f5e-b4a9-44c4-b485-e0d6f3efc28c"
-        export TEST_PIPELINE_ID="ddb619d5-79a5-4de0-a4b0-e736d7253292"
-        export TEST_PIPELINE_REGION="eu-de"
-    ;;
     *)
         export PAUSE_BEFORE_TESTS=$(get_env PAUSE_BEFORE_TESTS "false")
         export TEST_TOOLCHAIN_ID="d5c0676c-55ed-4c25-b763-60b7afd64c87"
