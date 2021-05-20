@@ -26,6 +26,7 @@ case $ENVIRONMENT in
         export TEST_PIPELINE_REGION="us-south"
     ;;
 esac
+export IC_1308775_API_KEY=$(get_env IC_1308775_API_KEY "$(get_env otc_IC_1308775_API_KEY "")")
 export IC_1651315_API_KEY=$(get_env IC_1651315_API_KEY "$(get_env otc_IC_1651315_API_KEY "")")
 export IC_1561947_API_KEY=$(get_env IC_1561947_API_KEY "$(get_env otc_IC_1561947_API_KEY "")")
 export DEPLOYMENT_SLACK_CHANNEL_ID=$(get_env DEPLOYMENT_SLACK_CHANNEL_ID "none")
