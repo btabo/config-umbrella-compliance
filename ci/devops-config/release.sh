@@ -46,12 +46,15 @@ if [ "$HAS_DEV_CHANGES" == "true" ]; then
         --repo="$INVENTORY_REPO" \
         --environment="dev" \
         --name="config" \
-        --artifact="https://github.ibm.com/ids-env/devops-config/tree/${COMMIT_SHA}/environments" \
+        --artifact="environments-config-values" \
         --repository-url="${APP_REPO}" \
         --commit-sha="${COMMIT_SHA}" \
         --build-number="${BUILD_NUMBER}" \
         --pipeline-run-id="${PIPELINE_RUN_ID}" \
-        --version="$(get_env version)"
+        --version="$(date -u +%Y%m%d%H%M%Z)" \
+        --type="config" \
+        --sha256="${COMMIT_SHA}" \
+        --provenance="https://github.ibm.com/ids-env/devops-config/tree/${COMMIT_SHA}/environments"
 fi
 if [ "$HAS_STAGING_CHANGES" == "true" ]; then
     cocoa inventory add \
@@ -59,12 +62,15 @@ if [ "$HAS_STAGING_CHANGES" == "true" ]; then
         --repo="$INVENTORY_REPO" \
         --environment="staging" \
         --name="config" \
-        --artifact="https://github.ibm.com/ids-env/devops-config/tree/${COMMIT_SHA}/environments" \
+        --artifact="environments-config-values" \
         --repository-url="${APP_REPO}" \
         --commit-sha="${COMMIT_SHA}" \
         --build-number="${BUILD_NUMBER}" \
         --pipeline-run-id="${PIPELINE_RUN_ID}" \
-        --version="$(get_env version)"
+        --version="$(date -u +%Y%m%d%H%M%Z)" \
+        --type="config" \
+        --sha256="${COMMIT_SHA}" \
+        --provenance="https://github.ibm.com/ids-env/devops-config/tree/${COMMIT_SHA}/environments"
 fi
 echo "Inventory updated"
 echo

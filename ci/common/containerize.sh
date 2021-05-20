@@ -96,7 +96,7 @@ MANIFEST_SHA=$(docker inspect --format='{{index .RepoDigests 0}}' "$IMAGE" | awk
 echo "IMAGE=$IMAGE"
 echo "MANIFEST_SHA=$MANIFEST_SHA"
 echo "IMAGE_TAG=$IMAGE_TAG"
-save_artifact service type=image \
+save_artifact ${APP_NAME}_image type=image \
   name="${IMAGE}" \
   digest="${MANIFEST_SHA}" \
   tags="${IMAGE_TAG}"

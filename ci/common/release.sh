@@ -130,24 +130,23 @@ export APP_REPO_NAME=${APP_REPO_NAME%.git}
 echo "Adding to inventory"
 CHART_VERSION=$(yq r -j "k8s/$APP_NAME/Chart.yaml" | jq -r '.version')
 ARTIFACT="https://github.ibm.com/$CHART_ORG/$CHART_REPO/blob/master/charts/$APP_NAME-$CHART_VERSION.tgz"
-IMAGE_ARTIFACT="$(get_env artifact)"
+IMAGE_NAME="$(load_artifact ${APP_NAME}_image name)"
 SIGNATURE="$(get_env signature "")"
-if [ "$SIGNATURE" ]; then
-    # using TaaS worker
-    APP_ARTIFACTS='{ "signature": "'${SIGNATURE}'", "provenance": "'${IMAGE_ARTIFACT}'" }'
-else
-    # using regular worker, no signature
-    APP_ARTIFACTS='{ "provenance": "'${IMAGE_ARTIFACT}'" }'
-fi
+PROVENANCE="$(load_repo app-repo url)/tree/${COMMIT_SHA}"
+APP_ARTIFACTS='{ "image": "'${IMAGE_NAME}'" }'
 cocoa inventory add \
     --environment="${INVENTORY_BRANCH}" \
+    --name="${APP_NAME}" \
     --artifact="${ARTIFACT}" \
     --repository-url="${APP_REPO}" \
     --commit-sha="${COMMIT_SHA}" \
     --build-number="${BUILD_NUMBER}" \
     --pipeline-run-id="${PIPELINE_RUN_ID}" \
-    --version="$(get_env version)" \
-    --name="${APP_NAME}" \
-    --app-artifacts="${APP_ARTIFACTS}"
+    --version="$CHART_VERSION" \
+    --app-artifacts="${APP_ARTIFACTS}" \
+    --type="helm-chart" \
+    --sha256="${COMMIT_SHA}" \
+    --provenance="${PROVENANCE}" \
+    --signature="${SIGNATURE}"
 echo "Inventory updated"
 echo
