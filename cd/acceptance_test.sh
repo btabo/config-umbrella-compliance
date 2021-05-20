@@ -60,8 +60,24 @@ if [ "$PAUSE_BEFORE_TESTS" == "true" ]; then
     fi
 fi
 
+# collect build ids of each component for publishing insights test records 
+if [ "$ENVIRONMENT" != "eu-fr2" ]; then # not reachable from outside, tests are not run there
+    collectBuildIdsInFirstCluster BUILD_IDS $ENVIRONMENT
+fi
+
 # run tests
-runRegionTests status "$ENVIRONMENT" "$PIPELINE_RUN_ID" "$BUILD_NUMBER" "$TEST_TOOLCHAIN_ID" "$TEST_PIPELINE_ID" "$TEST_PIPELINE_REGION" $DEPLOYMENT_SLACK_CHANNEL_ID $DEPLOYMENT_SLACK_TOKEN
+PARAMS="{ \
+  \"region\": \"$ENVIRONMENT\", \
+  \"callerRunId\": \"$PIPELINE_RUN_ID\", \
+  \"buildNumber\": \"$BUILD_NUMBER\", \
+  \"testToolchainId\": \"$TEST_TOOLCHAIN_ID\", \
+  \"testPipelineId\": \"$TEST_PIPELINE_ID\", \
+  \"testPipelineRegion\": \"$TEST_PIPELINE_REGION\", \
+  \"deploymentSlackChannelId\": \"$DEPLOYMENT_SLACK_CHANNEL_ID\", \
+  \"deploymentSlackToken\": \"$DEPLOYMENT_SLACK_TOKEN\", \
+  \"buildIds\": \"$BUILD_IDS\" \
+}"
+runRegionTests status "$PARAMS"
 echo "Status of $ENVIRONMENT tests is $status"
 echo
 
