@@ -79,7 +79,7 @@ runRegionTests status "{ \
   \"deploymentSlackToken\": \"$DEPLOYMENT_SLACK_TOKEN\", \
   \"doiToolchainId\": \"$DOI_TOOLCHAIN_ID\", \
   \"doiAppName\": \"CD-Umbrella\", \
-  \"doiBuildId\": \"umbrella-$BUILD_NUMBER\", \
+  \"doiBuildId\": \"umbrella-$ENVIRONMENT-$BUILD_NUMBER\", \
   \"doiBuildIds\": \"$BUILD_IDS\" \
 }"
 echo "Status of $ENVIRONMENT tests is $status"
