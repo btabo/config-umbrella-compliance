@@ -26,6 +26,7 @@ case $ENVIRONMENT in
         export TEST_PIPELINE_REGION="us-south"
     ;;
 esac
+export DOI_TOOLCHAIN_ID=$(get_env doi-toolchain-id)
 export IC_1308775_API_KEY=$(get_env IC_1308775_API_KEY "$(get_env otc_IC_1308775_API_KEY "")")
 export IC_1651315_API_KEY=$(get_env IC_1651315_API_KEY "$(get_env otc_IC_1651315_API_KEY "")")
 export IC_1561947_API_KEY=$(get_env IC_1561947_API_KEY "$(get_env otc_IC_1561947_API_KEY "")")
@@ -61,13 +62,13 @@ if [ "$PAUSE_BEFORE_TESTS" == "true" ]; then
     fi
 fi
 
-# collect build ids of each component for publishing insights test records 
+# collect build ids of each umbrella component for publishing insights test records 
 if [ "$ENVIRONMENT" != "eu-fr2" ]; then # not reachable from outside, tests are not run there
-    collectBuildIdsInFirstCluster BUILD_IDS $ENVIRONMENT
+    collectUmbrellaBuildIds BUILD_IDS $ENVIRONMENT
 fi
 
 # run tests
-PARAMS="{ \
+runRegionTests status "{ \
   \"region\": \"$ENVIRONMENT\", \
   \"callerRunId\": \"$PIPELINE_RUN_ID\", \
   \"buildNumber\": \"$BUILD_NUMBER\", \
@@ -76,9 +77,11 @@ PARAMS="{ \
   \"testPipelineRegion\": \"$TEST_PIPELINE_REGION\", \
   \"deploymentSlackChannelId\": \"$DEPLOYMENT_SLACK_CHANNEL_ID\", \
   \"deploymentSlackToken\": \"$DEPLOYMENT_SLACK_TOKEN\", \
-  \"buildIds\": \"$BUILD_IDS\" \
+  \"doiToolchainId\": \"$DOI_TOOLCHAIN_ID\", \
+  \"doiAppName\": \"CD-Umbrella\", \
+  \"doiBuildId\": \"umbrella-$BUILD_NUMBER\", \
+  \"doiBuildIds\": \"$BUILD_IDS\" \
 }"
-runRegionTests status "$PARAMS"
 echo "Status of $ENVIRONMENT tests is $status"
 echo
 
