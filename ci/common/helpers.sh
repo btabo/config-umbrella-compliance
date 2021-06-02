@@ -3,21 +3,19 @@
 # Check compliance statuses. Return 1 if one of them is set and it is not "success"
 # Return 0 if all statuses are success, or if EMERGENCY is set to true.
 function checkComplianceStatuses() {
-    # uses undocumented env vars as workaround for https://github.ibm.com/one-pipeline/adoption-issues/issues/254
-    local allStatusVars="STAGE_TEST_STATUS CRA_VULNERABILITY_RESULTS_STATUS CIS_CHECK_VULNERABILITY_RESULTS_STATUS CRA_BOM_CHECK_RESULTS_STATUS BRANCH_PROTECTION_STATUS STAGE_SCAN_ARTIFACT_STATUS STAGE_SIGN_ARTIFACT_STATUS STAGE_ACCEPTANCE_TEST_STATUS"
-    for statusVar in $allStatusVars; do
-        local status=${!statusVar}
+    while read -r stage; do
+        local status=$(get_data result $stage)
         if [ "$status" ] && [ "$status" != "success" ]; then
             if [ "$(get_env EMERGENCY "")" == "true" ]; then
                 echo "$statusVar=$status. Ignoring since EMERGENCY == true."
                 echo
                 return 0
             else
-                echo "$statusVar=$status"
+                echo "$stage result is $status"
                 return 1
             fi
         fi
-    done
+    done < <(get_data result)
     return 0
 }
 
