@@ -7,7 +7,7 @@ function checkComplianceStatuses() {
         local status=$(get_data result $stage)
         if [ "$status" ] && [ "$status" != "success" ]; then
             if [ "$(get_env EMERGENCY "")" == "true" ]; then
-                echo "$statusVar=$status. Ignoring since EMERGENCY == true."
+                echo "$stage result is $status. Ignoring since EMERGENCY == true."
                 echo
                 return 0
             else
