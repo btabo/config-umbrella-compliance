@@ -115,11 +115,11 @@ if [ "$BRANCH" == "integration" ]; then
 else
   export INVENTORY_BRANCH="dev"
 fi
-INVENTORY_REPO=$(get_env TEMP_INVENTORY_REPO "$(get_env inventory-url)" )
-GHE_ORG=${INVENTORY_REPO%/*}
-export GHE_ORG=${GHE_ORG##*/}
-GHE_REPO=${INVENTORY_REPO##*/}
-export GHE_REPO=${GHE_REPO%.git}
+INVENTORY_REPO_URL=$(get_env TEMP_INVENTORY_REPO "$(get_env inventory-url)" )
+INVENTORY_ORG=${INVENTORY_REPO_URL%/*}
+export INVENTORY_ORG=${INVENTORY_ORG##*/}
+INVENTORY_REPO=${INVENTORY_REPO_URL##*/}
+export INVENTORY_REPO=${INVENTORY_REPO%.git}
 APP_REPO=$(load_repo app-repo url)
 APP_REPO_ORG=${APP_REPO%/*}
 export APP_REPO_ORG=${APP_REPO_ORG##*/}
@@ -135,6 +135,8 @@ SIGNATURE="$(get_env signature "")"
 PROVENANCE="$(load_repo app-repo url)/tree/${COMMIT_SHA}"
 APP_ARTIFACTS='{ "image": "'${IMAGE_NAME}'" }'
 cocoa inventory add \
+    --org="$INVENTORY_ORG" \
+    --repo="$INVENTORY_REPO" \
     --environment="${INVENTORY_BRANCH}" \
     --name="${APP_NAME}" \
     --artifact="${ARTIFACT}" \
@@ -150,3 +152,11 @@ cocoa inventory add \
     --signature="${SIGNATURE}"
 echo "Inventory updated"
 echo
+
+if [ "$BRANCH" == "integration" ]; then
+    # install gh cli
+    installGh
+
+    # promote to mon01
+    promoteInventory $IDS_USER $IDS_TOKEN $INVENTORY_ORG $INVENTORY_REPO staging mon01
+fi

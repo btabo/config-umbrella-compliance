@@ -27,8 +27,49 @@ function installCocoa() {
     cp cocoa-linux-* /usr/local/bin/cocoa	
     chmod +x /usr/local/bin/cocoa	
     export PATH="$PATH:/usr/local/bin/"	
-    echo "Done"	
+    echo "Done installing cocoa cli"	
     echo	
+}
+
+# Install gh cli
+function installGh() {
+    local ghVersion='1.10.3'
+    echo "Installing gh cli $ghVersion"	
+    curl -LsO https://github.com/cli/cli/releases/download/v${ghVersion}/gh_${ghVersion}_linux_amd64.tar.gz
+    tar xvf gh_${ghVersion}_linux_amd64.tar.gz
+    cp gh_${ghVersion}_linux_amd64/bin/gh /usr/local/bin/
+    chmod +x /usr/local/bin/gh
+    rm -rf gh_${ghVersion}_linux_amd64
+    rm -f gh_${ghVersion}_linux_amd64.tar.gz
+    echo "Done installing gh cli"
+    echo
+}
+
+# Promote source environment to target environment
+function promoteInventory() {
+    local ghUser=$1
+    local ghToken=$2
+    local inventoryOrg=$3
+    local inventoryRepo=$4
+    local sourceBranch=$5
+    local targetBranch=$6
+
+    echo "Promoting from $sourceBranch to $targetBranch"
+    echo "git clone https://$ghUser:***@github.ibm.com/$inventoryOrg/$inventoryRepo inventory"
+    git clone https://$ghUser:$ghToken@github.ibm.com/$inventoryOrg/$inventoryRepo inventory
+    echo "Done"
+    cd inventory
+    echo "gh auth login --hostname github.ibm.com --with-token <<< ***"
+    gh auth login --hostname github.ibm.com --with-token <<< $ghToken
+    echo "gh pr create --base $targetBranch --head $sourceBranch --title \"Promote $sourceBranch to $targetBranch\" --body-file .github/pull_request_template.md"
+    local pr=$(gh pr create --base $targetBranch --head $sourceBranch --title "Promote $sourceBranch to $targetBranch" --body-file .github/pull_request_template.md)
+    if [ -z "$pr" ]; then
+        echo "Failed to promote from $sourceBranch to $targetBranch"
+        exit 1
+    fi
+    echo "gh pr merge $pr --merge"
+    gh pr merge $pr --merge
+    echo "Done promoting from $sourceBranch to $targetBranch"
 }
 
 # Clone otc-deploy and devops-config if needed

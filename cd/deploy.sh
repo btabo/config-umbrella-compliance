@@ -26,7 +26,7 @@ case $ENVIRONMENT in
         export SKIP_CLUSTER_DANCE="true"
     ;;
     mon01)
-        export INVENTORY_BRANCH="staging"
+        export INVENTORY_BRANCH="mon01"
         export CHART_REPO="devops-int"
         export CHART_BRANCH="umbrella"
         export DOMAIN="$ENVIRONMENT.devops.cloud.ibm.com"

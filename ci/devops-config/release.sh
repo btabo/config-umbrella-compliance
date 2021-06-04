@@ -71,6 +71,12 @@ if [ "$HAS_STAGING_CHANGES" == "true" ]; then
         --type="config" \
         --sha256="${COMMIT_SHA}" \
         --provenance="https://github.ibm.com/ids-env/devops-config/tree/${COMMIT_SHA}/environments"
+
+    # install gh cli
+    installGh
+
+    # promote to mon01
+    promoteInventory "idsorg" $GHE_TOKEN $INVENTORY_ORG $INVENTORY_REPO staging mon01
 fi
 echo "Inventory updated"
 echo
