@@ -152,11 +152,3 @@ cocoa inventory add \
     --signature="${SIGNATURE}"
 echo "Inventory updated"
 echo
-
-if [ "$BRANCH" == "integration" ]; then
-    # install gh cli
-    installGh
-
-    # promote to mon01
-    promoteInventory $IDS_USER $IDS_TOKEN $INVENTORY_ORG $INVENTORY_REPO staging mon01
-fi
