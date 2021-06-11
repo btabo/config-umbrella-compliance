@@ -71,7 +71,8 @@ export DEPLOYMENT_SLACK_TOKEN=$(get_env DEPLOYMENT_SLACK_TOKEN "none")
 clusterLogin "$FIRST_CLUSTER" "otc"
 
 # check helm version
-. scripts//helpers/checkHelmVersion.sh
+export HELM_VERSION="2.14.3"
+. scripts/helpers/checkHelmVersion.sh
 
 # build and deploy from inventory
 buildAndDeployFromInventory $ENVIRONMENT $INVENTORY_URL $INVENTORY_BRANCH $DEPLOYMENT_SLACK_CHANNEL_ID $DEPLOYMENT_SLACK_TOKEN $SKIP_CLUSTER_DANCE $PAUSE_AFTER_FIRST_CLUSTER
