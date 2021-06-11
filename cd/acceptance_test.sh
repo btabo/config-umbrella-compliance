@@ -1,7 +1,15 @@
 #!/usr/bin/env bash
+source scripts/umbrella/helpers.sh
+
 export ENVIRONMENT=$(get_env ENVIRONMENT "$(get_env cluster-region)")
 case $ENVIRONMENT in
     dev)
+        export PAUSE_BEFORE_TESTS="false"
+        export TEST_TOOLCHAIN_ID="d5c0676c-55ed-4c25-b763-60b7afd64c87"
+        export TEST_PIPELINE_ID="000d42c0-a9f7-4d7d-86f8-01160f04d1fb"
+        export TEST_PIPELINE_REGION="us-south"
+    ;;
+    dev-gen2)
         export PAUSE_BEFORE_TESTS="false"
         export TEST_TOOLCHAIN_ID="d5c0676c-55ed-4c25-b763-60b7afd64c87"
         export TEST_PIPELINE_ID="000d42c0-a9f7-4d7d-86f8-01160f04d1fb"
@@ -33,8 +41,6 @@ export IC_1561947_API_KEY=$(get_env IC_1561947_API_KEY "$(get_env otc_IC_1561947
 export DEPLOYMENT_SLACK_CHANNEL_ID=$(get_env DEPLOYMENT_SLACK_CHANNEL_ID "none")
 export DEPLOYMENT_SLACK_TOKEN=$(get_env DEPLOYMENT_SLACK_TOKEN "none")
 export IDS_TOKEN=$(get_env git-token)
-
-. /umbrella/helpers.sh
 
 # optionally pause before running the tests
 if [ "$PAUSE_BEFORE_TESTS" == "true" ]; then

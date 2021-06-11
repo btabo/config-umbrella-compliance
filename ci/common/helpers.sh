@@ -35,12 +35,21 @@ function installCocoa() {
 function cloneOtcDeploy() {
     local gitToken=$(get_env git-token)
     if [ ! -d "otc-deploy" ]; then
+        echo git clone "https://$gitToken@github.ibm.com/org-ids/otc-deploy"
         git clone "https://$gitToken@github.ibm.com/org-ids/otc-deploy"
+        local rc=$?
+        if [ "$rc" != "0" ]; then
+            exit $rc
+        fi
         echo "Done"
         echo
     fi 
     if [ ! -d "devops-config" ]; then
+        echo git clone "https://$gitToken@github.ibm.com/ids-env/devops-config"
         git clone "https://$gitToken@github.ibm.com/ids-env/devops-config"
+        if [ "$rc" != "0" ]; then
+            exit $rc
+        fi
         echo "Done"
         echo
     fi 

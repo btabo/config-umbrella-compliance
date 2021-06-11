@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+source scripts/umbrella/helpers.sh
 
 # config
 export ENVIRONMENT=$(get_env ENVIRONMENT "$(get_env cluster-region)")
@@ -22,6 +23,15 @@ case $ENVIRONMENT in
         export CHART_BRANCH="umbrella"
         export DOMAIN="us-south.devops.dev.cloud.ibm.com"
         export FIRST_CLUSTER="otc-us-south-dev"
+        export PAUSE_AFTER_FIRST_CLUSTER="false"
+        export SKIP_CLUSTER_DANCE="true"
+    ;;
+    dev-gen2)
+        export INVENTORY_BRANCH="dev"
+        export CHART_REPO="devops-dev"
+        export CHART_BRANCH="umbrella-gen2"
+        export DOMAIN="us-south.devops.dev.cloud.ibm.com"
+        export FIRST_CLUSTER="otc-us-south-dev-gen2"
         export PAUSE_AFTER_FIRST_CLUSTER="false"
         export SKIP_CLUSTER_DANCE="true"
     ;;
@@ -57,17 +67,13 @@ export NR_1783376_API_KEY=$(get_env NR_1783376_API_KEY "")
 export OTC_REGISTRY_API_KEY=$(get_env IC_1416501_API_KEY "")
 export DEPLOYMENT_SLACK_TOKEN=$(get_env DEPLOYMENT_SLACK_TOKEN "none")
 
-# uncomment below if not using otc-deploy image
-# source ./ci/helpers.sh
-# cloneOtcDeploy
-# cp -r otc-deploy/k8s/scripts/* /
-# cp -r devops-config/otc-deploy/* /otc-config
-
 # login
-. /login/clusterLogin.sh "$FIRST_CLUSTER" "otc"
+clusterLogin "$FIRST_CLUSTER" "otc"
+
+# check helm version
+. scripts//helpers/checkHelmVersion.sh
 
 # build and deploy from inventory
-. /umbrella/helpers.sh
 buildAndDeployFromInventory $ENVIRONMENT $INVENTORY_URL $INVENTORY_BRANCH $DEPLOYMENT_SLACK_CHANNEL_ID $DEPLOYMENT_SLACK_TOKEN $SKIP_CLUSTER_DANCE $PAUSE_AFTER_FIRST_CLUSTER
 rc=$?
 case $rc in
