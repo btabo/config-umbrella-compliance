@@ -67,11 +67,14 @@ export NR_1783376_API_KEY=$(get_env NR_1783376_API_KEY "")
 export OTC_REGISTRY_API_KEY=$(get_env IC_1416501_API_KEY "")
 export DEPLOYMENT_SLACK_TOKEN=$(get_env DEPLOYMENT_SLACK_TOKEN "none")
 
+# debug
+cli showoutput jq --version
+
 # login
 clusterLogin "$FIRST_CLUSTER" "otc"
 
 # check helm version
-. scripts//helpers/checkHelmVersion.sh
+. scripts/helpers/checkHelmVersion.sh
 
 # build and deploy from inventory
 buildAndDeployFromInventory $ENVIRONMENT $INVENTORY_URL $INVENTORY_BRANCH $DEPLOYMENT_SLACK_CHANNEL_ID $DEPLOYMENT_SLACK_TOKEN $SKIP_CLUSTER_DANCE $PAUSE_AFTER_FIRST_CLUSTER
