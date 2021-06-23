@@ -85,7 +85,7 @@ echo cat .dockerignore
 cat .dockerignore
 
 echo "Building image $IMAGE with arguments $DOCKER_BUILD_ARGS"
-DOCKER_BUILD_ARGS="-t $IMAGE"
+DOCKER_BUILD_ARGS="-t $IMAGE --build-arg ARTIFACTORY_API_KEY=$(get_env otc_ARTIFACTORY_API_KEY) "
 DOCKER_BUILDKIT=1 docker build $DOCKER_BUILD_ARGS .
 docker push "$IMAGE"
 echo "Done"
