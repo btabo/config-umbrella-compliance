@@ -31,6 +31,20 @@ function installCocoa() {
     echo	
 }
 
+# Install gh cli
+function installGh() {
+    local ghVersion='1.10.3'
+    echo "Installing gh cli $ghVersion"
+    curl -LO https://github.com/cli/cli/releases/download/v${ghVersion}/gh_${ghVersion}_linux_amd64.tar.gz
+    tar xf gh_${ghVersion}_linux_amd64.tar.gz
+    cp gh_${ghVersion}_linux_amd64/bin/gh /usr/local/bin/
+    chmod +x /usr/local/bin/gh
+    rm -rf gh_${ghVersion}_linux_amd64
+    rm -f gh_${ghVersion}_linux_amd64.tar.gz
+    echo "Done installing gh cli"	
+    echo
+}
+
 # Clone otc-deploy and devops-config if needed
 function cloneOtcDeploy() {
     local gitToken=$(get_env git-token)

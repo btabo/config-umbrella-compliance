@@ -42,7 +42,6 @@ export ENV_NEW_RELIC_APP_NAME="topasshelmlintanddryrun"
 export ENV_TIAM_URL="topasshelmlintanddryrun"
 export ENV_PORT="topasshelmlintanddryrun"
 export GLOBAL_ENV_SECGRP="topasshelmlintanddryrun"
-export PIPELINE_KUBERNETES_CLUSTER_NAME="topasshelmlintanddryrun"
 
 # for building helm chart
 export IDS_USER="idsorg"
@@ -59,6 +58,7 @@ else
     export CHART_REPO="devops-dev"
     export PRUNE_CHART_REPO="true"
 fi
+export PIPELINE_KUBERNETES_CLUSTER_NAME="otc-dal12-test"
 export NAMESPACE="opentoolchain"
 export RELEASE_NAME="$APP_NAME"
 export MAJOR_VERSION="1"
@@ -79,7 +79,7 @@ fi
 
 echo "Cheking helm version"
 export IC_1308775_API_KEY=$(get_env otc_IC_1308775_API_KEY)
-. otc-deploy/k8s/scripts/login/clusterLogin.sh "otc-dal12-test" "otc"
+. otc-deploy/k8s/scripts/login/clusterLogin.sh "$PIPELINE_KUBERNETES_CLUSTER_NAME" "otc"
 . otc-deploy/k8s/scripts/helpers/checkHelmVersion.sh
 echo "Done checking helm version"
 echo
@@ -99,13 +99,15 @@ echo
 
 # build and publish component chart to solution repo
 echo "Publishing component chart to solution repo"
-chmod u+x otc-deploy/k8s/scripts/ci/publishHelmChart.sh
-./otc-deploy/k8s/scripts/ci/publishHelmChart.sh
-echo "Done publishing component chart"
+. otc-deploy/k8s/scripts/ci/publishHelmChart.sh
+echo "Done publishing component chart, commit is $CHART_REPO_COMMIT"
 echo
 
 # install cocoa cli	
-installCocoa	
+installCocoa
+
+# install gh cli
+installGh
 
 # for cocoa cli
 export GHE_TOKEN="$(get_env git-token)"
@@ -128,27 +130,71 @@ export APP_REPO_NAME=${APP_REPO_NAME%.git}
 
 # add to inventory
 echo "Adding to inventory"
+
+# setup temp branch so that inventory has 1 commit and thus triggers 1 CD pipeline run (dev and staging case)
+cli showoutput git clone -b $INVENTORY_BRANCH https://$IDS_USER:$IDS_TOKEN@github.ibm.com/org-ids/inventory-umbrella-compliance inventory
+echo "Done"
+cd inventory
+TEMP_BRANCH=${INVENTORY_BRANCH}_${PIPELINE_RUN_ID} 
+echo "git checkout -b $TEMP_BRANCH"
+git checkout -b $TEMP_BRANCH
+echo "git push origin $TEMP_BRANCH"
+git push origin $TEMP_BRANCH 
+cd ..
+
+# helm chart
 CHART_VERSION=$(yq r -j "k8s/$APP_NAME/Chart.yaml" | jq -r '.version')
-ARTIFACT="https://github.ibm.com/$CHART_ORG/$CHART_REPO/blob/master/charts/$APP_NAME-$CHART_VERSION.tgz"
-IMAGE_NAME="$(load_artifact ${APP_NAME}_image name)"
-SIGNATURE="$(get_env signature "")"
-PROVENANCE="$(load_repo app-repo url)/tree/${COMMIT_SHA}"
-APP_ARTIFACTS='{ "image": "'${IMAGE_NAME}'" }'
+ARTIFACT_URL="https://github.ibm.com/$CHART_ORG/$CHART_REPO/blob/master/charts/$APP_NAME-$CHART_VERSION.tgz"
 cocoa inventory add \
     --org="$INVENTORY_ORG" \
     --repo="$INVENTORY_REPO" \
-    --environment="${INVENTORY_BRANCH}" \
+    --environment="$TEMP_BRANCH" \
     --name="${APP_NAME}" \
-    --artifact="${ARTIFACT}" \
+    --artifact="${ARTIFACT_URL}" \
     --repository-url="${APP_REPO}" \
     --commit-sha="${COMMIT_SHA}" \
     --build-number="${BUILD_NUMBER}" \
     --pipeline-run-id="${PIPELINE_RUN_ID}" \
     --version="$CHART_VERSION" \
-    --app-artifacts="${APP_ARTIFACTS}" \
-    --type="helm-chart" \
+    --type="helm chart" \
+    --sha256="${CHART_REPO_COMMIT}" \
+    --provenance="${ARTIFACT_URL}" 
+
+# image
+ARTIFACT_URL="$(load_artifact ${APP_NAME}_image name)"
+ARTIFACT_SIGNATURE="$(get_env signature "")"
+PROVENANCE="$(load_repo app-repo url)/tree/${COMMIT_SHA}"
+cocoa inventory add \
+    --org="$INVENTORY_ORG" \
+    --repo="$INVENTORY_REPO" \
+    --environment="$TEMP_BRANCH" \
+    --name="${APP_NAME}_image" \
+    --artifact="${ARTIFACT_URL}" \
+    --repository-url="${APP_REPO}" \
+    --commit-sha="${COMMIT_SHA}" \
+    --build-number="${BUILD_NUMBER}" \
+    --pipeline-run-id="${PIPELINE_RUN_ID}" \
+    --version="$CHART_VERSION" \
+    --type="container image" \
     --sha256="${COMMIT_SHA}" \
-    --provenance="${PROVENANCE}" \
-    --signature="${SIGNATURE}"
+    --provenance="${ARTIFACT_URL}" \
+    --signature="${ARTIFACT_SIGNATURE}"
+
+# merge
+cd inventory
+echo "git pull origin $TEMP_BRANCH"
+git pull origin $TEMP_BRANCH
+echo "gh auth login --hostname github.ibm.com --with-token <<< ***"
+gh auth login --hostname github.ibm.com --with-token <<< $IDS_TOKEN
+echo "gh pr create --base $INVENTORY_BRANCH --head $TEMP_BRANCH --title \"$APP_NAME $CHART_VERSION\" --body \"Automatic merge $TEMP_BRANCH to $INVENTORY_BRANCH\""
+MERGE_PR=$(gh pr create --base $INVENTORY_BRANCH --head $TEMP_BRANCH --title "$APP_NAME $CHART_VERSION" --body "Automatic merge $TEMP_BRANCH to $INVENTORY_BRANCH")
+if [ -z "$MERGE_PR" ]; then
+    echo "Failed to merge $TEMP_BRANCH to $INVENTORY_BRANCH"
+    exit 1
+fi
+echo "gh pr merge $MERGE_PR --squash --delete-branch"
+gh pr merge $MERGE_PR --squash --delete-branch
+echo
+
 echo "Inventory updated"
 echo
