@@ -100,7 +100,7 @@ echo
 # build and publish component chart to solution repo
 echo "Publishing component chart to solution repo"
 . otc-deploy/k8s/scripts/ci/publishHelmChart.sh
-echo "Done publishing component chart, commit is $CHART_REPO_COMMIT"
+echo "Done publishing component chart"
 echo
 
 # install cocoa cli	
@@ -144,32 +144,32 @@ cd ..
 
 # helm chart
 CHART_VERSION=$(yq r -j "k8s/$APP_NAME/Chart.yaml" | jq -r '.version')
-ARTIFACT_URL="https://github.ibm.com/$CHART_ORG/$CHART_REPO/blob/master/charts/$APP_NAME-$CHART_VERSION.tgz"
+# TODO: change to CHART_NAME="$APP_NAME-$CHART_VERSION.tgz"
+CHART_NAME="https://github.ibm.com/$CHART_ORG/$CHART_REPO/blob/master/charts/$APP_NAME-$CHART_VERSION.tgz"
 cocoa inventory add \
     --org="$INVENTORY_ORG" \
     --repo="$INVENTORY_REPO" \
     --environment="$TEMP_BRANCH" \
     --name="${APP_NAME}" \
-    --artifact="${ARTIFACT_URL}" \
+    --artifact="${CHART_NAME}" \
     --repository-url="${APP_REPO}" \
     --commit-sha="${COMMIT_SHA}" \
     --build-number="${BUILD_NUMBER}" \
     --pipeline-run-id="${PIPELINE_RUN_ID}" \
     --version="$CHART_VERSION" \
     --type="helm chart" \
-    --sha256="${CHART_REPO_COMMIT}" \
-    --provenance="${ARTIFACT_URL}" 
+    --sha256="${ARTIFACTORY_SHA_256}" \
+    --provenance="${ARTIFACTORY_DOWNLOAD_URI}" 
 
 # image
-ARTIFACT_URL="$(load_artifact ${APP_NAME}_image name)"
-ARTIFACT_SIGNATURE="$(get_env signature "")"
-PROVENANCE="$(load_repo app-repo url)/tree/${COMMIT_SHA}"
+IMAGE_URL="$(load_artifact ${APP_NAME}_image name)"
+IMAGE_SIGNATURE="$(get_env signature "")"
 cocoa inventory add \
     --org="$INVENTORY_ORG" \
     --repo="$INVENTORY_REPO" \
     --environment="$TEMP_BRANCH" \
     --name="${APP_NAME}_image" \
-    --artifact="${ARTIFACT_URL}" \
+    --artifact="${IMAGE_URL}" \
     --repository-url="${APP_REPO}" \
     --commit-sha="${COMMIT_SHA}" \
     --build-number="${BUILD_NUMBER}" \
@@ -177,8 +177,8 @@ cocoa inventory add \
     --version="$CHART_VERSION" \
     --type="container image" \
     --sha256="${COMMIT_SHA}" \
-    --provenance="${ARTIFACT_URL}" \
-    --signature="${ARTIFACT_SIGNATURE}"
+    --provenance="${IMAGE_URL}" \
+    --signature="${IMAGE_SIGNATURE}"
 
 # merge
 cd inventory
