@@ -9,12 +9,6 @@ case $ENVIRONMENT in
         export TEST_PIPELINE_ID="000d42c0-a9f7-4d7d-86f8-01160f04d1fb"
         export TEST_PIPELINE_REGION="us-south"
     ;;
-    dev-gen2)
-        export PAUSE_BEFORE_TESTS="false"
-        export TEST_TOOLCHAIN_ID="d5c0676c-55ed-4c25-b763-60b7afd64c87"
-        export TEST_PIPELINE_ID="000d42c0-a9f7-4d7d-86f8-01160f04d1fb"
-        export TEST_PIPELINE_REGION="us-south"
-    ;;
     old-staging) # old staging
         export PAUSE_BEFORE_TESTS=$(get_env PAUSE_BEFORE_TESTS "false")
         export TEST_TOOLCHAIN_ID="d5c0676c-55ed-4c25-b763-60b7afd64c87"

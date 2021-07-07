@@ -26,15 +26,6 @@ case $ENVIRONMENT in
         export PAUSE_AFTER_FIRST_CLUSTER="false"
         export SKIP_CLUSTER_DANCE="true"
     ;;
-    dev-gen2)
-        export INVENTORY_BRANCH="dev"
-        export CHART_REPO="devops-dev"
-        export CHART_BRANCH="umbrella-gen2"
-        export DOMAIN="us-south.devops.dev.cloud.ibm.com"
-        export FIRST_CLUSTER="otc-us-south-dev-gen2"
-        export PAUSE_AFTER_FIRST_CLUSTER="false"
-        export SKIP_CLUSTER_DANCE="true"
-    ;;
     mon01)
         export INVENTORY_BRANCH="mon01"
         export CHART_REPO="devops-int"
