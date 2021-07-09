@@ -86,7 +86,7 @@ echo
 
 # compute BUILD_NUMBER
 echo "Finding a suitable BUILD_NUMBER for helm chart revision number"
-if [ "$BRANCH" == "dev" ]; then
+if [ "$BRANCH" == "master" ]; then
   DEV_OR_PROD="dev"
 else
   DEV_OR_PROD="prod"
