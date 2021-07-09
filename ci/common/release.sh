@@ -86,8 +86,13 @@ echo
 
 # compute BUILD_NUMBER
 echo "Finding a suitable BUILD_NUMBER for helm chart revision number"
+if [ "$BRANCH" == "dev" ]; then
+  DEV_OR_PROD="dev"
+else
+  DEV_OR_PROD="prod"
+fi
 . otc-deploy/k8s/scripts/artifactory/helpers.sh
-listArtifactsStartingWith PACKAGED_CHART_LIST "wcp-otc-common-team-helm-local" "dev/$APP_NAME" "$APP_NAME" $ARTIFACTORY_API_KEY
+listArtifactsStartingWith PACKAGED_CHART_LIST "wcp-otc-common-team-helm-local" "$DEV_OR_PROD/$APP_NAME" "$APP_NAME" $ARTIFACTORY_API_KEY
 NEXT_VERSION=$( echo "$PACKAGED_CHART_LIST" | tail -n -1 | grep -Eo '[0-9]+\.[0-9]+\.[0-9]+' | awk -F'.' -v OFS='.' '{$3=sprintf("%d",++$3)}7' )
 if [ -z "$NEXT_VERSION" ]; then
     NEXT_VERSION="$MAJOR_VERSION.$MINOR_VERSION.0"
@@ -145,8 +150,7 @@ cd ..
 
 # helm chart
 CHART_VERSION=$(yq r -j "k8s/$APP_NAME/Chart.yaml" | jq -r '.version')
-# TODO: change to CHART_NAME="$APP_NAME-$CHART_VERSION.tgz"
-CHART_NAME="https://github.ibm.com/$CHART_ORG/$CHART_REPO/blob/master/charts/$APP_NAME-$CHART_VERSION.tgz"
+CHART_NAME="$APP_NAME-$CHART_VERSION.tgz"
 cocoa inventory add \
     --org="$INVENTORY_ORG" \
     --repo="$INVENTORY_REPO" \
