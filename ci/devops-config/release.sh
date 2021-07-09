@@ -47,7 +47,7 @@ tar -zcf $TGZ_FILE_NAME ./devops-config/environments
 
 echo "Adding to inventory"
 if [ "$HAS_DEV_CHANGES" == "true" ]; then
-    uploadToArtifactory ARTIFACTORY_SHA_256 ARTIFACTORY_DOWNLOAD_URI "$TGZ_FILE_NAME" "wcp-otc-common-team-generic-local" "helm-charts/dev/$TGZ_FILE_NAME" $ARTIFACTORY_API_KEY    
+    uploadToArtifactory ARTIFACTORY_SHA_256 ARTIFACTORY_DOWNLOAD_URI "$TGZ_FILE_NAME" "wcp-otc-common-team-helm-local" "dev/config/$TGZ_FILE_NAME" $ARTIFACTORY_API_KEY    
     cocoa inventory add \
         --org="$INVENTORY_ORG" \
         --repo="$INVENTORY_REPO" \
@@ -64,7 +64,7 @@ if [ "$HAS_DEV_CHANGES" == "true" ]; then
         --provenance="${ARTIFACTORY_DOWNLOAD_URI}"
 fi
 if [ "$HAS_STAGING_CHANGES" == "true" ]; then
-    uploadToArtifactory ARTIFACTORY_SHA_256 ARTIFACTORY_DOWNLOAD_URI "$TGZ_FILE_NAME" "wcp-otc-common-team-generic-local" "helm-charts/prod/$TGZ_FILE_NAME" $ARTIFACTORY_API_KEY    
+    uploadToArtifactory ARTIFACTORY_SHA_256 ARTIFACTORY_DOWNLOAD_URI "$TGZ_FILE_NAME" "wcp-otc-common-team-helm-local" "prod/config/$TGZ_FILE_NAME" $ARTIFACTORY_API_KEY    
     cocoa inventory add \
         --org="$INVENTORY_ORG" \
         --repo="$INVENTORY_REPO" \
