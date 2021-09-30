@@ -86,10 +86,10 @@ echo
 
 # compute BUILD_NUMBER
 echo "Finding a suitable BUILD_NUMBER for helm chart revision number"
-if [ "$BRANCH" == "master" ]; then
-  DEV_OR_PROD="dev"
+if [ "$BRANCH" == "integration" ]; then
+  DEV_OR_PROD="prod" #chart will be used by prod, so put it in the prod folder on Artifactory
 else
-  DEV_OR_PROD="prod"
+  DEV_OR_PROD="dev"
 fi
 . otc-deploy/k8s/scripts/artifactory/helpers.sh
 listArtifactsStartingWith PACKAGED_CHART_LIST "wcp-otc-common-team-helm-local" "$DEV_OR_PROD/$APP_NAME" "$APP_NAME" $ARTIFACTORY_API_KEY
