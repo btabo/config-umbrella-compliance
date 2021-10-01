@@ -29,7 +29,7 @@ else
     export RELEASE_NAME=$APP_NAME
 fi
 export TIAM_URL="https://tiam.us-south.devops.dev.cloud.ibm.com/identity/v1"
-export DOMAIN="otc-dal12-test.us-south.containers.mybluemix.net"
+export DOMAIN="otc-dal10-test-ebc4c2329856a2fac5ef9072561d9bbf-0000.us-south.containers.appdomain.cloud"
 export _DEPLOY_url="https://$APP_NAME-$NAMESPACE.$DOMAIN"
 
 # Define the TEST_URL but let's the script 'acceptance_test_config.sh' being able to refine it

@@ -58,7 +58,7 @@ else
     export CHART_REPO="devops-dev"
     export PRUNE_CHART_REPO="true"
 fi
-export PIPELINE_KUBERNETES_CLUSTER_NAME="otc-dal12-test"
+export PIPELINE_KUBERNETES_CLUSTER_NAME="otc-dal10-test"
 export NAMESPACE="opentoolchain"
 export RELEASE_NAME="$APP_NAME"
 export MAJOR_VERSION="1"
@@ -78,7 +78,7 @@ if [ "$TEMP_CHART_REPO_URL" ]; then
 fi
 
 echo "Cheking helm version"
-export IC_1308775_API_KEY=$(get_env otc_IC_1308775_API_KEY)
+export IC_1651315_API_KEY=$(get_env otc_IC_1651315_API_KEY)
 . otc-deploy/k8s/scripts/login/clusterLogin.sh "$PIPELINE_KUBERNETES_CLUSTER_NAME" "otc"
 . otc-deploy/k8s/scripts/helpers/checkHelmVersion.sh
 echo "Done checking helm version"

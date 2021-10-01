@@ -31,9 +31,9 @@ export NUM_INSTANCES='1'
 export COMPONENT_NAME=$APP_NAME
 export IMAGE_TAG="latest" #unused ?
 export ROUTE=$APP_NAME-$NAMESPACE
-export DOMAIN="otc-dal12-test.us-south.containers.mybluemix.net"
+export DOMAIN="otc-dal10-test-ebc4c2329856a2fac5ef9072561d9bbf-0000.us-south.containers.appdomain.cloud"
 export GLOBAL_ENV_SECGRP="GRP3DEVS"
-export PIPELINE_KUBERNETES_CLUSTER_NAME="otc-dal12-test"
+export PIPELINE_KUBERNETES_CLUSTER_NAME="otc-dal10-test"
 export ENV_CLOUDANT_URL="https://3972fdbd-33a6-4174-a595-e54fb1a52e56-bluemix.cloudant.com/"
 export ENV_LOG4J_LEVEL="DEBUG"
 export ENV_services__otc_api="https://otc-api.us-south.devops.dev.cloud.ibm.com/api/v1"
@@ -52,8 +52,8 @@ fi
 cloneOtcDeploy
 
 # login and check helm version
-export IC_1308775_API_KEY=$(get_env otc_IC_1308775_API_KEY)
-. otc-deploy/k8s/scripts/login/clusterLogin.sh "otc-dal12-test" "otc"
+export IC_1651315_API_KEY=$(get_env otc_IC_1651315_API_KEY)
+. otc-deploy/k8s/scripts/login/clusterLogin.sh "otc-dal10-test" "otc"
 . otc-deploy/k8s/scripts/helpers/checkHelmVersion.sh
 
 # deploy to test cluster
