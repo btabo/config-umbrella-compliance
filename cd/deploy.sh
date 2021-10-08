@@ -58,6 +58,8 @@ export NR_1783376_API_KEY=$(get_env NR_1783376_API_KEY "")
 export OTC_REGISTRY_API_KEY=$(get_env IC_1416501_API_KEY "")
 export DEPLOYMENT_SLACK_TOKEN=$(get_env DEPLOYMENT_SLACK_TOKEN "none")
 export ARTIFACTORY_API_KEY=$(get_env ARTIFACTORY_API_KEY)
+export ROLE_ID=$(get_env ROLE_ID "")
+export SECRET_ID=$(get_env SECRET_ID "")
 
 # login
 clusterLogin "$FIRST_CLUSTER" "otc"
