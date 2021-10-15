@@ -93,7 +93,7 @@ else
 fi
 . otc-deploy/k8s/scripts/artifactory/helpers.sh
 listArtifactsStartingWith PACKAGED_CHART_LIST "wcp-otc-common-team-helm-local" "$DEV_OR_PROD/$APP_NAME" "$APP_NAME" $ARTIFACTORY_API_KEY
-NEXT_VERSION=$( echo "$PACKAGED_CHART_LIST" | tail -n -1 | grep -Eo '[0-9]+\.[0-9]+\.[0-9]+' | awk -F'.' -v OFS='.' '{$3=sprintf("%d",++$3)}7' )
+NEXT_VERSION=$( echo "$PACKAGED_CHART_LIST" | sort --version-sort | tail -n -1 | grep -Eo '[0-9]+\.[0-9]+\.[0-9]+' | awk -F'.' -v OFS='.' '{$3=sprintf("%d",++$3)}7' )
 if [ -z "$NEXT_VERSION" ]; then
     NEXT_VERSION="$MAJOR_VERSION.$MINOR_VERSION.0"
 fi
