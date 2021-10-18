@@ -4,7 +4,7 @@
 # none
 
 # config
-# none
+export SKIP_HEALTH_CHECK="true"
 
 # script file
 export ACCEPTANCE_TESTS_SCRIPT_FILE="scripts/tekton-test.sh"
