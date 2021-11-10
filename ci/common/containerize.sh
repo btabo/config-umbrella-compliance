@@ -9,7 +9,7 @@ COMMON_FOLDER="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 export APP_NAME=$(get_env app-name)
 if [ -f $COMMON_FOLDER/../$APP_NAME/containerize.sh ]; then
     source $COMMON_FOLDER/../$APP_NAME/containerize.sh
-    exit 0
+    exit $?
 fi
 
 REPO_FOLDER=$(load_repo app-repo path)
@@ -96,7 +96,7 @@ MANIFEST_SHA=$(docker inspect --format='{{index .RepoDigests 0}}' "$IMAGE" | awk
 echo "IMAGE=$IMAGE"
 echo "MANIFEST_SHA=$MANIFEST_SHA"
 echo "IMAGE_TAG=$IMAGE_TAG"
-save_artifact ${APP_NAME}_image type=image \
+save_artifact "app-image" type=image \
   name="${IMAGE}" \
   digest="${MANIFEST_SHA}" \
   tags="${IMAGE_TAG}"

@@ -9,7 +9,7 @@ COMMON_FOLDER="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 export APP_NAME=$(get_env app-name)
 if [ -f $COMMON_FOLDER/../$APP_NAME/test.sh ]; then
     source $COMMON_FOLDER/../$APP_NAME/test.sh
-    exit 0
+    exit $?
 fi
 
 source $COMMON_FOLDER/helpers.sh

@@ -9,7 +9,7 @@ COMMON_FOLDER="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 export APP_NAME=$(get_env app-name)
 if [ -f $COMMON_FOLDER/../$APP_NAME/release.sh ]; then
     source $COMMON_FOLDER/../$APP_NAME/release.sh
-    exit 0
+    exit $?
 fi
 
 source $COMMON_FOLDER/helpers.sh
@@ -167,7 +167,7 @@ cocoa inventory add \
     --provenance="${ARTIFACTORY_DOWNLOAD_URI}" 
 
 # image
-IMAGE_URL="$(load_artifact ${APP_NAME}_image name)"
+IMAGE_URL="$(load_artifact "app-image" name)"
 IMAGE_SIGNATURE="$(get_env signature "")"
 cocoa inventory add \
     --org="$INVENTORY_ORG" \

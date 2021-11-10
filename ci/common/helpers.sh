@@ -71,24 +71,25 @@ function cloneOtcDeploy() {
 
 # Remove otc-deploy, devos-config and otc-cf-deploy folders created by components
 function cleanupOtcDeploy() {
+    local root=${1:-$WORKSPACE/$REPO_FOLDER}
     echo "Cleaning up otc-deploy, devops-config, and otc-cf-deploy"
-    if [ -d "$WORKSPACE/$REPO_FOLDER/otc-deploy" ]; then
-        echo rm -rf "$WORKSPACE/$REPO_FOLDER/otc-deploy"
-        rm -rf "$WORKSPACE/$REPO_FOLDER/otc-deploy"
+    if [ -d "$root/otc-deploy" ]; then
+        echo rm -rf "$root/otc-deploy"
+        rm -rf "$root/otc-deploy"
     fi
-    if [ -d "$WORKSPACE/$REPO_FOLDER/devops-config" ]; then
-        echo rm -rf "$WORKSPACE/$REPO_FOLDER/devops-config"
-        rm -rf "$WORKSPACE/$REPO_FOLDER/devops-config"
+    if [ -d "$root/devops-config" ]; then
+        echo rm -rf "$root/devops-config"
+        rm -rf "$root/devops-config"
     fi
-    if [ -d "$WORKSPACE/$REPO_FOLDER/otc-cf-deploy" ]; then
-        echo rm -rf "$WORKSPACE/$REPO_FOLDER/otc-cf-deploy"
-        rm -rf "$WORKSPACE/$REPO_FOLDER/otc-cf-deploy"
+    if [ -d "$root/otc-cf-deploy" ]; then
+        echo rm -rf "$root/otc-cf-deploy"
+        rm -rf "$root/otc-cf-deploy"
     fi
     echo "Done"
     echo
-    echo ls -la $WORKSPACE/$REPO_FOLDER
-    ls -la $WORKSPACE/$REPO_FOLDER
-    echo
+    # echo ls -la $root
+    # ls -la $root
+    # echo
 }
 
 # Detect changes in devops-config between the 2 given commits for the given environment.
