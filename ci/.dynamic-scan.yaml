@@ -32,7 +32,7 @@ sign-artifact:
   image: wcp-compliance-automation-team-docker-local.artifactory.swg-devops.com/csso-image-sign@sha256:cb22e6ad6b3469155719f6bf09bde641208a1e349e5ccc09407204bb069f7b4e
   script: |
     #!/usr/bin/env bash
-    echo "Not signing artifact for dynamic scan pipeline"
+    source ./ci/common/sign_artifact.sh
 
 deploy:
   image: icr.io/continuous-delivery/pipeline/pipeline-base-image:2.12@sha256:ff4053b0bca784d6d105fee1d008cfb20db206011453071e86b69ca3fde706a4
@@ -58,4 +58,5 @@ release:
   image: icr.io/continuous-delivery/pipeline/pipeline-base-image:2.12@sha256:ff4053b0bca784d6d105fee1d008cfb20db206011453071e86b69ca3fde706a4
   script: |
     #!/usr/bin/env bash
-    echo "Not releasing for dynamic scan pipeline"
+    APP_NAME=$(get_env app-name)
+    source ./ci/common/release.sh "Nightly dynamic scan for $APP_NAME"

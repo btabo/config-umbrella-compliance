@@ -5,6 +5,8 @@ if [[ "${PIPELINE_DEBUG:-0}" == 1 ]]; then
     set -x
 fi
 
+COMMIT_TITLE="$1" #optional
+
 COMMON_FOLDER="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 export APP_NAME=$(get_env app-name)
 if [ -f $COMMON_FOLDER/../$APP_NAME/release.sh ]; then
@@ -191,8 +193,11 @@ echo "git pull origin $TEMP_BRANCH"
 git pull origin $TEMP_BRANCH
 echo "gh auth login --hostname github.ibm.com --with-token <<< ***"
 gh auth login --hostname github.ibm.com --with-token <<< $IDS_TOKEN
-echo "gh pr create --base $INVENTORY_BRANCH --head $TEMP_BRANCH --title \"$APP_NAME $CHART_VERSION\" --body \"Automatic merge $TEMP_BRANCH to $INVENTORY_BRANCH\""
-MERGE_PR=$(gh pr create --base $INVENTORY_BRANCH --head $TEMP_BRANCH --title "$APP_NAME $CHART_VERSION" --body "Automatic merge $TEMP_BRANCH to $INVENTORY_BRANCH")
+if [ -z "$COMMIT_TITLE" ]; then
+    COMMIT_TITLE="$APP_NAME $CHART_VERSION"
+fi
+echo "gh pr create --base $INVENTORY_BRANCH --head $TEMP_BRANCH --title \"$COMMIT_TITLE\" --body \"Automatic merge $TEMP_BRANCH to $INVENTORY_BRANCH\""
+MERGE_PR=$(gh pr create --base $INVENTORY_BRANCH --head $TEMP_BRANCH --title "$COMMIT_TITLE" --body "Automatic merge $TEMP_BRANCH to $INVENTORY_BRANCH")
 if [ -z "$MERGE_PR" ]; then
     echo "Failed to merge $TEMP_BRANCH to $INVENTORY_BRANCH"
     exit 1
