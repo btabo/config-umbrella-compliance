@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
 
-DYNAMIC_API_SCAN=$(get_env "dynamic-api-scan" "")
-if [ "$DYNAMIC_API_SCAN" != "true" ]; then
-    echo "Skipping dynamic scan since dynamic-api-scan is set to $DYNAMIC_API_SCAN"
+BRANCH=$(load_repo app-repo branch)
+DYNAMIC_API_SCAN_BRANCH=$(get_env "dynamic-api-scan-branch" "")
+if [ "$DYNAMIC_API_SCAN_BRANCH" != "$BRANCH" ]; then
+    echo "Skipping dynamic scan since dynamic-api-scan-branch is set to $DYNAMIC_API_SCAN_BRANCH"
     echo
     exit 0
 fi
