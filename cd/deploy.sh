@@ -25,6 +25,7 @@ case $ENVIRONMENT in
         export FIRST_CLUSTER="otc-us-south-dev"
         export PAUSE_AFTER_FIRST_CLUSTER="false"
         export SKIP_CLUSTER_DANCE="true"
+        export PAUSE_BEFORE_CLUSTER_DANCE="false"
     ;;
     mon01)
         export INVENTORY_BRANCH="mon01"
@@ -34,6 +35,7 @@ case $ENVIRONMENT in
         export FIRST_CLUSTER="otc-dal10-stage"
         export PAUSE_AFTER_FIRST_CLUSTER="false"
         export SKIP_CLUSTER_DANCE="true"
+        export PAUSE_BEFORE_CLUSTER_DANCE="false"
     ;;
     *)
         export INVENTORY_BRANCH=$(get_env target-environment)
@@ -43,6 +45,7 @@ case $ENVIRONMENT in
         export FIRST_CLUSTER=$(get_env cluster)
         export PAUSE_AFTER_FIRST_CLUSTER=$(get_env PAUSE_AFTER_FIRST_CLUSTER "")
         export SKIP_CLUSTER_DANCE=$(get_env SKIP_CLUSTER_DANCE "")
+        export PAUSE_BEFORE_CLUSTER_DANCE=$(get_env PAUSE_BEFORE_CLUSTER_DANCE "")
     ;;
 esac
 
@@ -68,7 +71,7 @@ clusterLogin "$FIRST_CLUSTER" "otc"
 . scripts/helpers/checkHelmVersion.sh
 
 # build and deploy from inventory
-buildAndDeployFromInventory $ENVIRONMENT $INVENTORY_URL $INVENTORY_BRANCH $ARTIFACTORY_API_KEY $DEPLOYMENT_SLACK_CHANNEL_ID $DEPLOYMENT_SLACK_TOKEN $SKIP_CLUSTER_DANCE $PAUSE_AFTER_FIRST_CLUSTER 
+buildAndDeployFromInventory $ENVIRONMENT $INVENTORY_URL $INVENTORY_BRANCH $ARTIFACTORY_API_KEY $DEPLOYMENT_SLACK_CHANNEL_ID $DEPLOYMENT_SLACK_TOKEN $SKIP_CLUSTER_DANCE $PAUSE_AFTER_FIRST_CLUSTER $PAUSE_BEFORE_CLUSTER_DANCE 
 rc=$?
 case $rc in
     1)
