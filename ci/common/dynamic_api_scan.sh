@@ -53,7 +53,7 @@ if [ "$SWAGGER_DEFINITION_FILE" ]; then
         export NAMESPACE="opentoolchain"
     fi
     export DOMAIN="otc-dal10-test-ebc4c2329856a2fac5ef9072561d9bbf-0000.us-south.containers.appdomain.cloud"
-    set_env target-application-server-url "https://$APP_NAME-$NAMESPACE.$DOMAIN/" # trailing slash to workaround https://github.ibm.com/owasp-tools/api-dynamic-scans/issues/129
+    set_env target-application-server-url "https://$APP_NAME-$NAMESPACE.$DOMAIN"
 
     # clone otc-deploy if needed
     cloneOtcDeploy
