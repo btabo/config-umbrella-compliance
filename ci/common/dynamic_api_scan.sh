@@ -52,8 +52,13 @@ if [ "$SWAGGER_DEFINITION_FILE" ]; then
     else
         export NAMESPACE="opentoolchain"
     fi
+    if [ -z $ROUTE ]; then
+        SUBDOMAIN=$APP_NAME-$NAMESPACE
+    else 
+        SUBDOMAIN=$ROUTE-$NAMESPACE
+    fi
     export DOMAIN="otc-dal10-test-ebc4c2329856a2fac5ef9072561d9bbf-0000.us-south.containers.appdomain.cloud"
-    set_env target-application-server-url "https://$APP_NAME-$NAMESPACE.$DOMAIN"
+    set_env target-application-server-url "https://$SUBDOMAIN.$DOMAIN"
 
     # clone otc-deploy if needed
     cloneOtcDeploy
