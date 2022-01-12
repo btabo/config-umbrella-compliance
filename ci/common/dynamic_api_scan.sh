@@ -35,9 +35,6 @@ if [ "$SWAGGER_DEFINITION_FILE" ]; then
     # Configure API scan. These can be set either directly in the pipeline as environment properties, or directly in
     # your script as shown below.
 
-    # - ibmcloud-api-key (required): An IAM API key for idsorg@us.ibm.com for the 1651315 - bmdevops.dev account. This is temporary and is used
-    #     to pull the ZAP scanner image until the images are made public.
-    set_env ibmcloud-api-key $(get_env otc_IC_1651315_API_KEY)
     # - swagger-definition-files (required): A comma-separated list of workspace-relative paths to swagger files describing your API to scan,
     #     e.g. "your-app/spec/swagger1.json,your-app/spec/swagger2.yml". JSON and YAML are supported, both Swagger 2.0 and OpenAPI.
     set_env swagger-definition-files "$REPO_FOLDER/${SWAGGER_DEFINITION_FILE}"
