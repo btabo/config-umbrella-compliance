@@ -2,7 +2,7 @@
 
 # secrets
 export OTC_API_BROKER_SECRET=$(get_env otc-toolint-broker_OTC_API_SECRET)
-export ENCRYPTION_KEY=$(get_env otc-toolint-broker_ENCRYPTION_KEY)
+export ENCRYPTION_KEY=$(get_env otc-toolint-broker-test_ENCRYPTION_KEY)
 export TOOLCHAIN_API_KEY=$(get_env otc-toolint-broker_TOOLCHAIN_API_KEY)
 unset CLOUDANT_IAM_API_KEY
 unset test_tiam_secret
