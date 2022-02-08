@@ -8,7 +8,7 @@ unset CLOUDANT_IAM_API_KEY
 unset test_tiam_secret
 
 # kms_info
-export ENABLE_KMS=false
+export ENABLE_KMS=true
 export KMS_REGION=dev
 export SENTINEL_KMS_URL=https://qa.us-south.kms.test.cloud.ibm.com
 export SENTINEL_KMS_INSTANCE_ID=fd3d423f-f1c3-4af0-bf40-569c60f22376
