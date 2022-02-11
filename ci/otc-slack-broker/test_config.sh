@@ -3,6 +3,7 @@
 # secrets
 export OTC_API_BROKER_SECRET=$(get_env otc-slack-broker_OTC_API_SECRET)
 export slack_webhook=$(get_env otc-slack-broker_slack_webhook)
+export archived_slack_webhook=$(get_env otc-slack-broker_archived_slack_webhook)
 export slack_user_token=$(get_env otc-slack-broker_slack_user_token)
 export ENCRYPTION_KEY=$(get_env otc-slack-broker_ENCRYPTION_KEY)
 
