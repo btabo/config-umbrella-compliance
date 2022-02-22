@@ -37,22 +37,44 @@ if [ -f "$COMMON_FOLDER/../$APP_NAME/test_config.sh" ]; then
     . $COMMON_FOLDER/../$APP_NAME/test_config.sh
 fi
 
-# run tests
-if [ "$TESTS_SCRIPT_FILE" ]; then
-    # clone otc-deploy as it is needed by some tests
-    cloneOtcDeploy
+function unitTests() {
+    if [ "$TESTS_SCRIPT_FILE" ]; then
+        # clone otc-deploy as it is needed by some tests
+        cloneOtcDeploy
 
-    chmod u+x $TESTS_SCRIPT_FILE
-    if ! $TESTS_SCRIPT_FILE; then
-        echo "Tests failed"
-        echo
-        cleanupOtcDeploy
-        exit 1
+        chmod u+x $TESTS_SCRIPT_FILE
+        if ! $TESTS_SCRIPT_FILE; then
+            echo "Tests failed"
+            echo
+            cleanupOtcDeploy
+            return 1
+        else
+            echo
+            cleanupOtcDeploy
+        fi
     else
+        echo "Skipping tests since TESTS_SCRIPT_FILE is not set"
         echo
-        cleanupOtcDeploy
     fi
-else
-    echo "Skipping tests since TESTS_SCRIPT_FILE is not set"
-    echo
+    return 0
+}
+
+# run unit tests
+exit_code=0
+unitTests || exit_code=$?
+
+# save status for new evidence collection
+status="success"
+if [ "$exit_code" != "0" ]; then
+    status="failure"
 fi
+
+# collect evidences, use unsupported tool-type format, this won't create any issues
+collect-evidence \
+    --tool-type "umbrella-unit-tests" \
+    --status "$status" \
+    --evidence-type "com.ibm.unit_tests" \
+    --asset-type "repo" \
+    --asset-key "app-repo"
+    
+exit $exit_code

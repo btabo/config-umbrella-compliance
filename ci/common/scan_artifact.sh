@@ -12,6 +12,6 @@ if [ -f $COMMON_FOLDER/../$APP_NAME/scan_artifact.sh ]; then
     exit $?
 fi
 
-echo "Using the built-in default script for checking VA scan results"
+echo "Using the built-in default script for scan artifact"
 echo
-${ONE_PIPELINE_PATH}/internal/container-registry/va_scan
+${ONE_PIPELINE_PATH}/internal/artifact-scan/scan
