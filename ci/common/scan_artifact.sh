@@ -14,4 +14,4 @@ fi
 
 echo "Using the built-in default script for scan artifact"
 echo
-${ONE_PIPELINE_PATH}/internal/artifact-scan/scan
+${ONE_PIPELINE_PATH}/internal/artifact-scan/scan # https://github.ibm.com/one-pipeline/compliance-baseimage/blob/master/one-pipeline/internal/artifact-scan/scan

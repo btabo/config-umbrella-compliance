@@ -14,4 +14,4 @@ fi
 
 echo "Using the built-in default script for CISO signing"
 echo
-${ONE_PIPELINE_PATH}/internal/ciso/sign_icr
+${ONE_PIPELINE_PATH}/internal/ciso/sign_icr # https://github.ibm.com/one-pipeline/compliance-baseimage/blob/master/one-pipeline/internal/ciso/sign_icr
