@@ -46,6 +46,7 @@ case $ENVIRONMENT in
         export PAUSE_AFTER_FIRST_CLUSTER=$(get_env PAUSE_AFTER_FIRST_CLUSTER "")
         export SKIP_CLUSTER_DANCE=$(get_env SKIP_CLUSTER_DANCE "")
         export PAUSE_BEFORE_CLUSTER_DANCE=$(get_env PAUSE_BEFORE_CLUSTER_DANCE "")
+        export EXTRA_CLUSTER_GROUP=$(get_env EXTRA_CLUSTER_GROUP "")
     ;;
 esac
 
@@ -57,6 +58,7 @@ export IC_1416501_API_KEY=$(get_env IC_1416501_API_KEY "$(get_env otc_IC_1416501
 export IC_1561947_API_KEY=$(get_env IC_1561947_API_KEY "")
 export IC_1562047_API_KEY=$(get_env IC_1562047_API_KEY "")
 export IC_2113612_API_KEY=$(get_env IC_2113612_API_KEY "")
+export IC_2277151_API_KEY=$(get_env IC_2277151_API_KEY "")
 export NR_1783376_API_KEY=$(get_env NR_1783376_API_KEY "")
 export OTC_REGISTRY_API_KEY=$(get_env IC_1416501_API_KEY "")
 export DEPLOYMENT_SLACK_TOKEN=$(get_env DEPLOYMENT_SLACK_TOKEN "none")
@@ -64,29 +66,52 @@ export ARTIFACTORY_API_KEY=$(get_env ARTIFACTORY_API_KEY)
 export ROLE_ID=$(get_env ROLE_ID "")
 export SECRET_ID=$(get_env SECRET_ID "")
 
-# login
-clusterLogin "$FIRST_CLUSTER" "otc"
+# build umbrella chart from inventory
+buildFromInventory $INVENTORY_URL $INVENTORY_BRANCH $ENVIRONMENT $ARTIFACTORY_API_KEY
 
-# check helm version
-. scripts/helpers/checkHelmVersion.sh
+function loginAndDeploy() {
+    local result=$1
+    local group=$2
 
-# build and deploy from inventory
-buildAndDeployFromInventory $ENVIRONMENT $INVENTORY_URL $INVENTORY_BRANCH $ARTIFACTORY_API_KEY $DEPLOYMENT_SLACK_CHANNEL_ID $DEPLOYMENT_SLACK_TOKEN $SKIP_CLUSTER_DANCE $PAUSE_AFTER_FIRST_CLUSTER $PAUSE_BEFORE_CLUSTER_DANCE 
-rc=$?
-case $rc in
-    1)
-        message="failed as ${ENVIRONMENT} is unknown."
-    ;;
-    2)
-        message="failed due to cluster health check failure."
-    ;;
-    3)
-        message="aborted by deployment coordinator."
-    ;;
-    *)
-        unset message
-    ;;
-esac
+    echo "Deploying umbrella to $group clusters"
+    echo
+
+    # login
+    clusterLogin "$FIRST_CLUSTER" "$group"
+
+    # check helm version
+    source scripts/helpers/checkHelmVersion.sh
+
+    # deploy
+    deployUmbrella $ENVIRONMENT $DEPLOYMENT_SLACK_CHANNEL_ID $DEPLOYMENT_SLACK_TOKEN $SKIP_CLUSTER_DANCE $PAUSE_AFTER_FIRST_CLUSTER $PAUSE_BEFORE_CLUSTER_DANCE $group
+    rc=$?
+    case $rc in
+        1)
+            message="failed as ${ENVIRONMENT} is unknown for ${group} clusters."
+        ;;
+        2)
+            message="failed due to cluster health check failure."
+        ;;
+        3)
+            message="aborted by deployment coordinator."
+        ;;
+        *)
+            unset message
+        ;;
+    esac
+
+    echo "Done deploying umbrella to $group clusters"
+    echo
+
+    eval "$result=$message"
+}
+
+loginAndDeploy message "otc"
+
+if [ -z "$message" ] && [ "$EXTRA_CLUSTER_GROUP" ]; then
+    loginAndDeploy message "$EXTRA_CLUSTER_GROUP"
+fi
+
 if [ "$message" ]; then
     if [ "$DEPLOYMENT_SLACK_CHANNEL_ID" != "none" ]; then
         echo "Posting slack message: Umbrella deployment to ${ENVIRONMENT} $message"

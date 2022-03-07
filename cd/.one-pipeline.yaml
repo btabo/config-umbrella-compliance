@@ -10,7 +10,7 @@ setup:
     source ./cd/setup.sh
     
 deploy:
-  image: us.icr.io/otc-ops/otc-deploy:dev@sha256:c9e41d1ae8036343deb3f88e5e5f6f381f3af7a1ef3183dac5e57c9503d38513
+  image: icr.io/continuous-delivery/pipeline/pipeline-base-image:2.12@sha256:ff4053b0bca784d6d105fee1d008cfb20db206011453071e86b69ca3fde706a4
   script: |
     #!/usr/bin/env bash
     source ./cd/deploy.sh
