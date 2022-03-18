@@ -1,5 +1,12 @@
 #!/usr/bin/env bash
-source ./ci/common/helpers.sh
+if [[ "${PIPELINE_DEBUG:-0}" == 1 ]]; then
+    trap env EXIT
+    env | sort
+    set -x
+fi
+
+CD_FOLDER="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+source $CD_FOLDER/../helpers.sh
 
 # debug
 echo "kubectl version"

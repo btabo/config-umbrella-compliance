@@ -5,17 +5,24 @@ if [[ "${PIPELINE_DEBUG:-0}" == 1 ]]; then
     set -x
 fi
 
-PIPELINE_TYPE=$1 #CI or PR
+PIPELINE_TYPE=$1 #CI, PR, or CC
+export APP_NAME=$2
+REPO_FOLDER=$3
 
 COMMON_FOLDER="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-export APP_NAME=$(get_env app-name)
+source $COMMON_FOLDER/../../helpers.sh
+
+if [ -z $APP_NAME ]; then
+    export APP_NAME=$(get_env app-name)
+fi
 if [ -f $COMMON_FOLDER/../$APP_NAME/setup.sh ]; then
     source $COMMON_FOLDER/../$APP_NAME/setup.sh
     exit $?
 fi
 
-source $COMMON_FOLDER/helpers.sh
-REPO_FOLDER=$(load_repo app-repo path)
+if [ -z $REPO_FOLDER ]; then
+    REPO_FOLDER=$(load_repo app-repo path)
+fi
 cd $WORKSPACE/$REPO_FOLDER
 
 GH_TOKEN=$(get_env git-token)
@@ -37,6 +44,11 @@ export ARTIFACTORY_ID=idsorg@us.ibm.com
 # secrets and config specific to the component
 if [ -f "$COMMON_FOLDER/../$APP_NAME/setup_config.sh" ]; then
     . $COMMON_FOLDER/../$APP_NAME/setup_config.sh
+fi
+
+# save cra-custom-script-path
+if [ "$CRA_CUSTOM_SCRIPT_PATH" ]; then
+    set_env cra-custom-script-path $CRA_CUSTOM_SCRIPT_PATH
 fi
 
 # run setup

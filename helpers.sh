@@ -138,3 +138,33 @@ function detectDevopsConfigChange() {
 
     eval "$result=$hasChanges"
 }
+
+# Loop through all applications using the list_repos helper from one-pipeline
+# and for each one, run the given command with the app-name, repository path and branch (as returned by load_repo) as arguments
+function loopThroughApps() {
+    local command=$1
+
+    declare -A repos
+    local repoList=$(list_repos)
+    for repo in $repoList; do
+        inventory_entry=$(load_repo "$repo" inventory-entry)
+        repos[$inventory_entry]=$repo
+    done
+
+    local artifacts=$(list_artifacts)
+    for artifact in $artifacts; do
+        inventory_entry=$(load_artifact "$artifact" inventory-entry)
+        if [[ "$inventory_entry" != *"_image" ]]; then
+            continue
+        fi
+        app_name=${inventory_entry%%_image*}
+        repo=${repos[$inventory_entry]}
+        repo_path=$(load_repo "$repo" path)
+        branch=$(load_repo "$repo" branch)
+        echo "Processing $app_name"
+        echo
+        $command "$app_name" "$repo_path" "$branch" "$artifact"
+        echo "Done processing $app_name"
+        echo
+    done
+}

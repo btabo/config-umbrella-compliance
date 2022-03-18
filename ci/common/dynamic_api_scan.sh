@@ -1,6 +1,21 @@
 #!/usr/bin/env bash
+if [[ "${PIPELINE_DEBUG:-0}" == 1 ]]; then
+    trap env EXIT
+    env | sort
+    set -x
+fi
 
-BRANCH=$(load_repo app-repo branch)
+export APP_NAME=$1
+REPO_FOLDER=$2
+BRANCH=$3
+ARTIFACT=$4
+
+COMMON_FOLDER="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+source $COMMON_FOLDER/../../helpers.sh
+
+if [ -z $BRANCH ]; then
+    BRANCH=$(load_repo app-repo branch)
+fi
 DYNAMIC_API_SCAN_BRANCH=$(get_env "dynamic-api-scan-branch" "")
 if [ "$DYNAMIC_API_SCAN_BRANCH" != "$BRANCH" ]; then
     echo "Skipping dynamic scan since dynamic-api-scan-branch is set to $DYNAMIC_API_SCAN_BRANCH"
@@ -8,21 +23,17 @@ if [ "$DYNAMIC_API_SCAN_BRANCH" != "$BRANCH" ]; then
     exit 0
 fi
 
-if [[ "${PIPELINE_DEBUG:-0}" == 1 ]]; then
-    trap env EXIT
-    env | sort
-    set -x
+if [ -z $APP_NAME ]; then
+    export APP_NAME=$(get_env app-name)
 fi
-
-COMMON_FOLDER="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-export APP_NAME=$(get_env app-name)
 if [ -f $COMMON_FOLDER/../$APP_NAME/dynamic_api_scan.sh ]; then
     source $COMMON_FOLDER/../$APP_NAME/dynamic_api_scan.sh
     exit $?
 fi
 
-source $COMMON_FOLDER/helpers.sh
-REPO_FOLDER=$(load_repo app-repo path)
+if [ -z $REPO_FOLDER ]; then
+    REPO_FOLDER=$(load_repo app-repo path)
+fi
 cd $WORKSPACE
 
 # secrets and config specific to the component
@@ -30,7 +41,7 @@ if [ -f "$COMMON_FOLDER/../$APP_NAME/dynamic_api_scan_config.sh" ]; then
     . $COMMON_FOLDER/../$APP_NAME/dynamic_api_scan_config.sh
 fi
 
-# run tests
+# run scan
 if [ "$SWAGGER_DEFINITION_FILE" ]; then
     # Configure API scan. These can be set either directly in the pipeline as environment properties, or directly in
     # your script as shown below.
@@ -44,7 +55,7 @@ if [ "$SWAGGER_DEFINITION_FILE" ]; then
     set_env target-api-key "$(get_env otc_SWAGGER_API_KEY)"
     # - target-application-server-url (optional): Base url of the app to scan, e.g. "https://devops-api.devops.dev.cloud.ibm.com" if not provided,
     #     defaults to a URL to the host or server specified in the first swagger file listed in swagger-definition-files.
-    if [ "$(load_repo app-repo branch)" == "integration" ]; then
+    if [ "$BRANCH" == "integration" ]; then
         export NAMESPACE="otc-int"
     else
         export NAMESPACE="opentoolchain"
@@ -56,6 +67,10 @@ if [ "$SWAGGER_DEFINITION_FILE" ]; then
     fi
     export DOMAIN="otc-dal10-test-ebc4c2329856a2fac5ef9072561d9bbf-0000.us-south.containers.appdomain.cloud"
     set_env target-application-server-url "https://$SUBDOMAIN.$DOMAIN"
+    # - zap-artifact (optional): The artifact (string) that is scanned and that will get results associated with (using save_result and save_artifact)
+    if [ $ARTIFACT ]; then
+        set_env zap-artifact $ARTIFACT
+    fi
 
     # clone otc-deploy if needed
     cloneOtcDeploy

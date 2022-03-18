@@ -6,12 +6,18 @@ if [[ "${PIPELINE_DEBUG:-0}" == 1 ]]; then
 fi
 
 COMMON_FOLDER="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-export APP_NAME=$(get_env app-name)
+
+export APP_NAME=$1
+if [ -z $APP_NAME ]; then
+    export APP_NAME=$(get_env app-name)
+fi
+
 if [ -f $COMMON_FOLDER/../$APP_NAME/scan_artifact.sh ]; then
     source $COMMON_FOLDER/../$APP_NAME/scan_artifact.sh
     exit $?
 fi
 
-echo "Using the built-in default script for scan artifact"
+echo "Using the built-in default script for scan artifact /opt/commons/scan-artifact/scan.sh"
 echo
-${ONE_PIPELINE_PATH}/internal/artifact-scan/scan # https://github.ibm.com/one-pipeline/compliance-baseimage/blob/master/one-pipeline/internal/artifact-scan/scan
+/opt/commons/scan-artifact/scan.sh # https://github.ibm.com/open-toolchain/compliance-commons/blob/master/scan-artifact/scan.sh
+echo

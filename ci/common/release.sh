@@ -8,13 +8,13 @@ fi
 COMMIT_TITLE="$1" #optional
 
 COMMON_FOLDER="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+source $COMMON_FOLDER/../../helpers.sh
+
 export APP_NAME=$(get_env app-name)
 if [ -f $COMMON_FOLDER/../$APP_NAME/release.sh ]; then
     source $COMMON_FOLDER/../$APP_NAME/release.sh
     exit $?
 fi
-
-source $COMMON_FOLDER/helpers.sh
 
 # do not add to inventory or publish component chart if it cannot be deployed
 if ! checkComplianceStatuses; then
@@ -153,39 +153,45 @@ cd ..
 # helm chart
 CHART_VERSION=$(yq r -j "k8s/$APP_NAME/Chart.yaml" | jq -r '.version')
 CHART_NAME="$APP_NAME-$CHART_VERSION.tgz"
+
+# image
+IMAGE_URL="$(load_artifact "app-image" name)"
+IMAGE_SIGNATURE="$(get_env signature "")"
+DIGEST="$(load_artifact "app-image" digest)"
+
+# temporary add 2 entries (for backward compatibility)
 cocoa inventory add \
     --org="$INVENTORY_ORG" \
     --repo="$INVENTORY_REPO" \
     --environment="$TEMP_BRANCH" \
     --name="${APP_NAME}" \
-    --artifact="${CHART_NAME}" \
+    --artifact="${IMAGE_URL}@${DIGEST}" \
     --repository-url="${APP_REPO}" \
     --commit-sha="${COMMIT_SHA}" \
     --build-number="${BUILD_NUMBER}" \
     --pipeline-run-id="${PIPELINE_RUN_ID}" \
     --version="$CHART_VERSION" \
-    --type="helm chart" \
-    --sha256="${ARTIFACTORY_SHA_256}" \
-    --provenance="${ARTIFACTORY_DOWNLOAD_URI}" 
-
-# image
-IMAGE_URL="$(load_artifact "app-image" name)"
-IMAGE_SIGNATURE="$(get_env signature "")"
+    --type="image" \
+    --sha256="${DIGEST}" \
+    --provenance="${IMAGE_URL}@${DIGEST}" \
+    --signature="${IMAGE_SIGNATURE}" \
+    --app-artifacts='{"helm_chart_url": "'"${ARTIFACTORY_DOWNLOAD_URI}"'", "helm_chart_sha256": "'"${ARTIFACTORY_SHA_256}"'"}'
 cocoa inventory add \
     --org="$INVENTORY_ORG" \
     --repo="$INVENTORY_REPO" \
     --environment="$TEMP_BRANCH" \
     --name="${APP_NAME}_image" \
-    --artifact="${IMAGE_URL}" \
+    --artifact="${IMAGE_URL}@${DIGEST}" \
     --repository-url="${APP_REPO}" \
     --commit-sha="${COMMIT_SHA}" \
     --build-number="${BUILD_NUMBER}" \
     --pipeline-run-id="${PIPELINE_RUN_ID}" \
     --version="$CHART_VERSION" \
-    --type="container image" \
-    --sha256="${COMMIT_SHA}" \
-    --provenance="${IMAGE_URL}" \
-    --signature="${IMAGE_SIGNATURE}"
+    --type="image" \
+    --sha256="${DIGEST}" \
+    --provenance="${IMAGE_URL}@${DIGEST}" \
+    --signature="${IMAGE_SIGNATURE}" \
+    --app-artifacts='{"helm_chart_url": "'"${ARTIFACTORY_DOWNLOAD_URI}"'", "helm_chart_sha256": "'"${ARTIFACTORY_SHA_256}"'"}'
 
 # merge
 cd inventory
