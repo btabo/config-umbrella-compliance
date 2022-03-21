@@ -148,6 +148,9 @@ function loopThroughApps() {
     local repoList=$(list_repos)
     for repo in $repoList; do
         inventory_entry=$(load_repo "$repo" inventory-entry)
+        if [[ "$inventory_entry" != *"_image" ]]; then
+            continue
+        fi
         repos[$inventory_entry]=$repo
     done
 
