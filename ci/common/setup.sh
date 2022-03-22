@@ -46,8 +46,8 @@ if [ -f "$COMMON_FOLDER/../$APP_NAME/setup_config.sh" ]; then
     . $COMMON_FOLDER/../$APP_NAME/setup_config.sh
 fi
 
-# save cra-custom-script-path
-if [ "$CRA_CUSTOM_SCRIPT_PATH" ]; then
+# save cra-custom-script-path (if not running CC, see ./cc/setup.sh)
+if [ "$CRA_CUSTOM_SCRIPT_PATH" ] && [ "$PIPELINE_TYPE" != "CC" ]; then
     set_env cra-custom-script-path $CRA_CUSTOM_SCRIPT_PATH
 fi
 
