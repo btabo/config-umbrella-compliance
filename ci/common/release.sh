@@ -159,28 +159,12 @@ IMAGE_URL="$(load_artifact "app-image" name)"
 IMAGE_SIGNATURE="$(get_env signature "")"
 DIGEST="$(load_artifact "app-image" digest)"
 
-# temporary add 2 entries (for backward compatibility)
+# inventory update
 cocoa inventory add \
     --org="$INVENTORY_ORG" \
     --repo="$INVENTORY_REPO" \
     --environment="$TEMP_BRANCH" \
     --name="${APP_NAME}" \
-    --artifact="${IMAGE_URL}@${DIGEST}" \
-    --repository-url="${APP_REPO}" \
-    --commit-sha="${COMMIT_SHA}" \
-    --build-number="${BUILD_NUMBER}" \
-    --pipeline-run-id="${PIPELINE_RUN_ID}" \
-    --version="$CHART_VERSION" \
-    --type="image" \
-    --sha256="${DIGEST}" \
-    --provenance="${IMAGE_URL}@${DIGEST}" \
-    --signature="${IMAGE_SIGNATURE}" \
-    --app-artifacts='{"helm_chart_url": "'"${ARTIFACTORY_DOWNLOAD_URI}"'", "helm_chart_sha256": "'"${ARTIFACTORY_SHA_256}"'"}'
-cocoa inventory add \
-    --org="$INVENTORY_ORG" \
-    --repo="$INVENTORY_REPO" \
-    --environment="$TEMP_BRANCH" \
-    --name="${APP_NAME}_image" \
     --artifact="${IMAGE_URL}@${DIGEST}" \
     --repository-url="${APP_REPO}" \
     --commit-sha="${COMMIT_SHA}" \

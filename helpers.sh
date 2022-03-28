@@ -148,19 +148,13 @@ function loopThroughApps() {
     local repoList=$(list_repos)
     for repo in $repoList; do
         inventory_entry=$(load_repo "$repo" inventory-entry)
-        if [[ "$inventory_entry" != *"_image" ]]; then
-            continue
-        fi
         repos[$inventory_entry]=$repo
     done
 
     local artifacts=$(list_artifacts)
     for artifact in $artifacts; do
         inventory_entry=$(load_artifact "$artifact" inventory-entry)
-        if [[ "$inventory_entry" != *"_image" ]]; then
-            continue
-        fi
-        app_name=${inventory_entry%%_image*}
+        app_name=${inventory_entry}
         repo=${repos[$inventory_entry]}
         repo_path=$(load_repo "$repo" path)
         branch=$(load_repo "$repo" branch)
