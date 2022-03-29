@@ -16,33 +16,41 @@ source $COMMON_FOLDER/../../helpers.sh
 if [ -z $BRANCH ]; then
     BRANCH=$(load_repo app-repo branch)
 fi
-DYNAMIC_API_SCAN_BRANCH=$(get_env "dynamic-api-scan-branch" "")
-if [ "$DYNAMIC_API_SCAN_BRANCH" != "$BRANCH" ]; then
-    echo "Skipping dynamic scan since dynamic-api-scan-branch is set to $DYNAMIC_API_SCAN_BRANCH"
-    echo
-    exit 0
-fi
 
-if [ -z $APP_NAME ]; then
-    export APP_NAME=$(get_env app-name)
-fi
-if [ -f $COMMON_FOLDER/../$APP_NAME/dynamic_api_scan.sh ]; then
-    source $COMMON_FOLDER/../$APP_NAME/dynamic_api_scan.sh
-    exit $?
-fi
+function ciDynamicApiScan() {
+    DYNAMIC_API_SCAN_BRANCH=$(get_env "dynamic-api-scan-branch" "")
+    if [ "$DYNAMIC_API_SCAN_BRANCH" != "$BRANCH" ]; then
+        echo "Skipping ZAP dynamic API scan since dynamic-api-scan-branch is set to $DYNAMIC_API_SCAN_BRANCH"
+        echo
+        return 0
+    fi
 
-if [ -z $REPO_FOLDER ]; then
-    REPO_FOLDER=$(load_repo app-repo path)
-fi
-cd $WORKSPACE
+    if [ -z $APP_NAME ]; then
+        export APP_NAME=$(get_env app-name)
+    fi
+    if [ -f $COMMON_FOLDER/../$APP_NAME/dynamic_api_scan.sh ]; then
+        source $COMMON_FOLDER/../$APP_NAME/dynamic_api_scan.sh
+        return $?
+    fi
 
-# secrets and config specific to the component
-if [ -f "$COMMON_FOLDER/../$APP_NAME/dynamic_api_scan_config.sh" ]; then
-    . $COMMON_FOLDER/../$APP_NAME/dynamic_api_scan_config.sh
-fi
+    if [ -z $REPO_FOLDER ]; then
+        REPO_FOLDER=$(load_repo app-repo path)
+    fi
+    cd $WORKSPACE
 
-# run scan
-if [ "$SWAGGER_DEFINITION_FILE" ]; then
+    # secrets and config specific to the component
+    if [ -f "$COMMON_FOLDER/../$APP_NAME/dynamic_api_scan_config.sh" ]; then
+        . $COMMON_FOLDER/../$APP_NAME/dynamic_api_scan_config.sh
+    fi
+
+    if [ -z "$SWAGGER_DEFINITION_FILE" ]; then
+        echo "Skipping ZAP dynamic API scan since SWAGGER_DEFINITION_FILE is not set"
+        echo
+        return 0
+    fi
+
+    # run scan
+
     # Configure API scan. These can be set either directly in the pipeline as environment properties, or directly in
     # your script as shown below.
 
@@ -81,7 +89,6 @@ if [ "$SWAGGER_DEFINITION_FILE" ]; then
     echo "Done running ZAP dynamic API scan for ${APP_NAME}"
     echo
     cleanupOtcDeploy $WORKSPACE
-else
-    echo "Skipping ZAP dynamic API scan since SWAGGER_DEFINITION_FILE is not set"
-    echo
-fi
+}
+
+ciDynamicApiScan

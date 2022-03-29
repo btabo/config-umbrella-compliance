@@ -151,15 +151,25 @@ function loopThroughApps() {
         repos[$inventory_entry]=$repo
     done
 
+    local environment_branch=$(get_env "environment-branch" "")
     local artifacts=$(list_artifacts)
     for artifact in $artifacts; do
-        inventory_entry=$(load_artifact "$artifact" inventory-entry)
-        app_name=${inventory_entry}
-        repo=${repos[$inventory_entry]}
-        repo_path=$(load_repo "$repo" path)
-        branch=$(load_repo "$repo" branch)
+        local inventory_entry=$(load_artifact "$artifact" inventory-entry)
+        local app_name=${inventory_entry}
+        local repo=${repos[$inventory_entry]}
+        local repo_path=$(load_repo "$repo" path)
+
+        # cannot use $(load_repo "$repo" branch), see https://ibm-cloudplatform.slack.com/archives/CFQHG5PP1/p1648478879572919
+        local branch
+        if [ "$environment_branch" == "dev" ]; then
+            branch="master"
+        else
+            branch="integration"
+        fi
+
         echo "Processing $app_name"
         echo
+        echo "$command $app_name $repo_path $branch $artifact"
         $command "$app_name" "$repo_path" "$branch" "$artifact"
         echo "Done processing $app_name"
         echo
