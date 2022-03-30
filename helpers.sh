@@ -169,6 +169,10 @@ function loopThroughApps() {
 
         echo "Processing $app_name"
         echo
+
+        # add 2 labels on each incident found by the scans: "squad:umbrella" and "<app-name>"
+        set_env incident-labels "squad:umbrella,$app_name" 
+        
         echo "$command $app_name $repo_path $branch $artifact"
         $command "$app_name" "$repo_path" "$branch" "$artifact"
         echo "Done processing $app_name"

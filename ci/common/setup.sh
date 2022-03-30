@@ -53,6 +53,12 @@ function ciSetup() {
         set_env cra-custom-script-path $CRA_CUSTOM_SCRIPT_PATH
     fi
 
+    # add 2 labels on each incident found by the scans: "squad:umbrella" and "<app-name>"
+    # (if not running CC, see ../helpers.sh#loopThroughApps())
+    if [ "$PIPELINE_TYPE" != "CC" ]; then
+        set_env incident-labels "squad:umbrella,$APP_NAME"
+    fi
+
     # run setup
     if [ "$SETUP_SCRIPT_FILE" ]; then
         chmod u+x $SETUP_SCRIPT_FILE
