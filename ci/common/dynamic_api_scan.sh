@@ -13,9 +13,22 @@ ARTIFACT=$4
 COMMON_FOLDER="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 source $COMMON_FOLDER/../../helpers.sh
 
+if [ -z $APP_NAME ]; then
+    export APP_NAME=$(get_env app-name)
+fi
+if [ -z $REPO_FOLDER ]; then
+    REPO_FOLDER=$(load_repo app-repo path)
+fi
 if [ -z $BRANCH ]; then
     BRANCH=$(load_repo app-repo branch)
 fi
+
+cd $WORKSPACE
+
+# clone otc-deploy if needed
+cloneOtcDeploy
+
+# do not cd in $REPO_FOLDER as otc-deploy/k8s/scripts/zap/run_api_scan.sh assumes that otc-deploy is in current dir
 
 function ciDynamicApiScan() {
     DYNAMIC_API_SCAN_BRANCH=$(get_env "dynamic-api-scan-branch" "")
@@ -25,18 +38,10 @@ function ciDynamicApiScan() {
         return 0
     fi
 
-    if [ -z $APP_NAME ]; then
-        export APP_NAME=$(get_env app-name)
-    fi
     if [ -f $COMMON_FOLDER/../$APP_NAME/dynamic_api_scan.sh ]; then
         source $COMMON_FOLDER/../$APP_NAME/dynamic_api_scan.sh
         return $?
     fi
-
-    if [ -z $REPO_FOLDER ]; then
-        REPO_FOLDER=$(load_repo app-repo path)
-    fi
-    cd $WORKSPACE
 
     # secrets and config specific to the component
     if [ -f "$COMMON_FOLDER/../$APP_NAME/dynamic_api_scan_config.sh" ]; then
@@ -80,15 +85,11 @@ function ciDynamicApiScan() {
         set_env zap-artifact $ARTIFACT
     fi
 
-    # clone otc-deploy if needed
-    cloneOtcDeploy
-
     # run scan
     echo "Running ZAP dynamic API scan for ${APP_NAME}..."
-    . otc-deploy/k8s/scripts/zap/run_api_scan.sh
+    . $WORKSPACE/otc-deploy/k8s/scripts/zap/run_api_scan.sh
     echo "Done running ZAP dynamic API scan for ${APP_NAME}"
     echo
-    cleanupOtcDeploy $WORKSPACE
 }
 
 ciDynamicApiScan

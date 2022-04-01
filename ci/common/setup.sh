@@ -15,17 +15,16 @@ source $COMMON_FOLDER/../../helpers.sh
 if [ -z $APP_NAME ]; then
     export APP_NAME=$(get_env app-name)
 fi
+if [ -z $REPO_FOLDER ]; then
+    REPO_FOLDER=$(load_repo app-repo path)
+fi
+cd $WORKSPACE/$REPO_FOLDER
 
 function ciSetup() {
     if [ -f $COMMON_FOLDER/../$APP_NAME/setup.sh ]; then
         source $COMMON_FOLDER/../$APP_NAME/setup.sh
         return $?
     fi
-
-    if [ -z $REPO_FOLDER ]; then
-        REPO_FOLDER=$(load_repo app-repo path)
-    fi
-    cd $WORKSPACE/$REPO_FOLDER
 
     GH_TOKEN=$(get_env git-token)
 
@@ -50,13 +49,17 @@ function ciSetup() {
 
     # save cra-custom-script-path (if not running CC, see ./cc/setup.sh)
     if [ "$CRA_CUSTOM_SCRIPT_PATH" ] && [ "$PIPELINE_TYPE" != "CC" ]; then
+        echo "set_env cra-custom-script-path $CRA_CUSTOM_SCRIPT_PATH"
         set_env cra-custom-script-path $CRA_CUSTOM_SCRIPT_PATH
+        echo
     fi
 
     # add 2 labels on each incident found by the scans: "squad:umbrella" and "<app-name>"
     # (if not running CC, see ../helpers.sh#loopThroughApps())
     if [ "$PIPELINE_TYPE" != "CC" ]; then
+        echo "set_env incident-labels \"squad:umbrella,$APP_NAME\""
         set_env incident-labels "squad:umbrella,$APP_NAME"
+        echo
     fi
 
     # run setup

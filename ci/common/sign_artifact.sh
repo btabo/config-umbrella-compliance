@@ -15,5 +15,5 @@ fi
 
 echo "Using the built-in default script for CISO signing /opt/commons/ciso/sign_icr.sh"
 echo
-/opt/commons/ciso/sign_icr.sh
+/opt/commons/ciso/sign_icr.sh # https://github.ibm.com/one-pipeline/compliance-commons-internal/blob/master/ciso/sign_icr.sh
 echo
