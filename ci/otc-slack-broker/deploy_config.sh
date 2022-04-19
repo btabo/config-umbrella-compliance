@@ -3,7 +3,7 @@
 # secrets
 export SEC_OTC_API_BROKER_SECRET=$(get_env otc-slack-broker_OTC_API_SECRET)
 export SEC_ENCRYPTION_KEY=$(get_env otc-slack-broker_ENCRYPTION_KEY)
-export TOOLCHAIN_API_KEY=$(get_env otc-slack-broker_TOOLCHAIN_API_KEY)
+export SEC_TOOLCHAIN_API_KEY=$(get_env otc-slack-broker_TOOLCHAIN_API_KEY)
 
 # config 
 # kms_info
