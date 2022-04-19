@@ -20,6 +20,7 @@ cd $WORKSPACE/$REPO_FOLDER
 # secrets
 export CLOUDANT_IAM_API_KEY=$(get_env otc_CLOUDANT_IAM_API_KEY)
 export test_tiam_secret=$(get_env otc_test_tiam_secret)
+export TOOLCHAIN_API_KEY=$(get_env otc-integration-broker_TOOLCHAIN_API_KEY)
 export ARTIFACTORY_AUTH_BASE64="$(get_env otc_ARTIFACTORY_AUTH_BASE64 "")"
 
 # config

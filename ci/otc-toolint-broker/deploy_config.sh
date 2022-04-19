@@ -19,3 +19,7 @@ export ENV_MCC_URL=https://mccp.ng.bluemix.net
 export ENV_TIAM_ID=test
 export ENV_TIAM_URL=https://tiam.devops.dev.us-south.bluemix.net/identity/v1
 export ENV_url=otc-toolint-broker.devops-dal12-test.us-south.containers.mybluemix.net
+
+# kms_info
+export ENV_DEFAULT_WDEK=eyJjaXBoZXJ0ZXh0IjoiSmU1SFdiWkVmZEJ5M1E4K0NRVUd4SDNlTWJxZEoyQ3B0RFp1ZmVMeGNxR3FrSEg4dU4rR2txb3dpblk9IiwiaXYiOiIxbWpnTXE0V0N0SlAxT1Z1IiwidmVyc2lvbiI6IjQuMC4wIiwiaGFuZGxlIjoiNTdlOGJiMmItZmE3Ni00OGY1LWEzMjMtMzU3NTBmZWYxN2RjIn0=
+export ENV_IAM_URL=https://iam.test.cloud.ibm.com

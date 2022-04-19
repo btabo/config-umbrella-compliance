@@ -3,7 +3,6 @@
 # secrets
 export OTC_API_BROKER_SECRET=$(get_env otc-toolint-broker_OTC_API_SECRET)
 export ENCRYPTION_KEY=$(get_env otc-toolint-broker-test_ENCRYPTION_KEY)
-export TOOLCHAIN_API_KEY=$(get_env otc-toolint-broker_TOOLCHAIN_API_KEY)
 unset CLOUDANT_IAM_API_KEY
 unset test_tiam_secret
 
@@ -15,7 +14,6 @@ export SENTINEL_KMS_INSTANCE_ID=fd3d423f-f1c3-4af0-bf40-569c60f22376
 export SENTINEL_ROOT_KEY_ID=57e8bb2b-fa76-48f5-a323-35750fef17dc
 export SENTINEL_TOOLCHAIN_CRN=crn:v1:staging:public:toolchain:us-south:a/79df5267605f4fa8aa2db7b8dfcf2197:c14cc969-83c8-462d-89aa-c9722aef5be2::
 export DEFAULT_WDEK=eyJjaXBoZXJ0ZXh0IjoiSmU1SFdiWkVmZEJ5M1E4K0NRVUd4SDNlTWJxZEoyQ3B0RFp1ZmVMeGNxR3FrSEg4dU4rR2txb3dpblk9IiwiaXYiOiIxbWpnTXE0V0N0SlAxT1Z1IiwidmVyc2lvbiI6IjQuMC4wIiwiaGFuZGxlIjoiNTdlOGJiMmItZmE3Ni00OGY1LWEzMjMtMzU3NTBmZWYxN2RjIn0=
-export IAM_URL=https://iam.test.cloud.ibm.com
 
 # config
 export DLMS_WS_HOST=https://devops-api.us-south.devops.dev.cloud.ibm.com

@@ -19,6 +19,7 @@ cd $WORKSPACE/$REPO_FOLDER
 
 # secrets
 export SEC_CLOUDANT_IAM_API_KEY=$(get_env otc_CLOUDANT_IAM_API_KEY)
+export SEC_TOOLCHAIN_API_KEY=$(get_env otc-integration-broker_TOOLCHAIN_API_KEY)
 
 # config
 if [ "$(load_repo app-repo branch)" == "integration" ]; then
@@ -43,6 +44,13 @@ export ENV_services__otc_ui_env_id='ibm:ys1:us-south'
 export ENV_TIAM_URL="https://tiam.us-south.devops.dev.cloud.ibm.com/identity/v1"
 export ENV_PORT="8080"
 export ENV_url="https://$APP_NAME-$NAMESPACE.$DOMAIN"
+# kms_info
+export ENV_ENABLE_KMS="true"
+export ENV_KMS_REGION="dev"
+export ENV_SENTINEL_KMS_URL="https://qa.us-south.kms.test.cloud.ibm.com"
+export ENV_SENTINEL_KMS_INSTANCE_ID="fd3d423f-f1c3-4af0-bf40-569c60f22376"
+export ENV_SENTINEL_ROOT_KEY_ID="57e8bb2b-fa76-48f5-a323-35750fef17dc"
+export ENV_SENTINEL_TOOLCHAIN_CRN="crn:v1:staging:public:toolchain:us-south:a/79df5267605f4fa8aa2db7b8dfcf2197:c14cc969-83c8-462d-89aa-c9722aef5be2::"
 
 # secrets and config specific to the component
 if [ -f "$COMMON_FOLDER/../$APP_NAME/deploy_config.sh" ]; then
