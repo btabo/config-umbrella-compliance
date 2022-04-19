@@ -17,9 +17,5 @@ export ENV_DEFAULT_WDEK=eyJjaXBoZXJ0ZXh0IjoiS2h0THNlTVVmZjZtcFZnUTBjNW1iTCs3a2NP
 export ENV_ENABLE_KMS_EVENTS=true
 export ENV_IAM_URL=https://iam.test.cloud.ibm.com
 export ENV_ENABLE_NEW_RELIC=true
-export ENV_ENABLE_SECRET_PICKER=true
-export ENV_ENV_ID=ibm:ys1:us-south
 export ENV_KMS_EVENT_WEBHOOK=https://otc-slack-broker.us-south.devops.dev.cloud.ibm.com/slack-broker/api/v1/events
-export ENV_NEW_RELIC_APP_NAME=otc-slack-broker-ys1
-export ENV_SECRETS_API_URL=https://otc-ui.us-south.devops.dev.cloud.ibm.com/devops/api/v1/secrets
 # none
