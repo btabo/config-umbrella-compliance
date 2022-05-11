@@ -56,7 +56,7 @@ function acceptanceTests() {
                     echo "${TEST_URL} is successful"
                     break
                     ;;
-                500|501|502)
+                500|501|502|404)
                     # 50? errors can occur during the interval while the POD is in creation
                     echo "Got a $http_code_test_url on $TEST_URL"
                     echo "Assuming the app is starting and retrying in 30s ..."
