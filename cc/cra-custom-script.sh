@@ -16,3 +16,8 @@ repo=$(basename $currentDir)
 inventoryEntry=$(load_repo $repo inventory-entry)
 echo "set_env incident-labels \"squad:umbrella,$inventoryEntry\""
 set_env incident-labels "squad:umbrella,$inventoryEntry"
+
+# disable the use of .cracveomit or cra ignore file, so that CVEs are always tracked
+# by the CC pipeline as issues
+echo "[]" > .do-not-use-cveignore
+set_env cra-cveignore-path "./.do-not-use-cveignore"
