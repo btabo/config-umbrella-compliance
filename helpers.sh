@@ -3,19 +3,52 @@
 # Check compliance statuses. Return 1 if one of them is set and it is not "success"
 # Return 0 if all statuses are success, or if EMERGENCY is set to true.
 function checkComplianceStatuses() {
-    while read -r stage; do
-        local status=$(get_data result $stage)
-        if [ "$status" ] && [ "$status" != "success" ]; then
+
+    # collect assets from pipelinectl that are registered in the current pipeline run
+    # code borrowed from https://github.ibm.com/one-pipeline/compliance-baseimage/blob/bd228fe8fe941b8d4cc818982578861b7940ce5b/one-pipeline/internal/pipeline/evaluator-v2#L20
+    parse_artifact_name () {
+        local artifact=$1
+        local name
+        name="$(echo "${artifact}" | grep  -oP "^[^@]*")"
+
+        printf "%s" "$name"
+    }
+    collectAssets () {
+      while read -r repo ; do
+        local url="$(load_repo "${repo}" url)"
+        local commit="$(load_repo "${repo}" commit)"
+        echo "${url/.git/}.git#${commit}"
+      done < <(list_repos)
+
+      while read -r artifact ; do
+        if [ "$(load_artifact "${artifact}" type)" == "image" ]; then
+          local name="$(parse_artifact_name "$(load_artifact "${artifact}" name)")"
+          local digest="$(load_artifact "${artifact}" digest)"
+          echo "docker://${name}@${digest}"
+        fi
+      done < <(list_artifacts)
+    }
+    local asset_list="$(collectAssets)"
+
+    # check results of each asset
+    export GHE_TOKEN=$(get_env git-token)
+    for asset in $asset_list; do
+        echo "Checking result of $asset"
+        local summary=$(cocoa locker evidence summary --org org-ids --repo evidence-umbrella-compliance $asset)
+        local hasFailure=$(echo $summary | jq -r '.evidences[] | select(.result != "success")')
+        if [ "$hasFailure" ]; then
             if [ "$(get_env EMERGENCY "")" == "true" ]; then
-                echo "$stage result is $status. Ignoring since EMERGENCY == true."
+                echo "Asset $asset has failure(s). Ignoring since EMERGENCY == true."
                 echo
                 return 0
             else
-                echo "$stage result is $status"
+                echo "Aborting since asset $asset has failure(s)"
                 return 1
             fi
         fi
-    done < <(get_data result)
+        echo "Done"
+        echo
+    done
     return 0
 }
 
