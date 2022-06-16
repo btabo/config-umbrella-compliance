@@ -43,6 +43,9 @@ function checkComplianceStatuses() {
                 return 0
             else
                 echo "Aborting since asset $asset has failure(s)"
+                echo "Evidence summary is:"
+                echo $summary
+                echo
                 return 1
             fi
         fi
