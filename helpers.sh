@@ -35,7 +35,7 @@ function checkComplianceStatuses() {
     for asset in $asset_list; do
         echo "Checking result of $asset"
         local summary=$(cocoa locker evidence summary --org org-ids --repo evidence-umbrella-compliance $asset)
-        local hasFailure=$(echo $summary | jq -r '.evidences[] | select(.result != "success")')
+        local hasFailure=$(echo $summary | jq -r '.evidences[] | select(.result == "failure")')
         if [ "$hasFailure" ]; then
             if [ "$(get_env EMERGENCY "")" == "true" ]; then
                 echo "Asset $asset has failure(s). Ignoring since EMERGENCY == true."
