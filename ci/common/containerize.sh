@@ -87,7 +87,6 @@ cat .dockerignore
 
 echo "Building image $IMAGE with arguments $DOCKER_BUILD_ARGS"
 echo "ARTIFACTORY_API_KEY=$(cat /config/otc_ARTIFACTORY_API_KEY)" > ./env.txt
-cat ./env.txt
 DOCKERBUILDFLAGS="-t $IMAGE --secret id=my_env,src=./env.txt"
 DOCKER_BUILDKIT=1 docker build $DOCKER_BUILD_ARGS .
 docker push "$IMAGE"
