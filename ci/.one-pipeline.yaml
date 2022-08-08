@@ -1,20 +1,20 @@
 version: '1'
 
 setup:
-  image: icr.io/continuous-delivery/pipeline/pipeline-base-image:2.12@sha256:ff4053b0bca784d6d105fee1d008cfb20db206011453071e86b69ca3fde706a4
+  image: icr.io/continuous-delivery/pipeline/pipeline-base-image:2.21@sha256:4ce661dc331005bc3cb828a677c760b2dda3c2951415141a91aeb0c0b9a351da
   script: |
     #!/usr/bin/env bash
     source ./ci/common/setup.sh CI
 
 test:
   abort_on_failure: false
-  image: icr.io/continuous-delivery/pipeline/pipeline-base-image:2.12@sha256:ff4053b0bca784d6d105fee1d008cfb20db206011453071e86b69ca3fde706a4
+  image: icr.io/continuous-delivery/pipeline/pipeline-base-image:2.21@sha256:4ce661dc331005bc3cb828a677c760b2dda3c2951415141a91aeb0c0b9a351da
   script: |
     #!/usr/bin/env bash
     source ./ci/common/test.sh
 
 static-scan:
-  image: icr.io/continuous-delivery/pipeline/pipeline-base-image:2.12@sha256:ff4053b0bca784d6d105fee1d008cfb20db206011453071e86b69ca3fde706a4
+  image: icr.io/continuous-delivery/pipeline/pipeline-base-image:2.21@sha256:4ce661dc331005bc3cb828a677c760b2dda3c2951415141a91aeb0c0b9a351da
   abort_on_failure: false
   image_pull_policy: IfNotPresent
   script: |
@@ -23,14 +23,14 @@ static-scan:
 
 containerize:
   dind: true
-  image: icr.io/continuous-delivery/pipeline/pipeline-base-image:2.20@sha256:655330f36771d274082b6c16a60620350597a9d6f2489a6246b9d2833d021211 
+  image: icr.io/continuous-delivery/pipeline/pipeline-base-image:2.21@sha256:4ce661dc331005bc3cb828a677c760b2dda3c2951415141a91aeb0c0b9a351da
   script: |
     #!/usr/bin/env bash
     source ./ci/common/containerize.sh
 
 scan-artifact:
   abort_on_failure: false
-  image: icr.io/continuous-delivery/pipeline/pipeline-base-image:2.12@sha256:ff4053b0bca784d6d105fee1d008cfb20db206011453071e86b69ca3fde706a4
+  image: icr.io/continuous-delivery/pipeline/pipeline-base-image:2.21@sha256:4ce661dc331005bc3cb828a677c760b2dda3c2951415141a91aeb0c0b9a351da
   script: |
     #!/usr/bin/env bash
     source ./ci/common/scan_artifact.sh
@@ -43,27 +43,27 @@ sign-artifact:
     source ./ci/common/sign_artifact.sh
 
 deploy:
-  image: icr.io/continuous-delivery/pipeline/pipeline-base-image:2.12@sha256:ff4053b0bca784d6d105fee1d008cfb20db206011453071e86b69ca3fde706a4
+  image: icr.io/continuous-delivery/pipeline/pipeline-base-image:2.21@sha256:4ce661dc331005bc3cb828a677c760b2dda3c2951415141a91aeb0c0b9a351da
   script: |
     #!/usr/bin/env bash
     source ./ci/common/deploy.sh
 
 dynamic-scan:
   dind: true
-  image: icr.io/continuous-delivery/pipeline/pipeline-base-image:2.12@sha256:ff4053b0bca784d6d105fee1d008cfb20db206011453071e86b69ca3fde706a4
+  image: icr.io/continuous-delivery/pipeline/pipeline-base-image:2.21@sha256:4ce661dc331005bc3cb828a677c760b2dda3c2951415141a91aeb0c0b9a351da
   script: |
     #!/usr/bin/env bash
     source ./ci/common/dynamic_api_scan.sh
 
 acceptance-test:
   abort_on_failure: false
-  image: icr.io/continuous-delivery/pipeline/pipeline-base-image:2.12@sha256:ff4053b0bca784d6d105fee1d008cfb20db206011453071e86b69ca3fde706a4
+  image: icr.io/continuous-delivery/pipeline/pipeline-base-image:2.21@sha256:4ce661dc331005bc3cb828a677c760b2dda3c2951415141a91aeb0c0b9a351da
   script: |
     #!/usr/bin/env bash
     source ./ci/common/acceptance_test.sh
 
 release:
-  image: icr.io/continuous-delivery/pipeline/pipeline-base-image:2.12@sha256:ff4053b0bca784d6d105fee1d008cfb20db206011453071e86b69ca3fde706a4
+  image: icr.io/continuous-delivery/pipeline/pipeline-base-image:2.21@sha256:4ce661dc331005bc3cb828a677c760b2dda3c2951415141a91aeb0c0b9a351da
   script: |
     #!/usr/bin/env bash
     source ./ci/common/release.sh
