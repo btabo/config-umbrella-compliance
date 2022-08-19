@@ -10,6 +10,8 @@ source $CD_FOLDER/../helpers.sh
 source scripts/umbrella/helpers.sh
 
 # config
+export USE_HELM3=$(get_env USE_HELM3 "")
+export MIGRATE_TO_HELM3=$(get_env MIGRATE_TO_HELM3 "")
 export ENVIRONMENT=$(get_env ENVIRONMENT "$(get_env cluster-region)")
 export INVENTORY_URL=https://github.ibm.com/org-ids/inventory-umbrella-compliance
 export DOI_TOOLCHAIN_ID=$(get_env doi-toolchain-id)
