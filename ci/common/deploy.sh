@@ -60,10 +60,7 @@ fi
 # clone otc-deploy and devops-config if needed
 cloneOtcDeploy
 
-# login and check helm version
+# deploy to test cluster
 export IC_1651315_API_KEY=$(get_env otc_IC_1651315_API_KEY)
 . otc-deploy/k8s/scripts/login/clusterLogin.sh "otc-dal10-test" "otc"
-. otc-deploy/k8s/scripts/helpers/checkHelmVersion.sh
-
-# deploy to test cluster
 . otc-deploy/k8s/scripts/deployComponentToCluster.sh

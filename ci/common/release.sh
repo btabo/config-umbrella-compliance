@@ -79,13 +79,6 @@ if [ "$TEMP_CHART_REPO_URL" ]; then
     CHART_ORG=$(basename $(dirname $TEMP_CHART_REPO_URL))
 fi
 
-echo "Cheking helm version"
-export IC_1651315_API_KEY=$(get_env otc_IC_1651315_API_KEY)
-. otc-deploy/k8s/scripts/login/clusterLogin.sh "$PIPELINE_KUBERNETES_CLUSTER_NAME" "otc"
-. otc-deploy/k8s/scripts/helpers/checkHelmVersion.sh
-echo "Done checking helm version"
-echo
-
 # compute BUILD_NUMBER
 echo "Finding a suitable BUILD_NUMBER for helm chart revision number"
 if [ "$BRANCH" == "integration" ]; then
@@ -107,6 +100,8 @@ echo
 
 # build and publish component chart to solution repo
 echo "Publishing component chart to solution repo"
+export IC_1651315_API_KEY=$(get_env otc_IC_1651315_API_KEY)
+. otc-deploy/k8s/scripts/login/clusterLogin.sh "$PIPELINE_KUBERNETES_CLUSTER_NAME" "otc"
 . otc-deploy/k8s/scripts/ci/publishHelmChart.sh
 echo "Done publishing component chart"
 echo
