@@ -61,7 +61,11 @@ else
     export PRUNE_CHART_REPO="true"
 fi
 export PIPELINE_KUBERNETES_CLUSTER_NAME="otc-dal10-test"
-export NAMESPACE="opentoolchain"
+if [ "$(load_repo app-repo branch)" == "integration" ]; then
+    export NAMESPACE="otc-int"
+else
+    export NAMESPACE="opentoolchain"
+fi
 export RELEASE_NAME="$APP_NAME"
 export MAJOR_VERSION="1"
 export MINOR_VERSION="0"
