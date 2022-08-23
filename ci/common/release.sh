@@ -63,10 +63,11 @@ fi
 export PIPELINE_KUBERNETES_CLUSTER_NAME="otc-dal10-test"
 if [ "$(load_repo app-repo branch)" == "integration" ]; then
     export NAMESPACE="otc-int"
+    export RELEASE_NAME=$APP_NAME-$NAMESPACE
 else
     export NAMESPACE="opentoolchain"
+    export RELEASE_NAME=$APP_NAME
 fi
-export RELEASE_NAME="$APP_NAME"
 export MAJOR_VERSION="1"
 export MINOR_VERSION="0"
 export CHART_ORG="ids-env"
