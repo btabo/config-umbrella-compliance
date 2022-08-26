@@ -10,8 +10,6 @@ source $CD_FOLDER/../helpers.sh
 source scripts/umbrella/helpers.sh
 
 # config
-export USE_HELM3=$(get_env USE_HELM3 "")
-export MIGRATE_TO_HELM3=$(get_env MIGRATE_TO_HELM3 "")
 export ENVIRONMENT=$(get_env ENVIRONMENT "$(get_env cluster-region)")
 export INVENTORY_URL=https://github.ibm.com/org-ids/inventory-umbrella-compliance
 export DOI_TOOLCHAIN_ID=$(get_env doi-toolchain-id)
@@ -89,9 +87,6 @@ function loginAndDeploy() {
 
     # login
     clusterLogin "$FIRST_CLUSTER" "$group"
-
-    # check helm version
-    source scripts/helpers/checkHelmVersion.sh
 
     # deploy
     deployUmbrella $ENVIRONMENT $DEPLOYMENT_SLACK_CHANNEL_ID $DEPLOYMENT_SLACK_TOKEN $SKIP_CLUSTER_DANCE $PAUSE_AFTER_FIRST_CLUSTER $PAUSE_BEFORE_CLUSTER_DANCE $group
